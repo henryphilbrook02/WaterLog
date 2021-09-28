@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_theme.dart';
+import 'account.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,16 +37,15 @@ class log_in_state extends State<log_in> {
               padding: const EdgeInsets.only(top: 60.0),
               child: Center(
                 child: Container(
-                    width: 200,
-                    height: 150,
-                    /*decoration: BoxDecoration(
+                  width: 200,
+                  height: 150,
+                  /*decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(50.0)),*/
-                    // TODO ADD IMAGE HERE child: Image.asset('ADD ASSET HERE')
+                  // TODO ADD IMAGE HERE child: Image.asset('ADD ASSET HERE')
                 ),
               ),
             ),
-
             Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
@@ -56,13 +56,11 @@ class log_in_state extends State<log_in> {
                     hintText: 'Enter valid email id as abc@gmail.com'),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 15, bottom: 0),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -70,9 +68,8 @@ class log_in_state extends State<log_in> {
                     hintText: 'Enter secure password'),
               ),
             ),
-
             FlatButton(
-              onPressed: (){
+              onPressed: () {
                 //TODO FORGOT PASSWORD SCREEN GOES HERE
               },
               child: Text(
@@ -80,7 +77,6 @@ class log_in_state extends State<log_in> {
                 style: TextStyle(color: Colors.blue, fontSize: 15),
               ),
             ),
-
             Container(
               height: 50,
               width: 250,
@@ -88,9 +84,10 @@ class log_in_state extends State<log_in> {
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: FlatButton(
                 onPressed: () {
-                //  Navigator.push(
-                //      context, MaterialPageRoute(builder: (_) => HomePage())); TODO SEND THIS TO THE LANDING PAGE
-                // TODO check to make sure the username and password match
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => account()),
+                  );
                 },
                 child: Text(
                   'Login',
@@ -98,13 +95,11 @@ class log_in_state extends State<log_in> {
                 ),
               ),
             ),
-
             SizedBox(
               height: 130,
             ),
-
             FlatButton(
-              onPressed: (){
+              onPressed: () {
                 //TODO CREATE ACCOUNT SCREEN GOES HERE
               },
               child: Text(
@@ -112,7 +107,6 @@ class log_in_state extends State<log_in> {
                 style: TextStyle(color: Colors.blue, fontSize: 15),
               ),
             ),
-
           ],
         ),
       ),
