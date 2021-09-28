@@ -42,3 +42,40 @@ app.get('/customers/:customerId/', function (req, res) {
         });
     });
 });
+
+// What we will need to add as API calls
+
+/*
+USER:
+Get used based on name
+Update user profile
+delete user profile
+create user profile
+
+FRIENDS:
+Get friends
+Remove friends / update friend status
+
+FRIEND REQUEST:
+Create request
+Delete request / Deny Request
+
+DAY DATA:
+Get data for a time range
+Create data for a day 
+Update data MAYBE
+
+ENTRY:
+Create an entry
+Delete an entry MAYBE
+
+LOG ENTITY:
+Create an entity
+update an entity
+delete an entity
+get an entity
+
+OTHER FUNTIONS:
+Check Log In
+
+*/
