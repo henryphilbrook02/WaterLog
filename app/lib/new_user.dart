@@ -33,7 +33,7 @@ class _NewUserPageState extends State<NewUserPage> {
   void post() async {
     print("Made it to method");
     final response = await http
-        .post("http://192.168.0.174/MealTimeServer/config.php", body: {
+        .post(Uri.parse("http://192.168.0.174/MealTimeServer/config.php"), body: {
       "name": name.text,
       "email": email.text,
       "password": password.text,
