@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7820858-0e99-4f40-9473-ae54d130f7b0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/assets/images/google_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/assets/images/google_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/assets/images/newuser.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/account.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/custom_theme.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/entity_creation.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/friends.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/landing.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/log_entry.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/log_in.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/main.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/new_user.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/water_log_app/lib/stats.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/WaterLog.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WaterLog.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/new_user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/new_user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/app/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/app/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/app/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +39,14 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\gnlgr\.android\avd\Pixel_5_API_30.avd]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1yW2BdwxiU1HsbXY9g7zodFcIHS" />
   <component name="ProjectLevelVcsManager">
@@ -52,8 +79,28 @@
       <option name="filePath" value="$PROJECT_DIR$/app/lib/main.dart" />
       <method v="2" />
     </configuration>
+    <configuration name="C:/Users/gnlgr/Documents/GitHub/WaterLog/app/android/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/app/android/build.gradle" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.C:/Users/gnlgr/Documents/GitHub/WaterLog/app/android/build.gradle" />
         <item itemvalue="Flutter.log_in.dart" />
         <item itemvalue="Flutter.main.dart" />
       </list>
