@@ -1,119 +1,54 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:water_log_app/custom_theme.dart';
-import 'package:water_log_app/new_user.dart';
-import 'account.dart';
+import 'package:water_log_app/main.dart';
+import 'package:water_log_app/stats.dart';
+import 'package:water_log_app/log_in.dart';
+import 'package:water_log_app/friends.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class mainPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: theme_class.light_theme,
-      home: log_in(),
-    );
-  }
+  _mainPage createState() => _mainPage();
 }
 
-class log_in extends StatefulWidget {
-  @override
-  log_in_state createState() => log_in_state();
-}
+class _mainPage extends State<mainPage> {
+  int selectedPage = 0;
 
-class log_in_state extends State<log_in> {
+  final _pageOptions = [log_in(), stats(), log_in(), friends(), stats()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 150,
-                  /*decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50.0)),*/
-                  // TODO ADD IMAGE HERE child: Image.asset('ADD ASSET HERE')
-                ),
-              ),
-            ),
-            Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    hintText: 'Enter secure password'),
-              ),
-            ),
-            FlatButton(
-              onPressed: () {
-                //TODO FORGOT PASSWORD SCREEN GOES HERE
-              },
-              child: Text(
-                'Forgot Password',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
-              ),
-            ),
-            Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => account()),
-                  );
-                },
-                child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 130,
-            ),
-            FlatButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewUserPage()),
-                );
-              },
-              child: Text(
-                'New User? Create Account',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
-              ),
-            ),
+        backgroundColor: Colors.white,
+        body: _pageOptions[selectedPage],
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home, size: 30), title: Text('Home')),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bar_chart, size: 30), title: Text('Stats')),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.add, size: 30), title: Text('Add Water')),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.group, size: 30), title: Text('Friends')),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle, size: 30),
+                title: Text('Profile')),
           ],
-        ),
-      ),
-    );
+          selectedItemColor: Colors.green,
+          elevation: 5.0,
+          unselectedItemColor: Colors.green[900],
+          currentIndex: selectedPage,
+          backgroundColor: Colors.white,
+          onTap: (index) {
+            setState(() {
+              selectedPage = index;
+            });
+          },
+        ));
   }
 }

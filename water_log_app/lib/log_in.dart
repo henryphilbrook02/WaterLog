@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
-import 'account.dart';
+import 'package:water_log_app/log_in.dart';
+import 'package:water_log_app/new_user.dart';
+import 'package:water_log_app/stats.dart';
+import 'package:water_log_app/main.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'account.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -86,7 +87,7 @@ class log_in_state extends State<log_in> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => account()),
+                    MaterialPageRoute(builder: (context) => mainPage()),
                   );
                 },
                 child: Text(
@@ -100,7 +101,10 @@ class log_in_state extends State<log_in> {
             ),
             FlatButton(
               onPressed: () {
-                //TODO CREATE ACCOUNT SCREEN GOES HERE
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewUserPage()),
+                );
               },
               child: Text(
                 'New User? Create Account',
