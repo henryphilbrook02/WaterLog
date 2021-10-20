@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePageFriends> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Account"),
+        title: Text("Friend Data"),
         elevation: 1,
       ),
       body: Container(
@@ -51,10 +51,6 @@ class _MyHomePageState extends State<MyHomePageFriends> {
           },
           child: ListView(
             children: [
-              Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
               SizedBox(
                 height: 15,
               ),
@@ -107,19 +103,23 @@ class _MyHomePageState extends State<MyHomePageFriends> {
               SizedBox(
                 height: 35,
               ),
+              TextFormField(
+                decoration:
+                    const InputDecoration(labelText: 'Username: Maaloufer'),
+              ),
+              TextFormField(
+                decoration:
+                    const InputDecoration(labelText: 'Full Name: John Maalouf'),
+              ),
+              TextFormField(
+                decoration:
+                    const InputDecoration(labelText: 'Age: 21 Years Old'),
+              ),
               Container(
                 height: 400,
                 width: 400,
                 child: buildGraph(context),
               ),
-              buildTextField("Username", "BobertTheRobert", false),
-              buildTextField("Name", "Rob Bobert", false),
-              buildTextField("Email", "Bobert.roberts@hotmail.com", false),
-              buildTextField("Date of Birth", "05/23/2006", false),
-              buildTextField("Weight", "300lb", false),
-              buildTextField("Height", "5'11", false),
-              buildTextField("BMI", "26.6", false),
-              buildTextField("Gender", "Male", false),
               SizedBox(
                 height: 35,
               )
@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                 : null,
             contentPadding: EdgeInsets.only(bottom: 3),
             labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
+            //loatingLabelBehavior: FloatingLabelBehavior.never,
             hintText: placeholder,
             hintStyle: TextStyle(
               fontSize: 16,
@@ -168,7 +168,6 @@ class _MyHomePageState extends State<MyHomePageFriends> {
     return SafeArea(
         child: Scaffold(
       body: SfCartesianChart(
-          title: ChartTitle(text: 'Last Week Water Usage for Friend'),
           legend: Legend(isVisible: true),
           tooltipBehavior: _tooltipBehavior,
           series: <ChartSeries>[
