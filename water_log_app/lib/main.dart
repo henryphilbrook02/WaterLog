@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:water_log_app/account.dart';
 import 'package:water_log_app/main.dart';
 import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/log_in.dart';
@@ -18,7 +19,7 @@ class mainPage extends StatefulWidget {
 class _mainPage extends State<mainPage> {
   int selectedPage = 0;
 
-  final _pageOptions = [log_in(), stats(), log_in(), friends(), stats()];
+  final _pageOptions = [log_in(), stats(), log_in(), friends(), AccountPage()];
 
   @override
   Widget build(BuildContext context) {
