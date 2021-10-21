@@ -11,27 +11,46 @@ var sql = require('mssql'); // MS Sql Server client
 // Connection string parameters.
 // Example Data for now
 var sqlConfig = {
-    user: 'UserName',
-    password: 'password',
-    server: 'localhost',
-    database: 'DatabaseName'
+    user: 'WLAdmin',
+    password: 'Capping2021',
+    server: '10.11.25.59,3306',
+    database: 'WaterLogDB'
 }
+
+app.get('/', function(req, res){
+  // res.render('views/index.html');
+});
 
 // Start server and listen on http://localhost:8081/
 // Example data but will need to change when server is set up
-var server = app.listen(8081, function () {
+var server = app.listen(8080, function () {
     var host = server.address().address
     var port = server.address().port
 
     console.log("app listening at http://%s:%s", host, port)
 });
 
+async () => {
+    try {
+        // make sure that any items are correctly URL encoded in the connection string
+        console.log("test")
+        const con = await sql.connect('Server=10.11.25.59,3306;Database=WaterLogDB;User Id=WLAdmin;Password=Capping2021;Encrypt=true')
+        // const result = await sql.query`select * from mytable where id = ${value}`
+        console.log(con)
+    } catch (err) {
+        // ... error checks
+        console.log("This error is:")
+        console.log(err)
+    }
+}
 
 //-----------------
 // API DECLARATION
 //-----------------
 
 // Example get function
+
+/*
 app.get('/customers/:customerId/', function (req, res) {
     sql.connect(sqlConfig, function() {
         var request = new sql.Request();
@@ -42,6 +61,7 @@ app.get('/customers/:customerId/', function (req, res) {
         });
     });
 });
+*/
 
 // What we will need to add as API calls
 
