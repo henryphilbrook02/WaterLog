@@ -1,17 +1,24 @@
 {
-  "name": "api",
+  "name": "API",
   "version": "1.0.0",
-  "description": "API to connect WaterLog front end to backend",
-  "main": "api.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node api.js"
+    "start": "nodemon index.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.1",
     "express": "^4.17.1",
-    "html": "^1.0.0",
-    "mssql": "^7.2.1"
-  }
+    "mssql": "^6.2.1",
+    "mysql2": "^2.3.2",
+    "tedious": "^14.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
