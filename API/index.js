@@ -1,7 +1,7 @@
 //Initiallising node modules
 var express = require("express");
 var bodyParser = require("body-parser");
-var sql = require("mssql");
+var sql = require("mysql");
 var app = express();
 var routes = require("./routes.js");
 
@@ -24,46 +24,59 @@ var server = app.listen(process.env.PORT || 8080, function () {
 });
 
 //Initiallising connection string
-var dbConfig = {
+var con = sql.createConnection({
     user: "WLAdmin",
     password: "Capping2021",
     server: "10.11.25.59",
-    port: "3306",
     database: "wlsql"
-};
-        
+});
+
 //Function to connect to database and execute query
-exports.executeQuery = function(res, query){
-                    sql.connect(dbConfig, function (err) {
-                        if (err) {
-                            console.log("Error while connecting database :- " + err);
-                            res.send(err);
-                        }
-                        else {
-                            // create Request object
-                            var request = new sql.Request();
-                            // query to the database
-                            request.query(query, function (err, res) {
-                                if (err) {
-                                    console.log("Error while querying database :- " + err);
-                                    res.send(err);
-                                }
-                                else {
-                                    res.send(res);
-                                }
-                            });
-                        }
-                    });
+exports.executeQuery = function (res, query) {
+    // query to the database
+    con.query(query, (error, results, fields) => {
+        if (error) {
+            console.log("Error while querying database :- " + error);
+            res.send(error);
+        }
+        else {
+            res.send(results);
+        }
+    });
+}
+/*
+//Function to connect to database and execute query
+exports.executeQuery = function (res, query) {
+    con.connect(function (err) {
+        if (err) {
+            console.log("Error while connecting database :- " + err);
+            res.send(err);
+        }
+        else {
+            // query to the database
+            con.query(query, (error, results, fields) => {
+                if (err) {
+                    console.log("Error while querying database :- " + error);
+                    res.send(error);
                 }
-                
+                else {
+                    res.send(results);
+                }
+            });
+        }
+    });
+}
+*/
+
 app.use("/api", routes);
 
 /*
 //GET API
-app.get("/api/user", function(req , res){
-                var query = "select * from user";
-                executeQuery (res, query);
+app.get("/api/users", function (req, res) {
+    var query = "select * from user";
+    executeQuery(res, query);
 });
+
 
 //POST API
  app.post("/api/user", function(req , res){
@@ -84,3 +97,4 @@ app.get("/api/user", function(req , res){
 });
 
 */
+
