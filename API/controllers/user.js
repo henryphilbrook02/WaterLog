@@ -19,27 +19,27 @@ exports.createUser = (req, res) => {
         req.body.height + "', " +
         req.body.BMI + ", " +
         req.body.curUsage + ", " +
-        req.body.unit + ", " +
-        req.body.creation + ", " +
-        req.body.update + ")";
+        req.body.unit + ", '" +
+        req.body.creation + "', '" +
+        req.body.update + "')";
     index.executeQuery(res, query);
 }
 
 exports.updateUser = (req, res) => {
     var query = "UPDATE user " +
-        "SET TOKEN = '" + req.body.tolken
-        + "', WEIGHT = " + req.body.weight
-        + ", HEIGHT = '" + req.body.height
-        + "', BMI = " + req.body.BMI
-        + ", CUR_USAGE = " + req.body.curUsage
-        + ", UNIT = " + req.body.unit
-        + ", CREATION = " + req.body.creation
-        + ", LAST_UPDATE = " + req.body.update +""
-        + "WHERE(USERNAME = '" + req.params.id + "')";
+        "SET TOKEN = '" + req.body.tolken +
+        "', WEIGHT = " + req.body.weight +
+        ", HEIGHT = '" + req.body.height +
+        "', BMI = " + req.body.BMI +
+        ", CUR_USAGE = " + req.body.curUsage +
+        ", UNIT = " + req.body.unit +
+        ", CREATION = '" + req.body.creation +
+        "', LAST_UPDATE = '" + req.body.update + "' " +
+        "WHERE(USERNAME = '" + req.params.id + "')";
     index.executeQuery(res, query);
 }
 
 exports.deleteUser = (req, res) => {
     var query = "DELETE FROM user WHERE username = '" + req.params.id + "'";
     index.executeQuery(res, query);
-}
+}  

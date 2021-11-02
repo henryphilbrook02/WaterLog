@@ -11,16 +11,25 @@ exports.readGoal = (req, res) => {
 }
 
 exports.createGoal = (req, res) => {
-    var query = "";
+    var query = "INSERT INTO goal_log(`USERNAME`, `GOAL`, `CURRENT`, `CREATION`) VALUES('" +
+        req.body.username + "', " +
+        req.body.goal + ", " +
+        req.body.current + ", '" +
+        req.body.creation + "')";
     index.executeQuery(res, query);
 }
 
 exports.updateGoal = (req, res) => {
-    var query = "";
+    var query = "UPDATE goal_log " +
+        "SET USERNAME = '" + req.body.username +
+        "', GOAL = " + req.body.goal +
+        ", CURRENT = " + req.body.current +
+        ", CREATION = '" + req.body.creation + "' " +
+        "WHERE(GOAL_ID = " + req.params.id + ")";
     index.executeQuery(res, query);
 }
 
 exports.deleteGoal = (req, res) => {
-    var query = "";
+    var query = "DELETE FROM goal_log WHERE username = " + req.params.id;
     index.executeQuery(res, query);
 }

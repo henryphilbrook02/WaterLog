@@ -22,6 +22,6 @@ exports.updateEntry = (req, res) => {
 }
 
 exports.deleteEntry = (req, res) => {
-    var query = "";
+    var query = "DELETE FROM user WHERE username = " + req.params.id;
     index.executeQuery(res, query);
 }

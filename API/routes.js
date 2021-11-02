@@ -19,32 +19,48 @@ router.route("/users/:id")
 
 router.route("/presets")
     .get(presetCtlr.readAllPreset)
+    .post(presetCtlr.createPreset)
 
 router.route("/presets/:id")
     .get(presetCtlr.readPreset)
+    .delete(presetCtlr.deletePreset)
+    .put(presetCtlr.updatePreset)
 
 router.route("/goals")
     .get(goalCtlr.readAllGoals)
+    .post(goalCtlr.createGoal)
 
 router.route("/goals/:id")
     .get(goalCtlr.readGoal)
+    .delete(goalCtlr.deleteGoal)
+    .put(goalCtlr.updateGoal)
 
 router.route("/fs")
     .get(fsCtlr.readAllFriendships)
+    .post(fsCtlr.createFriendship)
 
 router.route("/fs/:id")
     .get(fsCtlr.readFriendship)
+    .delete(fsCtlr.deleteFriendship)
+    .put(fsCtlr.updateFriendship)
 
 router.route("/entries")
     .get(entryCtrl.readAllEntries)
+    .post(entryCtrl.createEntry)
 
 router.route("/entries/:id")
     .get(entryCtrl.readEntry)
+    .delete(entryCtrl.deleteEntry)
+    .put(entryCtrl.updateEntry)
+    
 
 router.route("/activities")
     .get(activityCtrl.readAllActivities)
+    .post(activityCtrl.createActivity)
 
 router.route("/activities/:id")
     .get(activityCtrl.readActivity)
+    .delete(activityCtrl.deleteActivity)
+    .put(activityCtrl.updateActivity)
 
 module.exports = router;

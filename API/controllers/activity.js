@@ -12,16 +12,26 @@ exports.readActivity = (req, res) => {
 }
 
 exports.createActivity = (req, res) => {
-    var query = "";
+    var query = "INSERT INTO activity (`USERNAME`, `NAME`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
+        req.body.username + "', '" +
+        req.body.name + "', '" +
+        req.body.units + "', '" +
+        req.body.creation + "', '" +
+        req.body.update + "')";
     index.executeQuery(res, query);
 }
 
 exports.updateActivity = (req, res) => {
-    var query = "";
+    var query = "UPDATE activity " +
+        "SET NAME = '" + req.body.name +
+        "', UNIT = '" + req.body.units +
+        "', CREATION = '" + req.body.creation +
+        "', LAST_UPDATE = '" + req.body.update + "' " +
+        "WHERE(ACTIVITY_ID = " + req.params.id + ")";
     index.executeQuery(res, query);
 }
 
 exports.deleteActivity = (req, res) => {
-    var query = "";
+    var query = "DELETE FROM activity WHERE ACTIVITY_ID = " + req.params.id;
     index.executeQuery(res, query);
 }

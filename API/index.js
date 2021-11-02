@@ -44,57 +44,6 @@ exports.executeQuery = function (res, query) {
         }
     });
 }
-/*
-//Function to connect to database and execute query
-exports.executeQuery = function (res, query) {
-    con.connect(function (err) {
-        if (err) {
-            console.log("Error while connecting database :- " + err);
-            res.send(err);
-        }
-        else {
-            // query to the database
-            con.query(query, (error, results, fields) => {
-                if (err) {
-                    console.log("Error while querying database :- " + error);
-                    res.send(error);
-                }
-                else {
-                    res.send(results);
-                }
-            });
-        }
-    });
-}
-*/
 
+//This will use out routes table
 app.use("/api", routes);
-
-/*
-//GET API
-app.get("/api/users", function (req, res) {
-    var query = "select * from user";
-    executeQuery(res, query);
-});
-
-
-//POST API
- app.post("/api/user", function(req , res){
-                var query = "INSERT INTO user (Name,Email,Password) VALUES (req.body.Name,req.body.Email,req.body.Password";
-                executeQuery (res, query);
-});
-
-//PUT API
- app.put("/api/user/:id", function(req , res){
-                var query = "UPDATE user SET Name= " + req.body.Name  +  " , Email=  " + req.body.Email + "  WHERE Id= " + req.params.id;
-                executeQuery (res, query);
-});
-
-// DELETE API
- app.delete("/api/user /:id", function(req , res){
-                var query = "DELETE FROM [user] WHERE Id=" + req.params.id;
-                executeQuery (res, query);
-});
-
-*/
-
