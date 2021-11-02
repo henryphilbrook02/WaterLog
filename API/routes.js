@@ -10,9 +10,12 @@ router = express.Router();
 
 router.route("/users")
     .get(userCtlr.readAllUsers)
+    .post(userCtlr.createUser)
 
 router.route("/users/:id")
     .get(userCtlr.readUser)
+    .put(userCtlr.updateUser)
+    .delete(userCtlr.deleteUser)
 
 router.route("/presets")
     .get(presetCtlr.readAllPreset)

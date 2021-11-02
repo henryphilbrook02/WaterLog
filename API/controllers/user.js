@@ -12,17 +12,34 @@ exports.readUser = (req, res) => {
 }
 
 exports.createUser = (req, res) => {
-    var query =
-    "INSERT INTO user(`USERNAME`, `TOKEN`, `WEIGHT`, `HEIGHT`, `BMI`, `CUR_USAGE`, `UNIT`, `CREATION`, `UPDATE`) VALUES("Maaloufer", "we may not need this", 150, 5.9, 28, 48, 0, NOW(), NOW())";
+    var query = "INSERT INTO user(`USERNAME`, `TOKEN`, `WEIGHT`, `HEIGHT`, `BMI`, `CUR_USAGE`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
+        req.body.id + "', '" +
+        req.body.tolken + "', " +
+        req.body.weight + ", '" +
+        req.body.height + "', " +
+        req.body.BMI + ", " +
+        req.body.curUsage + ", " +
+        req.body.unit + ", " +
+        req.body.creation + ", " +
+        req.body.update + ")";
     index.executeQuery(res, query);
 }
 
 exports.updateUser = (req, res) => {
-    var query = "";
+    var query = "UPDATE user " +
+        "SET TOKEN = '" + req.body.tolken
+        + "', WEIGHT = " + req.body.weight
+        + ", HEIGHT = '" + req.body.height
+        + "', BMI = " + req.body.BMI
+        + ", CUR_USAGE = " + req.body.curUsage
+        + ", UNIT = " + req.body.unit
+        + ", CREATION = " + req.body.creation
+        + ", LAST_UPDATE = " + req.body.update +""
+        + "WHERE(USERNAME = '" + req.params.id + "')";
     index.executeQuery(res, query);
 }
 
 exports.deleteUser = (req, res) => {
-    var query = "";
+    var query = "DELETE FROM user WHERE username = '" + req.params.id + "'";
     index.executeQuery(res, query);
 }
