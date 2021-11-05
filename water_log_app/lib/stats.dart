@@ -69,15 +69,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<GDPData> getChartData() {
+    // 7
+    // GET Query based on the user ID for that last 7* days
+    // then set that as a GPDData opject, and add it to chartData list.
+
     final List<GDPData> chartData = [
-      GDPData('Sunday', 16, Colors.blue),
-      GDPData('Saturday', 46, Colors.red),
-      GDPData('Friday', 15, Colors.blue),
-      GDPData('Thursday', 42, Colors.red),
-      GDPData('Wednesday', 30, Colors.green),
-      GDPData('Tuesday', 25, Colors.green),
-      GDPData('Monday', 46, Colors.red),
+      // GDPData('Sunday', 16, Colors.blue),
+      // GDPData('Saturday', 46, Colors.red),
+      // GDPData('Friday', 15, Colors.blue),
+      // GDPData('Thursday', 42, Colors.red),
+      // GDPData('Wednesday', 30, Colors.green),
+      // GDPData('Tuesday', 25, Colors.green),
+      // GDPData('Monday', 46, Colors.red),
     ];
+
+    for (double i = 0; i < 7; i++) {
+      chartData.add(GDPData("continent", i, Colors.black));
+    }
     return chartData;
   }
 }

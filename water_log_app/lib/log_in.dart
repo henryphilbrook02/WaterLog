@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/new_user.dart';
 import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/main.dart';
+
+import 'package:http/http.dart' as http;
 
 import 'account.dart';
 
@@ -89,9 +93,17 @@ class log_in_state extends State<log_in> {
                     context,
                     MaterialPageRoute(builder: (context) => mainPage()),
                   );
+                  postRequest();
+                  // var x = http.get(Uri.parse('http://10.0.2.2:8080/api/users'));
+                  // debugPrint(jsonDecode(x.toString()));
+
+                  /*
+                  
+
+                  */
                 },
                 child: Text(
-                  'Login',
+                  'PrintToConsole',
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
@@ -115,5 +127,86 @@ class log_in_state extends State<log_in> {
         ),
       ),
     );
+  }
+
+  Future<User> postRequest() async {
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/users'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      debugPrint(User.fromJson(jsonDecode(response.body)).getUserName());
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load Users');
+    }
+  }
+
+//   postRequest() async {
+//     debugPrint("Made it");
+//     // todo - fix baseUrl
+//     var url = 'http://10.0.2.2:8080/api/users';
+//     // var body = json.encode({
+//     //   'nick': nick,
+//     //   'password': password,
+//     // });
+
+//     // print('Body: $body');
+
+//     var response = await http.get(
+//       Uri.parse(url),
+//       headers: {
+//         'accept': 'application/json',
+//         'Content-Type': 'application/json-patch+json',
+//       },
+//     );
+
+//     // todo - handle non-200 status code, etc
+
+//     debugPrint(json.decode(response.body));
+//   }
+}
+
+class User {
+  String userName;
+  String token;
+  int weight;
+  String height;
+  int BMI;
+  int currentUsage;
+  int unit;
+  String creationDate;
+  String updateDate;
+
+  User({
+    required this.userName,
+    required this.token,
+    required this.weight,
+    required this.height,
+    required this.BMI,
+    required this.currentUsage,
+    required this.unit,
+    required this.creationDate,
+    required this.updateDate,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      userName: json['userName'],
+      token: json['token'],
+      weight: json['weight'],
+      height: json['height'],
+      BMI: json['BMI'],
+      currentUsage: json['currentUsage'],
+      unit: json['unit'],
+      creationDate: json['creationDate'],
+      updateDate: json['updateDate'],
+    );
+  }
+  getUserName() {
+    return userName;
   }
 }
