@@ -136,12 +136,17 @@ class log_in_state extends State<log_in> {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      debugPrint(User.fromJson(jsonDecode(response.body)).getUserName());
-      return User.fromJson(jsonDecode(response.body));
+
+      for (var i = 0; i < 2; i++) {
+        var x = User.fromJson(jsonDecode(response.body)[i]);
+        debugPrint(x.userName.toString());
+      }
+
+      return User.fromJson(jsonDecode(response.body)[0]);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load Users');
+      throw Exception('Failed to load album');
     }
   }
 
@@ -177,7 +182,7 @@ class User {
   String height;
   int BMI;
   int currentUsage;
-  int unit;
+  //int unit;
   String creationDate;
   String updateDate;
 
@@ -188,22 +193,22 @@ class User {
     required this.height,
     required this.BMI,
     required this.currentUsage,
-    required this.unit,
+    //required this.unit,
     required this.creationDate,
     required this.updateDate,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userName: json['userName'],
-      token: json['token'],
-      weight: json['weight'],
-      height: json['height'],
+      userName: json['USERNAME'],
+      token: json['TOKEN'],
+      weight: json['WEIGHT'],
+      height: json['HEIGHT'],
       BMI: json['BMI'],
-      currentUsage: json['currentUsage'],
-      unit: json['unit'],
-      creationDate: json['creationDate'],
-      updateDate: json['updateDate'],
+      currentUsage: json['CUR_USAGE'],
+      //unit: json['UNIT'],
+      creationDate: json['CREATION'],
+      updateDate: json['LAST_UPDATE'],
     );
   }
   getUserName() {

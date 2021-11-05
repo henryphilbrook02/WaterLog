@@ -61,22 +61,23 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "C:\Users\saqib\Documents\GitHub\FormalLanguagesFinal\WaterLog\water_log_app\assets\images\newuser.png",
-                              ))),
+                        border: Border.all(
+                            width: 4,
+                            color: Theme.of(context).scaffoldBackgroundColor),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.1),
+                              offset: Offset(0, 10))
+                        ],
+                        shape: BoxShape.circle,
+                        // image: DecorationImage(
+                        //     fit: BoxFit.cover,
+                        //     image: NetworkImage(
+                        //       "C:\Users\saqib\Documents\GitHub\FormalLanguagesFinal\WaterLog\water_log_app\assets\images\newuser.png",
+                        //     ))
+                      ),
                     ),
                     Positioned(
                         bottom: 0,
