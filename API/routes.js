@@ -35,6 +35,9 @@ router.route("/goals/:id")
     .delete(goalCtlr.deleteGoal)
     .put(goalCtlr.updateGoal)
 
+router.route("/user_goals/:user")
+    .get(goalCtlr.userGoal)
+
 router.route("/fs")
     .get(fsCtlr.readAllFriendships)
     .post(fsCtlr.createFriendship)
@@ -52,8 +55,13 @@ router.route("/entries/:id")
     .get(entryCtrl.readEntry)
     .delete(entryCtrl.deleteEntry)
     .put(entryCtrl.updateEntry)
-    
 
+router.route("/user_entries/:user")
+    .get(entryCtrl.userEntries)
+
+router.route("/user_date_entries/:user")
+    .get(entryCtrl.userDateEntries)
+    
 router.route("/activities")
     .get(activityCtrl.readAllActivities)
     .post(activityCtrl.createActivity)
@@ -62,5 +70,8 @@ router.route("/activities/:id")
     .get(activityCtrl.readActivity)
     .delete(activityCtrl.deleteActivity)
     .put(activityCtrl.updateActivity)
+
+router.route("/user_activities/:user")
+    .get(activityCtrl.userActivities)
 
 module.exports = router;

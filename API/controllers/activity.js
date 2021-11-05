@@ -11,6 +11,11 @@ exports.readActivity = (req, res) => {
     index.executeQuery(res, query);
 }
 
+exports.userActivities = (req, res) => {
+    var query = "select * from activity where USERNAME = '" + req.params.user + "'";
+    index.executeQuery(res, query);
+}
+
 exports.createActivity = (req, res) => {
     var query = "INSERT INTO activity (`USERNAME`, `NAME`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
         req.body.username + "', '" +

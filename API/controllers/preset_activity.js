@@ -30,6 +30,6 @@ exports.updatePreset = (req, res) => {
 }
 
 exports.deletePreset = (req, res) => {
-    var query = "DELETE FROM preset_activity WHERE username = " + req.params.id;
+    var query = "DELETE FROM preset_activity WHERE activity_id = " + req.params.id;
     index.executeQuery(res, query);
 }  

@@ -10,6 +10,11 @@ exports.readGoal = (req, res) => {
     index.executeQuery(res, query);
 }
 
+exports.userGoal = (req, res) => {
+    var query = "select * from goal_log where USERNAME = '" + req.params.user +"'";
+    index.executeQuery(res, query);
+}
+
 exports.createGoal = (req, res) => {
     var query = "INSERT INTO goal_log(`USERNAME`, `GOAL`, `CURRENT`, `CREATION`) VALUES('" +
         req.body.username + "', " +
@@ -30,6 +35,6 @@ exports.updateGoal = (req, res) => {
 }
 
 exports.deleteGoal = (req, res) => {
-    var query = "DELETE FROM goal_log WHERE username = " + req.params.id;
+    var query = "DELETE FROM goal_log WHERE goal_id = " + req.params.id;
     index.executeQuery(res, query);
 }
