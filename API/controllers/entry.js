@@ -22,6 +22,138 @@ exports.userDateEntries = (req, res) => {
     index.executeQuery(res, query);
 }
 
+exports.sevenDayEntries = (req, res) => {
+    var today = new Date();
+    var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+   
+    today.setDate(today.getDate() - 7);
+    var pastDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+   
+    var query = "select * from entry where USERNAME = '" + req.params.user +
+    "' AND DAY >= '" + pastDate + "' and DAY <= '" + curDate + "'";
+    index.executeQuery(res, query);
+}
+
+exports.weekEntries = (req, res) => { 
+    var today = new Date(); 
+    var first = today.getDate() - today.getDay(); 
+
+    today.setDate(first);
+    var firstday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+    today.setDate(today.getDate() + 6);
+    var lastday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+    var query = "select * from entry where USERNAME = '" + req.params.user +
+    "' AND DAY >= '" + firstday + "' and DAY <= '" + lastday + "'";
+    index.executeQuery(res, query);
+}
+
+
+// These next three quesies use 
+
+function querybuilder(userName, startDate, endDate) {
+    var val;
+    val ="select sum(amount) from ("+
+        "SELECT SUM(e.amount*p.amount) as amount " +
+        "from preset_activity AS p, entry AS e " +
+        "where  (p.ACTIVITY_ID = e.PRESET_ID) " +
+        "and (e.USERNAME = '" + userName + "') " +
+        "and (e.day >= '" + startDate + "')and (e.day <= '" + endDate + "') " +
+        "UNION " +
+        "SELECT SUM(e.amount * a.amount) as amount " +
+        "from activity AS a, entry AS e " +
+        "where (a.USERNAME = e.USERNAME) and (a.ACTIVITY_ID = e.ACTIVITY_ID) " +
+        "and (e.USERNAME = '" + userName + "') " +
+        "and (e.day >= '" + startDate + "') and (e.day <= '" + endDate + "')" +
+        ") x"
+    return val;
+}
+
+exports.dayTotal = (req, res) => {
+    var today = new Date();
+    var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+
+    var query = querybuilder(req.params.user, curDate, curDate);
+    index.executeQuery(res, query);
+}
+
+exports.weekTotal = (req, res) => {
+    var today = new Date(); 
+    var first = today.getDate() - today.getDay(); 
+
+    today.setDate(first);
+    var firstday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+    today.setDate(today.getDate() + 6);
+    var lastday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+    var query = querybuilder(req.params.user, firstday, lastday);
+    index.executeQuery(res, query);
+}
+
+exports.sevenDayTotal = (req, res) => {
+    var today = new Date();
+    var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+   
+    today.setDate(today.getDate() - 7);
+    var pastDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+
+    var query = querybuilder(req.params.user, pastDate, curDate);
+    index.executeQuery(res, query);
+}
+
+
+// The next two queries will use this query builder which is a different than the one above because it will give
+// a day by day readout not a total
+function dayQueryBuilder(userName, startDate, endDate) {
+    var val;
+    val = "select sum(amount), day from ( "+
+        "SELECT SUM(e.amount*p.amount) as amount, e.day as day " +
+        "from preset_activity AS p, entry AS e " +
+        "where  (p.ACTIVITY_ID = e.PRESET_ID) " +
+        "and (e.USERNAME = '" + userName + "') " +
+        "and (e.day >= '" + startDate + "')and (e.day <= '" + endDate + "') " +
+        "group by e.day " +
+        "UNION " +
+        "SELECT SUM(e.amount * a.amount) as amount, e.day " +
+        "from activity AS a, entry AS e " +
+        "where (a.USERNAME = e.USERNAME) and (a.ACTIVITY_ID = e.ACTIVITY_ID) " +
+        "and (e.USERNAME = '" + userName + "') " +
+        "and (e.day >= '" + startDate + "') and (e.day <= '" + endDate + "') " +
+        "group by e.day " +
+    ") x " +
+    "group by day"
+    
+    return val;
+}
+
+exports.weekReadout = (req, res) => {
+    var today = new Date(); 
+    var first = today.getDate() - today.getDay(); 
+
+    today.setDate(first);
+    var firstday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+    today.setDate(today.getDate() + 6);
+    var lastday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+    var query = dayQueryBuilder(req.params.user, firstday, lastday);
+    index.executeQuery(res, query);
+}
+
+exports.sevenDayReadout = (req, res) => {
+    var today = new Date();
+    var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+   
+    today.setDate(today.getDate() - 7);
+    var pastDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+
+    var query = dayQueryBuilder(req.params.user, pastDate, curDate);
+    index.executeQuery(res, query);
+}
+
+
 exports.createEntry = (req, res) => {
     var query = "INSERT INTO entry (`ACTIVITY_ID`, `PRESET_ID`, `USERNAME`, `DAY`, `AMOUNT`) VALUES(" +
         req.body.activity_id + ", " +

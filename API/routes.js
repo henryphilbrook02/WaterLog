@@ -59,9 +59,30 @@ router.route("/entries/:id")
 router.route("/user_entries/:user")
     .get(entryCtrl.userEntries)
 
+router.route("/seven_day_entries/:user")
+    .get(entryCtrl.sevenDayEntries)
+
+router.route("/user_week_entries/:user")
+    .get(entryCtrl.weekEntries)
+
 router.route("/user_date_entries/:user")
     .get(entryCtrl.userDateEntries)
-    
+
+router.route("/cur_day_data/:user")
+    .get(entryCtrl.dayTotal)
+
+router.route("/seven_day_data/:user")
+    .get(entryCtrl.sevenDayTotal)
+
+router.route("/week_data/:user")
+    .get(entryCtrl.weekTotal)
+
+router.route("/seven_day_readout/:user")
+    .get(entryCtrl.sevenDayReadout)
+
+router.route("/week_readout/:user")
+    .get(entryCtrl.weekReadout)
+
 router.route("/activities")
     .get(activityCtrl.readAllActivities)
     .post(activityCtrl.createActivity)
