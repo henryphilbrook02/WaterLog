@@ -158,7 +158,8 @@ class _AccountPageState extends State<AccountPage> {
 }
 
 Future<User> postRequest() async {
-  final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/users'));
+  final response =
+      await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -168,14 +169,14 @@ Future<User> postRequest() async {
     //   x = User.fromJson(jsonDecode(response.body)[i]);
     //   debugPrint(x.userName.toString());
     // }
-    var mainUser = User.fromJson(jsonDecode(response.body)[1]);
+    var mainUser = User.fromJson(jsonDecode(response.body)[2]);
     user_name = mainUser.userName.toString();
     weight = mainUser.weight.toString();
     height = mainUser.height.toString();
     bmi = mainUser.BMI.toString();
 
     debugPrint("Username: " + user_name);
-    return User.fromJson(jsonDecode(response.body)[0]);
+    return User.fromJson(jsonDecode(response.body)[1]);
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
