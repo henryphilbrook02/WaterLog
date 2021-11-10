@@ -109,8 +109,7 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+  Widget buildTextField(String labelText, String placeholder, bool isPasswordTextField) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
@@ -118,11 +117,7 @@ class _AccountPageState extends State<AccountPage> {
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
                 ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
+                    onPressed: () { setState(() {showPassword = !showPassword;});},
                     icon: Icon(
                       Icons.remove_red_eye,
                       color: Colors.grey,
@@ -137,7 +132,8 @@ class _AccountPageState extends State<AccountPage> {
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black,
-            )),
+            )
+        ),
       ),
     );
   }
