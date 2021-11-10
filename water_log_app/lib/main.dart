@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:water_log_app/account.dart';
-import 'package:water_log_app/main.dart';
+import 'package:water_log_app/entity_creation.dart';
 import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
@@ -23,7 +21,7 @@ class _mainPage extends State<mainPage> {
   final _pageOptions = [
     statsFriends(),
     stats(),
-    log_in(),
+    EntityCreation(),
     friends(),
     AccountPage()
   ];
