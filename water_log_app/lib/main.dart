@@ -21,7 +21,7 @@ class _mainPage extends State<mainPage> {
   final _pageOptions = [
     statsFriends(),
     stats(),
-    EntityCreation(),
+    //EntityCreation(),
     friends(),
     AccountPage()
   ];

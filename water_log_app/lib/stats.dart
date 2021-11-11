@@ -1,18 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-var sum;
-var day;
+var sum = 0.0;
+var day = "";
 var myDay;
+var fullAverage;
+var gColor;
+var mySums = [];
+var myDays = [];
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    postRequest();
+    stats();
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -45,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    postRequest();
     return SafeArea(
         child: Scaffold(
       body: SfCartesianChart(
@@ -57,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTrackVisible: false,
                 opacity: 0.5,
                 color: const Color.fromRGBO(51, 153, 255, 255),
-                name: 'Water Usage',
+                name: "Title",
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
                 xValueMapper: (GDPData gdp, _) => gdp.continent,
@@ -77,25 +84,32 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<GDPData> getChartData() {
-    // debugPrint("Sum: " + sum);
-    // debugPrint("Day: " + day);
-    // 7
-    // GET Query based on the user ID for that last 7* days
-    // then set that as a GPDData opject, and add it to chartData list.
-
+    postRequest();
+    sleep(const Duration(seconds: 5));
     final List<GDPData> chartData = [
-      GDPData("Sunday", 16, Colors.blue),
-      GDPData('Saturday', 46, Colors.red),
-      GDPData('Friday', 15, Colors.blue),
-      GDPData(myDay, sum, Colors.red),
-      GDPData('Wednesday', 30, Colors.green),
-      GDPData('Tuesday', 25, Colors.green),
-      GDPData('Monday', 46, Colors.red),
+      // GDPData("Sunday", 16, Colors.blue),
+      // GDPData('Saturday', 46, Colors.red),
+      // GDPData('Friday', 15, Colors.blue),
+      // GDPData(myDay, sum, Colors.red),
+      // GDPData('Wednesday', 30, Colors.green),
+      // GDPData('Tuesday', 25, Colors.green),
+      // GDPData('Monday', 46, Colors.red),
     ];
 
-    // for (double i = 0; i < 7; i++) {
-    //   chartData.add(GDPData("continent", i, Colors.black));
-    // }
+    if (mySums.length == 0) {
+      debugPrint("AMAALOUFE");
+      postRequest();
+    }
+
+    for (int i = 0; i < mySums.length; i++) {
+      //debugPrint("My int: " + mySums[i].truncate());
+      if ((mySums[i] > fullAverage)) {
+        gColor = Colors.red;
+      } else {
+        gColor = Colors.green;
+      }
+      chartData.add(GDPData(myDays[i], mySums[i], gColor));
+    }
     return chartData;
   }
 }
@@ -108,6 +122,7 @@ class GDPData {
 }
 
 Future<wData> postRequest() async {
+  double average = 0;
   final response = await http
       .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
 
@@ -119,20 +134,35 @@ Future<wData> postRequest() async {
     //   x = User.fromJson(jsonDecode(response.body)[i]);
     //   debugPrint(x.userName.toString());
     // }
-    var mainUser = wData.fromJson(jsonDecode(response.body)[0]);
-    sum = mainUser.wSum.toDouble();
-    day = mainUser.wDay.toString();
+    for (var i = 0; i < 6; i++) {
+      var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
+      sum = mainUser.wSum.toDouble();
+      day = mainUser.wDay.toString();
+      DateTime dt = DateTime.parse(day);
+      myDay = DateFormat('EEEE').format(dt);
 
-    DateTime dt = DateTime.parse(day);
+      mySums.add(sum);
+      myDays.add(myDay);
+      debugPrint("Average: " + average.toString());
+      debugPrint("Sum: " + sum.toString());
+      average = average + sum;
 
-    myDay = DateFormat('EEEE').format(dt);
-
+      debugPrint("I" + i.toString() + ": " + myDays[i].toString());
+    }
+    fullAverage = (average / 7);
     return wData.fromJson(jsonDecode(response.body)[0]);
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
     throw Exception('Failed to load album');
   }
+}
+
+waitForData() async {
+  debugPrint("Waiting for 20 Seconds");
+  await Future.delayed(const Duration(seconds: 4), () {});
+  postRequest();
+  debugPrint("Waited for 20 Seconds");
 }
 
 class wData {

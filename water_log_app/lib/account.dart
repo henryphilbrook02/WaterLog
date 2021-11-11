@@ -5,15 +5,16 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 
-var user_name;
-var name;
-var weight;
-var height;
-var bmi;
+var user_name = "";
+var name = "";
+var weight = "";
+var height = "";
+var bmi = "";
 
 class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    postRequest();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme_class.light_theme,
@@ -32,7 +33,6 @@ class _AccountPageState extends State<AccountPage> {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
-    postRequest();
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
@@ -107,7 +107,7 @@ class _AccountPageState extends State<AccountPage> {
               buildTextField("Name", "John Maalouf", false),
               buildTextField("Email", "john.maalouf1@marist.edu", false),
               buildTextField("Date of Birth", "09/19/2000", false),
-              buildTextField("Weight", weight + "lbs", false),
+              buildTextField("Weight", weight, false),
               buildTextField("Height", height, false),
               buildTextField("BMI", bmi, false),
               buildTextField("Gender", "Male", false),
@@ -121,7 +121,9 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget buildTextField(String labelText, String placeholder, bool isPasswordTextField) {
+  Widget buildTextField(
+      String labelText, String placeholder, bool isPasswordTextField) {
+    postRequest();
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
@@ -131,7 +133,11 @@ class _AccountPageState extends State<AccountPage> {
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
                 ? IconButton(
-                    onPressed: () { setState(() {showPassword = !showPassword;});},
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
                     icon: Icon(
                       Icons.remove_red_eye,
                       color: Colors.grey,
@@ -146,8 +152,7 @@ class _AccountPageState extends State<AccountPage> {
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black,
-            )
-        ),
+            )),
       ),
     );
   }
