@@ -43,21 +43,23 @@ class _MyHomePageState extends State<MyHomePage> {
   var mySums = [];
   var myDays = [];
 
-  Future<wData> postRequest() async {
+  void postRequest() async {
     double average = 0;
     final response = await http
         .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
 
     if (response.statusCode == 200) {
+
+
       for (var i = 0; i < 7; i++) {
         var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
-        setState((){ sum = mainUser.wSum.toDouble(); });
-        setState((){ day = mainUser.wDay.toString(); });
+        sum = mainUser.wSum.toDouble();
+        day = mainUser.wDay.toString();
         DateTime dt = DateTime.parse(day);
-        setState((){ myDay = DateFormat('EEEE').format(dt); });
+        myDay = DateFormat('EEEE').format(dt);
 
-        setState((){ mySums.add(sum); });
-        setState((){ myDays.add(myDay); });
+        mySums.add(sum);
+        myDays.add(myDay);
 
         print("Average: " + average.toString());
         print("Sum: " + sum.toString());
@@ -65,32 +67,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
       }
 
-      print("The sums are this: " + mySums.length.toString());
-      // for(var i=0; i<mySums.length; i++){
-      //   print(mySums[i]);
-      // }
+      // setState((){ mySums = mySums; });
+      // setState((){ myDays = myDays; });
 
-      return wData.fromJson(jsonDecode(response.body)[0]);
+      print("The sums are this: " + mySums.length.toString());
+      for(var i=0; i<mySums.length; i++){
+        print(mySums[i]);
+      }
+
+      //return wData.fromJson(jsonDecode(response.body)[0]);
 
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load album');
     }
+
   }
 
-
-  @override
-  void initState() {
-    _chartData = getChartData();
-    _tooltipBehavior = TooltipBehavior(enable: true);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
 
     postRequest();
+
+    setState((){ mySums = mySums; });
+    setState((){ myDays = myDays; });
+
+    _chartData = getChartData();
+    _tooltipBehavior = TooltipBehavior(enable: true);
 
     return SafeArea(
         child: Scaffold(
