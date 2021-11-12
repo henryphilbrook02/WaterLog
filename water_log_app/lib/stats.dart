@@ -11,7 +11,6 @@ class stats extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    stats();
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -43,7 +42,10 @@ class _MyHomePageState extends State<MyHomePage> {
   var mySums = [];
   var myDays = [];
 
-  void postRequest() async {
+  Future<wData> postRequest() async {
+
+    print("In METHOD");
+
     double average = 0;
     final response = await http
         .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
@@ -67,36 +69,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
       }
 
-      // setState((){ mySums = mySums; });
-      // setState((){ myDays = myDays; });
+      return wData.fromJson(jsonDecode(response.body)[0]);
 
       print("The sums are this: " + mySums.length.toString());
       for(var i=0; i<mySums.length; i++){
         print(mySums[i]);
       }
 
-      //return wData.fromJson(jsonDecode(response.body)[0]);
-
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load user');
     }
 
   }
 
+  @override
+  void initState() {
+
+    _tooltipBehavior = TooltipBehavior(enable: true);
+    _chartData = getChartData();
+
+    Future.delayed(Duration.zero,() async {
+
+      await postRequest();
+
+      setState((){ mySums = mySums; });
+      setState((){ myDays = myDays; });
+
+      _tooltipBehavior = TooltipBehavior(enable: true);
+      _chartData = getChartData();
+    });
+
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    postRequest();
-
-    setState((){ mySums = mySums; });
-    setState((){ myDays = myDays; });
-
-    _chartData = getChartData();
-    _tooltipBehavior = TooltipBehavior(enable: true);
-
+    // _chartData = getChartData();
+    // _tooltipBehavior = TooltipBehavior(enable: true);
     return SafeArea(
         child: Scaffold(
       body: SfCartesianChart(
@@ -149,35 +162,6 @@ class GDPData {
   final Color segmentColor;
 }
 
-// Future<wData> postRequest() async {
-//   double average = 0;
-//   final response = await http
-//       .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
-//
-//   if (response.statusCode == 200) {
-//     for (var i = 0; i < 5; i++) {
-//       var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
-//       sum = mainUser.wSum.toDouble();
-//       day = mainUser.wDay.toString();
-//       DateTime dt = DateTime.parse(day);
-//       myDay = DateFormat('EEEE').format(dt);
-//
-//       mySums.add(sum);
-//       myDays.add(myDay);
-//       debugPrint("Average: " + average.toString());
-//       debugPrint("Sum: " + sum.toString());
-//       average = average + sum;
-//
-//       debugPrint("I" + i.toString() + ": " + myDays[i].toString());
-//     }
-//     fullAverage = (average / 7);
-//     return wData.fromJson(jsonDecode(response.body)[0]);
-//   } else {
-//     // If the server did not return a 200 OK response,
-//     // then throw an exception.
-//     throw Exception('Failed to load album');
-//   }
-// }
 
 class wData {
   int wSum;
