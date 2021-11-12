@@ -6,19 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-var sum = 0.0;
-var day = "";
-var myDay;
-var fullAverage;
-var gColor;
-var mySums = [];
-var myDays = [];
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    postRequest();
     stats();
 
     return MaterialApp(
@@ -40,9 +32,53 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
   late List<GDPData> _chartData;
   late TooltipBehavior _tooltipBehavior;
+
+  var sum = 0.0;
+  var day = "";
+  var myDay;
+  var mySums = [];
+  var myDays = [];
+
+  Future<wData> postRequest() async {
+    double average = 0;
+    final response = await http
+        .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
+
+    if (response.statusCode == 200) {
+      for (var i = 0; i < 7; i++) {
+        var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
+        setState((){ sum = mainUser.wSum.toDouble(); });
+        setState((){ day = mainUser.wDay.toString(); });
+        DateTime dt = DateTime.parse(day);
+        setState((){ myDay = DateFormat('EEEE').format(dt); });
+
+        setState((){ mySums.add(sum); });
+        setState((){ myDays.add(myDay); });
+
+        print("Average: " + average.toString());
+        print("Sum: " + sum.toString());
+        print("I" + i.toString() + ": " + myDays[i].toString());
+
+      }
+
+      print("The sums are this: " + mySums.length.toString());
+      // for(var i=0; i<mySums.length; i++){
+      //   print(mySums[i]);
+      // }
+
+      return wData.fromJson(jsonDecode(response.body)[0]);
+
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
 
   @override
   void initState() {
@@ -53,6 +89,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    postRequest();
+
     return SafeArea(
         child: Scaffold(
       body: SfCartesianChart(
@@ -84,31 +123,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<GDPData> getChartData() {
-    postRequest();
-    sleep(const Duration(seconds: 5));
-    final List<GDPData> chartData = [
-      // GDPData("Sunday", 16, Colors.blue),
-      // GDPData('Saturday', 46, Colors.red),
-      // GDPData('Friday', 15, Colors.blue),
-      // GDPData(myDay, sum, Colors.red),
-      // GDPData('Wednesday', 30, Colors.green),
-      // GDPData('Tuesday', 25, Colors.green),
-      // GDPData('Monday', 46, Colors.red),
-    ];
 
-    if (mySums.length == 0) {
-      debugPrint("AMAALOUFE");
-      postRequest();
-    }
-
+    final List<GDPData> chartData = [];
     for (int i = 0; i < mySums.length; i++) {
-      //debugPrint("My int: " + mySums[i].truncate());
-      if ((mySums[i] > fullAverage)) {
-        gColor = Colors.red;
-      } else {
-        gColor = Colors.green;
-      }
-      chartData.add(GDPData(myDays[i], mySums[i], gColor));
+      // if ((mySums[i] > fullAverage)) {
+      //   gColor = Colors.red;
+      // } else {
+      //   gColor = Colors.green;
+      // }
+      chartData.add(GDPData(myDays[i], mySums[i], Colors.red));
     }
     return chartData;
   }
@@ -121,49 +144,35 @@ class GDPData {
   final Color segmentColor;
 }
 
-Future<wData> postRequest() async {
-  double average = 0;
-  final response = await http
-      .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-
-    // for (var i = 0; i < 2; i++) {
-    //   x = User.fromJson(jsonDecode(response.body)[i]);
-    //   debugPrint(x.userName.toString());
-    // }
-    for (var i = 0; i < 6; i++) {
-      var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
-      sum = mainUser.wSum.toDouble();
-      day = mainUser.wDay.toString();
-      DateTime dt = DateTime.parse(day);
-      myDay = DateFormat('EEEE').format(dt);
-
-      mySums.add(sum);
-      myDays.add(myDay);
-      debugPrint("Average: " + average.toString());
-      debugPrint("Sum: " + sum.toString());
-      average = average + sum;
-
-      debugPrint("I" + i.toString() + ": " + myDays[i].toString());
-    }
-    fullAverage = (average / 7);
-    return wData.fromJson(jsonDecode(response.body)[0]);
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-waitForData() async {
-  debugPrint("Waiting for 20 Seconds");
-  await Future.delayed(const Duration(seconds: 4), () {});
-  postRequest();
-  debugPrint("Waited for 20 Seconds");
-}
+// Future<wData> postRequest() async {
+//   double average = 0;
+//   final response = await http
+//       .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
+//
+//   if (response.statusCode == 200) {
+//     for (var i = 0; i < 5; i++) {
+//       var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
+//       sum = mainUser.wSum.toDouble();
+//       day = mainUser.wDay.toString();
+//       DateTime dt = DateTime.parse(day);
+//       myDay = DateFormat('EEEE').format(dt);
+//
+//       mySums.add(sum);
+//       myDays.add(myDay);
+//       debugPrint("Average: " + average.toString());
+//       debugPrint("Sum: " + sum.toString());
+//       average = average + sum;
+//
+//       debugPrint("I" + i.toString() + ": " + myDays[i].toString());
+//     }
+//     fullAverage = (average / 7);
+//     return wData.fromJson(jsonDecode(response.body)[0]);
+//   } else {
+//     // If the server did not return a 200 OK response,
+//     // then throw an exception.
+//     throw Exception('Failed to load album');
+//   }
+// }
 
 class wData {
   int wSum;
