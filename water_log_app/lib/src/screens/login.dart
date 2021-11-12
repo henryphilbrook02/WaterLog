@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/src/screens/home.dart';
+
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,12 +17,16 @@ class _LoginScreenState extends State<LoginScreen> {
   String _password = "";
   String _errorMsg = "";
 
-
   final auth = FirebaseAuth.instance;
+
+
 
   @override
 
   Widget build(BuildContext context) {
+
+    postUser();
+
     return Scaffold(
       appBar: AppBar(title: Text('Login'),),
       body: Column (
@@ -92,33 +99,32 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+void postUser() async{
 
-// void logInToFb() {
-//   firebaseAuth
-//       .signInWithEmailAndPassword(
-//       email: emailController.text, password: passwordController.text)
-//       .then((result) {
-//     Navigator.pushReplacement(
-//       context,
-//       MaterialPageRoute(builder: (context) => Home(uid: result.user.uid)),
-//     );
-//   }).catchError((err) {
-//     print(err.message);
-//     showDialog(
-//         context: context,
-//         builder: (BuildContext context) {
-//           return AlertDialog(
-//             title: Text("Error"),
-//             content: Text(err.message),
-//             actions: [
-//               TextButton(
-//                 child: Text("Ok"),
-//                 onPressed: () {
-//                   Navigator.of(context).pop();
-//                 },
-//               )
-//             ],
-//           );
-//         });
-//   });
-// }
+  print("user posted?");
+
+  var uri = Uri.parse('http://10.11.25.60:443/api/users');
+
+  Map<String, dynamic> map = {
+      "id": "Jan",
+      "tolken": "GIE A",
+      "weight": 175,
+      "height": "5 10",
+      "BMI": 15,
+      "curUsage": 65,
+      "unit": "1",
+      "email": "juan.arias@marist.edu",
+      "creation": "2021-11-11",
+      "update": "2021-11-11"
+  };
+  String rawJson = jsonEncode(map);
+
+  http.Response response = await http.post(
+    uri,
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+    body: rawJson,
+  );
+    
+}
