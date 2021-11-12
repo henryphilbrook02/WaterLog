@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget build(BuildContext context) {
 
-    postUser();
+    //postUser();
 
     return Scaffold(
       appBar: AppBar(title: Text('Login'),),
@@ -126,5 +126,8 @@ void postUser() async{
     },
     body: rawJson,
   );
-    
+
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${response.body}');
+
 }
