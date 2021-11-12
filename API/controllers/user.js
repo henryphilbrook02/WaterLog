@@ -12,14 +12,15 @@ exports.readUser = (req, res) => {
 }
 
 exports.createUser = (req, res) => {
-    var query = "INSERT INTO user(`USERNAME`, `TOKEN`, `WEIGHT`, `HEIGHT`, `BMI`, `CUR_USAGE`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
+    var query = "INSERT INTO user(`USERNAME`, `TOKEN`, `WEIGHT`, `HEIGHT`, `BMI`, `CUR_USAGE`, `UNIT`, `EMAIL`, `CREATION`, `LAST_UPDATE`) VALUES('" +
         req.body.id + "', '" +
         req.body.tolken + "', " +
         req.body.weight + ", '" +
         req.body.height + "', " +
         req.body.BMI + ", " +
-        req.body.curUsage + ", " +
-        req.body.unit + ", '" +
+        req.body.curUsage + ", '" +
+        req.body.unit + "', '" +
+        req.body.email + "', '" +
         req.body.creation + "', '" +
         req.body.update + "')";
     index.executeQuery(res, query);
@@ -32,8 +33,9 @@ exports.updateUser = (req, res) => {
         ", HEIGHT = '" + req.body.height +
         "', BMI = " + req.body.BMI +
         ", CUR_USAGE = " + req.body.curUsage +
-        ", UNIT = " + req.body.unit +
-        ", CREATION = '" + req.body.creation +
+        ", UNIT = '" + req.body.unit +
+        "', EMAIL = '" + req.body.email +
+        "', CREATION = '" + req.body.creation +
         "', LAST_UPDATE = '" + req.body.update + "' " +
         "WHERE(USERNAME = '" + req.params.id + "')";
     index.executeQuery(res, query);
