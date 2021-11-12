@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 
@@ -14,7 +12,6 @@ var bmi = "";
 class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    postRequest();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme_class.light_theme,
@@ -31,8 +28,48 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   bool showPassword = false;
+
+  String user_name = "";
+  var name = "";
+  var weight = "";
+  var height = "";
+  var bmi = "";
+
+
+  void postRequest() async {
+    final response =
+    await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      // for (var i = 0; i < 2; i++) {
+      //   x = User.fromJson(jsonDecode(response.body)[i]);
+      //   debugPrint(x.userName.toString());
+      // }
+      var mainUser = User.fromJson(jsonDecode(response.body)[2]);
+
+      setState((){ user_name = mainUser.userName.toString(); });
+      setState((){ weight = mainUser.weight.toString(); });
+      setState((){ height = mainUser.height.toString(); });
+      setState((){ bmi = mainUser.BMI.toString(); });
+
+      print("Username: " + user_name);
+      //return User.fromJson(jsonDecode(response.body)[1]);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load user');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+    postRequest();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
@@ -155,33 +192,6 @@ class _AccountPageState extends State<AccountPage> {
             )),
       ),
     );
-  }
-}
-
-Future<User> postRequest() async {
-  final response =
-      await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-
-    // for (var i = 0; i < 2; i++) {
-    //   x = User.fromJson(jsonDecode(response.body)[i]);
-    //   debugPrint(x.userName.toString());
-    // }
-    var mainUser = User.fromJson(jsonDecode(response.body)[2]);
-    user_name = mainUser.userName.toString();
-    weight = mainUser.weight.toString();
-    height = mainUser.height.toString();
-    bmi = mainUser.BMI.toString();
-
-    debugPrint("Username: " + user_name);
-    return User.fromJson(jsonDecode(response.body)[1]);
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
   }
 }
 
