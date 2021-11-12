@@ -85,24 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<GDPData> getChartData() {
     postRequest();
-    sleep(const Duration(seconds: 5));
-    final List<GDPData> chartData = [
-      // GDPData("Sunday", 16, Colors.blue),
-      // GDPData('Saturday', 46, Colors.red),
-      // GDPData('Friday', 15, Colors.blue),
-      // GDPData(myDay, sum, Colors.red),
-      // GDPData('Wednesday', 30, Colors.green),
-      // GDPData('Tuesday', 25, Colors.green),
-      // GDPData('Monday', 46, Colors.red),
-    ];
-
-    if (mySums.length == 0) {
-      debugPrint("AMAALOUFE");
-      postRequest();
-    }
-
+    final List<GDPData> chartData = [];
     for (int i = 0; i < mySums.length; i++) {
-      //debugPrint("My int: " + mySums[i].truncate());
       if ((mySums[i] > fullAverage)) {
         gColor = Colors.red;
       } else {
@@ -127,14 +111,7 @@ Future<wData> postRequest() async {
       .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-
-    // for (var i = 0; i < 2; i++) {
-    //   x = User.fromJson(jsonDecode(response.body)[i]);
-    //   debugPrint(x.userName.toString());
-    // }
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 5; i++) {
       var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
       sum = mainUser.wSum.toDouble();
       day = mainUser.wDay.toString();
@@ -156,13 +133,6 @@ Future<wData> postRequest() async {
     // then throw an exception.
     throw Exception('Failed to load album');
   }
-}
-
-waitForData() async {
-  debugPrint("Waiting for 20 Seconds");
-  await Future.delayed(const Duration(seconds: 4), () {});
-  postRequest();
-  debugPrint("Waited for 20 Seconds");
 }
 
 class wData {
