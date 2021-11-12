@@ -18,7 +18,7 @@ exports.userEntries = (req, res) => {
 
 exports.userDateEntries = (req, res) => {
     var query = "select * from entry where USERNAME = '" + req.params.user +
-        "' AND DAY >= '" + req.body.startDate + "' and DAY <= '" + req.body.endDate + "'";
+        "' AND DAY > '" + req.body.startDate + "' and DAY <= '" + req.body.endDate + "'";
     index.executeQuery(res, query);
 }
 
@@ -30,7 +30,7 @@ exports.sevenDayEntries = (req, res) => {
     var pastDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
    
     var query = "select * from entry where USERNAME = '" + req.params.user +
-    "' AND DAY >= '" + pastDate + "' and DAY <= '" + curDate + "'";
+    "' AND DAY > '" + pastDate + "' and DAY <= '" + curDate + "'";
     index.executeQuery(res, query);
 }
 
@@ -45,7 +45,7 @@ exports.weekEntries = (req, res) => {
     var lastday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
     var query = "select * from entry where USERNAME = '" + req.params.user +
-    "' AND DAY >= '" + firstday + "' and DAY <= '" + lastday + "'";
+    "' AND DAY > '" + firstday + "' and DAY <= '" + lastday + "'";
     index.executeQuery(res, query);
 }
 
@@ -59,13 +59,13 @@ function querybuilder(userName, startDate, endDate) {
         "from preset_activity AS p, entry AS e " +
         "where  (p.ACTIVITY_ID = e.PRESET_ID) " +
         "and (e.USERNAME = '" + userName + "') " +
-        "and (e.day >= '" + startDate + "')and (e.day <= '" + endDate + "') " +
+        "and (e.day > '" + startDate + "')and (e.day <= '" + endDate + "') " +
         "UNION " +
         "SELECT SUM(e.amount * a.amount) as amount " +
         "from activity AS a, entry AS e " +
         "where (a.USERNAME = e.USERNAME) and (a.ACTIVITY_ID = e.ACTIVITY_ID) " +
         "and (e.USERNAME = '" + userName + "') " +
-        "and (e.day >= '" + startDate + "') and (e.day <= '" + endDate + "')" +
+        "and (e.day > '" + startDate + "') and (e.day <= '" + endDate + "')" +
         ") x"
     return val;
 }
@@ -113,14 +113,14 @@ function dayQueryBuilder(userName, startDate, endDate) {
         "from preset_activity AS p, entry AS e " +
         "where  (p.ACTIVITY_ID = e.PRESET_ID) " +
         "and (e.USERNAME = '" + userName + "') " +
-        "and (e.day >= '" + startDate + "')and (e.day <= '" + endDate + "') " +
+        "and (e.day > '" + startDate + "')and (e.day <= '" + endDate + "') " +
         "group by e.day " +
         "UNION " +
         "SELECT SUM(e.amount * a.amount) as amount, e.day " +
         "from activity AS a, entry AS e " +
         "where (a.USERNAME = e.USERNAME) and (a.ACTIVITY_ID = e.ACTIVITY_ID) " +
         "and (e.USERNAME = '" + userName + "') " +
-        "and (e.day >= '" + startDate + "') and (e.day <= '" + endDate + "') " +
+        "and (e.day > '" + startDate + "') and (e.day <= '" + endDate + "') " +
         "group by e.day " +
     ") x " +
     "group by day"

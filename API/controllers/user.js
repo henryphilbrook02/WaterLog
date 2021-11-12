@@ -12,6 +12,7 @@ exports.readUser = (req, res) => {
 }
 
 exports.createUser = (req, res) => {
+    console.log(req.body)
     var query = "INSERT INTO user(`USERNAME`, `TOKEN`, `WEIGHT`, `HEIGHT`, `BMI`, `CUR_USAGE`, `UNIT`, `EMAIL`, `CREATION`, `LAST_UPDATE`) VALUES('" +
         req.body.id + "', '" +
         req.body.tolken + "', " +
