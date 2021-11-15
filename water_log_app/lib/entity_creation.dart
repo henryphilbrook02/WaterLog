@@ -18,6 +18,9 @@ class EntityCreationItem extends StatefulWidget {
 }
 
 class _EntityCreationPageState extends State<EntityCreationItem> {
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +30,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       ),
       body: ListView(
         children: [
-          buildEntity("Shower", 5)
+          buildEntity("Shower", "This is my daily shower",  5),
+          buildEntity("Flush", "This is a flush", 2)
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -36,19 +40,20 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       ),
     );
   }
-}
 
-Widget buildEntity (String entityName, int waterUnits) {
-  int waterUnits = 0;
+  Widget buildEntity (String entityName, String desc, int waterUnits) {
   return ListTile(
     leading: Icon(Icons.water),
     title: Text(entityName),
-    subtitle: Text("Enter the amount of gallons used for this task."),
+    subtitle: Text(desc),
     trailing: FittedBox(
       child: Row(
         children: [
           IconButton(
-            onPressed: () => incrementWater(waterUnits),
+            color: Colors.pinkAccent,
+            highlightColor: Colors.red.shade100,
+            splashRadius: 15,
+            onPressed: () { setState( () {waterUnits!=0 ? waterUnits--: waterUnits;} ); },
             /*
               Not sure how to fix this, not sure what state I need to change here
               I know this has to decrement the quantity of water used.
@@ -57,8 +62,10 @@ Widget buildEntity (String entityName, int waterUnits) {
             ),
           Text(waterUnits.toString()),
           IconButton(
-            onPressed: () => incrementWater(waterUnits),
-            //onPressed: () { setState( () {waterUnits!=0 ? waterUnits--: waterUnits;} ); },
+            color: Colors.lightGreen,
+            highlightColor: Colors.green.shade100,
+            splashRadius: 15,
+            onPressed: () { setState( () {waterUnits!=0 ? waterUnits++: waterUnits;} ); },
             /*
               Not sure how to fix this, not sure what state I need to change here
               I know this has to decrement the quantity of water used.
@@ -71,13 +78,11 @@ Widget buildEntity (String entityName, int waterUnits) {
   );
 }
 
+
+}
+
 Widget addEntity() {
   return Card(
 
   );
-}
-
-Widget incrementWater(int waterUnits) {
-  return
-  int waterUnits++;
 }
