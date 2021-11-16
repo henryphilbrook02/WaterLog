@@ -35,10 +35,9 @@ class _AccountPageState extends State<AccountPage> {
   var height = "";
   var bmi = "";
 
-
   void postRequest() async {
     final response =
-    await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
+        await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -50,10 +49,18 @@ class _AccountPageState extends State<AccountPage> {
       // }
       var mainUser = User.fromJson(jsonDecode(response.body)[2]);
 
-      setState((){ user_name = mainUser.userName.toString(); });
-      setState((){ weight = mainUser.weight.toString(); });
-      setState((){ height = mainUser.height.toString(); });
-      setState((){ bmi = mainUser.BMI.toString(); });
+      setState(() {
+        user_name = mainUser.userName.toString();
+      });
+      setState(() {
+        weight = mainUser.weight.toString();
+      });
+      setState(() {
+        height = mainUser.height.toString();
+      });
+      setState(() {
+        bmi = mainUser.BMI.toString();
+      });
 
       print("Username: " + user_name);
       //return User.fromJson(jsonDecode(response.body)[1]);
@@ -64,10 +71,8 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     postRequest();
 
     return Scaffold(
@@ -125,7 +130,7 @@ class _AccountPageState extends State<AccountPage> {
                             shape: BoxShape.circle,
                             border: Border.all(
                               width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
+                              //color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                             color: Colors.blue,
                           ),

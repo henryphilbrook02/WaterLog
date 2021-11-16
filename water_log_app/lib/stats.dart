@@ -6,12 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class stats extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,7 +29,6 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-
 class _MyHomePageState extends State<MyHomePage> {
   late List<GDPData> _chartData;
   late TooltipBehavior _tooltipBehavior;
@@ -43,16 +40,13 @@ class _MyHomePageState extends State<MyHomePage> {
   var myDays = [];
 
   Future<wData> postRequest() async {
-
     print("In METHOD");
 
     double average = 0;
-    final response = await http
-        .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
+    final response = await http.get(
+        Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
 
     if (response.statusCode == 200) {
-
-
       for (var i = 0; i < 7; i++) {
         var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
         sum = mainUser.wSum.toDouble();
@@ -66,52 +60,52 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Average: " + average.toString());
         print("Sum: " + sum.toString());
         print("I" + i.toString() + ": " + myDays[i].toString());
-
       }
 
       return wData.fromJson(jsonDecode(response.body)[0]);
 
       print("The sums are this: " + mySums.length.toString());
-      for(var i=0; i<mySums.length; i++){
+      for (var i = 0; i < mySums.length; i++) {
         print(mySums[i]);
       }
-
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load user');
     }
-
   }
 
   @override
   void initState() {
-
     _tooltipBehavior = TooltipBehavior(enable: true);
     _chartData = getChartData();
 
-    Future.delayed(Duration.zero,() async {
-
+    Future.delayed(Duration.zero, () async {
       await postRequest();
 
-      setState((){ mySums = mySums; });
-      setState((){ myDays = myDays; });
+      setState(() {
+        mySums = mySums;
+      });
+      setState(() {
+        myDays = myDays;
+      });
 
       _tooltipBehavior = TooltipBehavior(enable: true);
       _chartData = getChartData();
     });
 
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     // _chartData = getChartData();
     // _tooltipBehavior = TooltipBehavior(enable: true);
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Weekly Stats for User"),
+        elevation: 1,
+      ),
       body: SfCartesianChart(
           title: ChartTitle(text: 'Weekly Water Usage'),
           legend: Legend(isVisible: true),
@@ -137,11 +131,10 @@ class _MyHomePageState extends State<MyHomePage> {
               edgeLabelPlacement: EdgeLabelPlacement.shift,
               //numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)
               title: AxisTitle(text: 'Gallons Per Day - (09/27/2021)'))),
-    ));
+    );
   }
 
   List<GDPData> getChartData() {
-
     final List<GDPData> chartData = [];
     for (int i = 0; i < mySums.length; i++) {
       // if ((mySums[i] > fullAverage)) {
@@ -161,7 +154,6 @@ class GDPData {
   final double gdp;
   final Color segmentColor;
 }
-
 
 class wData {
   int wSum;

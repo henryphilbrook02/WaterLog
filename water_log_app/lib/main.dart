@@ -5,6 +5,7 @@ import 'package:water_log_app/entity_creation.dart';
 import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
+import 'package:water_log_app/home.dart';
 import 'package:water_log_app/friend_stats.dart';
 
 void main() async {
@@ -22,7 +23,8 @@ class _mainPage extends State<mainPage> {
   int selectedPage = 0;
 
   final _pageOptions = [
-    statsFriends(),
+    //statsFriends(),
+    home(),
     stats(),
     EntityCreationItem(),
     friends(),
