@@ -1,38 +1,38 @@
- import 'package:flutter/material.dart';
- import 'package:water_log_app/custom_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:water_log_app/custom_theme.dart';
 
- class EntityCreation extends StatelessWidget {
-     @override
-   Widget build(BuildContext context) {
+class EntityCreation extends StatelessWidget {
+    @override
+  Widget build(BuildContext context) {
      return MaterialApp(
        debugShowCheckedModeBanner: false,
        theme: theme_class.light_theme,
        home: EntityCreation(),
      );
    }
- }
+}
 
- class EntityCreationItem extends StatefulWidget {
-   @override
-   _EntityCreationPageState createState() => _EntityCreationPageState();
- }
+class EntityCreationItem extends StatefulWidget {
+  @override
+  _EntityCreationPageState createState() => _EntityCreationPageState();
+}
 
 class _EntityCreationPageState extends State<EntityCreationItem> {
 
-    List<Entity> entityList = [
-    Entity("Shower", "Morning Shower", 5),
-    Entity("Shower", "Evening Shower", 5),
-    Entity("Flush", "null", 4),
-  ];
+  List<Entity> entityList = [
+  Entity("Shower", "Morning Shower", 5),
+  Entity("Shower", "Evening Shower", 5),
+  Entity("Flush", "null", 4),
+];
 
-  late TextEditingController _Activity;
-  late TextEditingController _Desc;
-  initState()
-  {
-    _Activity = new TextEditingController();
-    _Desc = new TextEditingController();
-    super.initState();
-  }
+late TextEditingController _Activity;
+late TextEditingController _Desc;
+initState()
+{
+  _Activity = new TextEditingController();
+  _Desc = new TextEditingController();
+  super.initState();
+}
   
   @override
   Widget build(BuildContext context) {
