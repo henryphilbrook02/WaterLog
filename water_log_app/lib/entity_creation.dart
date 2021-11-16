@@ -26,9 +26,11 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
   late TextEditingController _Activity;
   late TextEditingController _Desc;
+  late TextEditingController _Amount;
   initState() {
     _Activity = new TextEditingController();
     _Desc = new TextEditingController();
+    _Amount = new TextEditingController();
     super.initState();
   }
 
@@ -83,26 +85,35 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
                   ),
                 );
               }),
-          Container(
-            height: 50,
-            width: 100,
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-            child: FlatButton(
-              onPressed: () {},
-              child: Text(
-                'Submit',
-                style: TextStyle(color: Colors.white, fontSize: 25),
-              ),
-            ),
-          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          _showAlertDialog();
-        },
+      floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              height: 50,
+              width: 300,
+              decoration: BoxDecoration(
+                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  print("submit");
+                },
+                label: const Text("Submit", style: TextStyle(fontSize: 25)),
+              ),
+            ),
+
+            SizedBox(
+              width: 10,
+            ),
+
+            FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                _showAlertDialog();
+              },
+            )
+          ]
       ),
     );
   }
@@ -141,6 +152,14 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
                 controller: _Desc,
                 decoration: new InputDecoration(
                     hintText: "Activity Description",
+                    contentPadding: EdgeInsets.all(10)),
+              ),
+            ),
+            new Flexible(
+              child: new TextField(
+                controller: _Amount,
+                decoration: new InputDecoration(
+                    hintText: "Amount Consumed  Per Use",
                     contentPadding: EdgeInsets.all(10)),
               ),
             )
