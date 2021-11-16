@@ -64,10 +64,6 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
                                     : entityList[index].waterUnits;
                               });
                             },
-                            /*
-                          Not sure how to fix this, not sure what state I need to change here
-                          I know this has to decrement the quantity of water used.
-                        */
                             icon: Icon(Icons.remove)),
                         Text(entityList[index].waterUnits.toString()),
                         IconButton(
@@ -76,15 +72,11 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
                             splashRadius: 15,
                             onPressed: () {
                               setState(() {
-                                entityList[index].waterUnits != 0
+                                entityList[index].waterUnits != -1
                                     ? entityList[index].waterUnits++
                                     : entityList[index].waterUnits;
                               });
                             },
-                            /*
-                          Not sure how to fix this, not sure what state I need to change here
-                          I know this has to decrement the quantity of water used.
-                        */
                             icon: Icon(Icons.add)),
                       ],
                     ),
@@ -97,11 +89,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(20)),
             child: FlatButton(
-              onPressed: () {}
-              /*
-                Here is where the page will send the list data to the database
-                */
-              ,
+              onPressed: () {},
               child: Text(
                 'Submit',
                 style: TextStyle(color: Colors.white, fontSize: 25),
@@ -118,43 +106,6 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       ),
     );
   }
-
-//   Widget buildEntity (String entityName, String desc, int waterUnits) {
-//   return ListTile(
-//     leading: Icon(Icons.water),
-//     title: Text(entityName),
-//     subtitle: Text(desc),
-//     trailing: FittedBox(
-//       child: Row(
-//         children: [
-//           IconButton(
-//             color: Colors.pinkAccent,
-//             highlightColor: Colors.red.shade100,
-//             splashRadius: 15,
-//             onPressed: () { setState( () {waterUnits!=0 ? waterUnits--: waterUnits;} ); },
-//             /*
-//               Not sure how to fix this, not sure what state I need to change here
-//               I know this has to decrement the quantity of water used.
-//             */
-//             icon: Icon(Icons.remove)
-//             ),
-//           Text(waterUnits.toString()),
-//           IconButton(
-//             color: Colors.lightGreen,
-//             highlightColor: Colors.green.shade100,
-//             splashRadius: 15,
-//             onPressed: () { setState( () {waterUnits!=0 ? waterUnits++: waterUnits;} ); },
-//             /*
-//               Not sure how to fix this, not sure what state I need to change here
-//               I know this has to decrement the quantity of water used.
-//             */
-//             icon: Icon(Icons.add)
-//             ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
 
   void _showAlertDialog() {
     String activity;
@@ -212,7 +163,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
   void addEntity(String actName, String desc) {
     setState(() {
-      entityList.add(Entity(actName, desc, 5));
+      entityList.add(Entity(actName, desc, 0));
     });
   }
 }
