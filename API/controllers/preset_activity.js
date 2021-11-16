@@ -11,8 +11,9 @@ exports.readPreset = (req, res) => {
 }
 
 exports.createPreset = (req, res) => {
-    var query = "INSERT INTO preset_activity (`NAME`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
-        req.body.name + "', '" +
+    var query = "INSERT INTO preset_activity (`NAME`, `AMOUNT`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
+        req.body.name + "', " +
+        req.body.amount + ", '" +
         req.body.units +"', '" +
         req.body.creation + "', '" +
         req.body.update + "')";
@@ -22,7 +23,8 @@ exports.createPreset = (req, res) => {
 exports.updatePreset = (req, res) => {
     var query = "UPDATE preset_activity " +
         "SET NAME = '" + req.body.name +
-        "', UNIT = '" + req.body.units +
+        "', AMOUNT = " + req.body.amount +
+        ", UNIT = '" + req.body.units +
         "', CREATION = '" + req.body.creation +
         "', LAST_UPDATE = '" + req.body.update + "' " +
         "WHERE(ACTIVITY_ID = " + req.params.id + ")";

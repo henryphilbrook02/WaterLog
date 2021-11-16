@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:water_log_app/custom_theme.dart';
+ import 'package:flutter/material.dart';
+ import 'package:water_log_app/custom_theme.dart';
 
-class EntityCreation extends StatelessWidget {
-    @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: theme_class.light_theme,
-      home: EntityCreation(),
-    );
-  }
-}
+ class EntityCreation extends StatelessWidget {
+     @override
+   Widget build(BuildContext context) {
+     return MaterialApp(
+       debugShowCheckedModeBanner: false,
+       theme: theme_class.light_theme,
+       home: EntityCreation(),
+     );
+   }
+ }
 
-class EntityCreationItem extends StatefulWidget {
-  @override
-  _EntityCreationPageState createState() => _EntityCreationPageState();
-}
+ class EntityCreationItem extends StatefulWidget {
+   @override
+   _EntityCreationPageState createState() => _EntityCreationPageState();
+ }
 
 class _EntityCreationPageState extends State<EntityCreationItem> {
 

@@ -17,9 +17,10 @@ exports.userActivities = (req, res) => {
 }
 
 exports.createActivity = (req, res) => {
-    var query = "INSERT INTO activity (`USERNAME`, `NAME`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
+    var query = "INSERT INTO activity (`USERNAME`, `NAME`, `AMOUNT`, `UNIT`, `CREATION`, `LAST_UPDATE`) VALUES('" +
         req.body.username + "', '" +
-        req.body.name + "', '" +
+        req.body.name + "', " +
+        req.body.amount + ", '" +
         req.body.units + "', '" +
         req.body.creation + "', '" +
         req.body.update + "')";
@@ -29,7 +30,8 @@ exports.createActivity = (req, res) => {
 exports.updateActivity = (req, res) => {
     var query = "UPDATE activity " +
         "SET NAME = '" + req.body.name +
-        "', UNIT = '" + req.body.units +
+        "', AMOUNT = " + req.body.amount +
+        ", UNIT = '" + req.body.units +
         "', CREATION = '" + req.body.creation +
         "', LAST_UPDATE = '" + req.body.update + "' " +
         "WHERE(ACTIVITY_ID = " + req.params.id + ")";

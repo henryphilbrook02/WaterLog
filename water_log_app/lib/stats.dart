@@ -1,18 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-var sum;
-var day;
-var myDay;
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -32,20 +31,85 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
   late List<GDPData> _chartData;
   late TooltipBehavior _tooltipBehavior;
 
+  var sum = 0.0;
+  var day = "";
+  var myDay;
+  var mySums = [];
+  var myDays = [];
+
+  Future<wData> postRequest() async {
+
+    print("In METHOD");
+
+    double average = 0;
+    final response = await http
+        .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
+
+    if (response.statusCode == 200) {
+
+
+      for (var i = 0; i < 7; i++) {
+        var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
+        sum = mainUser.wSum.toDouble();
+        day = mainUser.wDay.toString();
+        DateTime dt = DateTime.parse(day);
+        myDay = DateFormat('EEEE').format(dt);
+
+        mySums.add(sum);
+        myDays.add(myDay);
+
+        print("Average: " + average.toString());
+        print("Sum: " + sum.toString());
+        print("I" + i.toString() + ": " + myDays[i].toString());
+
+      }
+
+      return wData.fromJson(jsonDecode(response.body)[0]);
+
+      print("The sums are this: " + mySums.length.toString());
+      for(var i=0; i<mySums.length; i++){
+        print(mySums[i]);
+      }
+
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load user');
+    }
+
+  }
+
   @override
   void initState() {
-    _chartData = getChartData();
+
     _tooltipBehavior = TooltipBehavior(enable: true);
+    _chartData = getChartData();
+
+    Future.delayed(Duration.zero,() async {
+
+      await postRequest();
+
+      setState((){ mySums = mySums; });
+      setState((){ myDays = myDays; });
+
+      _tooltipBehavior = TooltipBehavior(enable: true);
+      _chartData = getChartData();
+    });
+
     super.initState();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    postRequest();
+
+    // _chartData = getChartData();
+    // _tooltipBehavior = TooltipBehavior(enable: true);
     return SafeArea(
         child: Scaffold(
       body: SfCartesianChart(
@@ -57,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTrackVisible: false,
                 opacity: 0.5,
                 color: const Color.fromRGBO(51, 153, 255, 255),
-                name: 'Water Usage',
+                name: "Title",
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
                 xValueMapper: (GDPData gdp, _) => gdp.continent,
@@ -77,25 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<GDPData> getChartData() {
-    // debugPrint("Sum: " + sum);
-    // debugPrint("Day: " + day);
-    // 7
-    // GET Query based on the user ID for that last 7* days
-    // then set that as a GPDData opject, and add it to chartData list.
 
-    final List<GDPData> chartData = [
-      GDPData("Sunday", 16, Colors.blue),
-      GDPData('Saturday', 46, Colors.red),
-      GDPData('Friday', 15, Colors.blue),
-      GDPData(myDay, sum, Colors.red),
-      GDPData('Wednesday', 30, Colors.green),
-      GDPData('Tuesday', 25, Colors.green),
-      GDPData('Monday', 46, Colors.red),
-    ];
-
-    // for (double i = 0; i < 7; i++) {
-    //   chartData.add(GDPData("continent", i, Colors.black));
-    // }
+    final List<GDPData> chartData = [];
+    for (int i = 0; i < mySums.length; i++) {
+      // if ((mySums[i] > fullAverage)) {
+      //   gColor = Colors.red;
+      // } else {
+      //   gColor = Colors.green;
+      // }
+      chartData.add(GDPData(myDays[i], mySums[i], Colors.red));
+    }
     return chartData;
   }
 }
@@ -107,33 +162,6 @@ class GDPData {
   final Color segmentColor;
 }
 
-Future<wData> postRequest() async {
-  final response = await http
-      .get(Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-
-    // for (var i = 0; i < 2; i++) {
-    //   x = User.fromJson(jsonDecode(response.body)[i]);
-    //   debugPrint(x.userName.toString());
-    // }
-    var mainUser = wData.fromJson(jsonDecode(response.body)[0]);
-    sum = mainUser.wSum.toDouble();
-    day = mainUser.wDay.toString();
-
-    DateTime dt = DateTime.parse(day);
-
-    myDay = DateFormat('EEEE').format(dt);
-
-    return wData.fromJson(jsonDecode(response.body)[0]);
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
 
 class wData {
   int wSum;

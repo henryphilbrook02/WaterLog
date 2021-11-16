@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:water_log_app/log_in.dart';
@@ -28,7 +29,14 @@ class log_in extends StatefulWidget {
 }
 
 class log_in_state extends State<log_in> {
+  String _email = "";
+  String _password = "";
+  String _errorMsg = "";
+
+  final auth = FirebaseAuth.instance;
+
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -55,10 +63,17 @@ class log_in_state extends State<log_in> {
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'),
+                    hintText: 'Enter valid email id as abc@gmail.com'
+                ),
+                onChanged: (value){
+                  setState(() {
+                    _email = value.trim();
+                  });
+                },
               ),
             ),
             Padding(
@@ -70,17 +85,34 @@ class log_in_state extends State<log_in> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
-                    hintText: 'Enter secure password'),
+                    hintText: 'Enter secure password'
+                ),
+                onChanged: (value){
+                  setState(() {
+                    _password = value.trim();
+                  });
+                },
               ),
             ),
-            FlatButton(
-              onPressed: () {
-                //TODO FORGOT PASSWORD SCREEN GOES HERE
-              },
-              child: Text(
-                'Forgot Password',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
+            // FlatButton(
+            //   onPressed: () {
+            //     //TODO FORGOT PASSWORD SCREEN GOES HERE
+            //   },
+            //   child: Text(
+            //     'Forgot Password',
+            //     style: TextStyle(color: Colors.blue, fontSize: 15),
+            //   ),
+            // ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
+              child: new Text(_errorMsg,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.red,
+                    backgroundColor: Colors.redAccent.withOpacity(.25)
+                ),
               ),
+              alignment: Alignment(0.0, 0.0),
             ),
             Container(
               height: 50,
@@ -89,21 +121,21 @@ class log_in_state extends State<log_in> {
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: FlatButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => mainPage()),
-                  );
-                  postRequest();
+                  auth.signInWithEmailAndPassword(email: _email, password: _password).then((res){
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => mainPage()));
+                  }).catchError((error){
+                    print("This is the Error: " + error.toString().split("]")[1]);
+                    setState(() { _errorMsg = "Incorrect Email / Username combination "; });
+                  });
+
+                  // TODO get data from the databse so we know the user i think the res we get can give us the email
+                  // postRequest();
                   // var x = http.get(Uri.parse('http://10.0.2.2:8080/api/users'));
                   // debugPrint(jsonDecode(x.toString()));
 
-                  /*
-                  
-
-                  */
                 },
                 child: Text(
-                  'PrintToConsole',
+                  'Login',
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),

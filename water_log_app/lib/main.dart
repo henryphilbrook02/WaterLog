@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/account.dart';
 import 'package:water_log_app/entity_creation.dart';
@@ -6,7 +7,9 @@ import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
 import 'package:water_log_app/friend_stats.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -21,7 +24,7 @@ class _mainPage extends State<mainPage> {
   final _pageOptions = [
     statsFriends(),
     stats(),
-    EntityCreation(),
+    //EntityCreation(),
     friends(),
     AccountPage()
   ];
