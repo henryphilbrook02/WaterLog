@@ -13,14 +13,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7820858-0e99-4f40-9473-ae54d130f7b0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/water_log_app/lib/account.dart" beforeDir="false" afterPath="$PROJECT_DIR$/water_log_app/lib/account.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/water_log_app/lib/entity_creation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/water_log_app/lib/entity_creation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/water_log_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/water_log_app/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\gnlgr\.android\avd\Pixel_5_API_30.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\saqib\.android\avd\Pixel_4a_API_30.avd]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
