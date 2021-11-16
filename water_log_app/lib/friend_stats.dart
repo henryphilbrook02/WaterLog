@@ -105,14 +105,20 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                 height: 35,
               ),
               TextFormField(
+                readOnly: true,
+                enabled: false,
                 decoration:
-                    const InputDecoration(labelText: 'Username: Maaloufer'),
+                    const InputDecoration(labelText: 'Username: Philbrooker'),
               ),
               TextFormField(
-                decoration:
-                    const InputDecoration(labelText: 'Full Name: John Maalouf'),
+                readOnly: true,
+                enabled: false,
+                decoration: const InputDecoration(
+                    labelText: 'Full Name: Henry Philbrook'),
               ),
               TextFormField(
+                readOnly: true,
+                enabled: false,
                 decoration:
                     const InputDecoration(labelText: 'Age: 21 Years Old'),
               ),
@@ -136,6 +142,8 @@ class _MyHomePageState extends State<MyHomePageFriends> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        enabled: false,
+        readOnly: true,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField

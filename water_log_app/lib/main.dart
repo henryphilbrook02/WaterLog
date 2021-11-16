@@ -23,12 +23,12 @@ class _mainPage extends State<mainPage> {
   int selectedPage = 0;
 
   final _pageOptions = [
-    //statsFriends(),
     home(),
     stats(),
     EntityCreationItem(),
     friends(),
-    AccountPage()
+    AccountPage(),
+    statsFriends(),
   ];
 
   @override
