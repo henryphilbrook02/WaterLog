@@ -46,18 +46,9 @@ class log_in_state extends State<log_in> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 150,
-                  /*decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50.0)),*/
-                  // TODO ADD IMAGE HERE child: Image.asset('ADD ASSET HERE')
-                ),
-              ),
+            Center(
+              child:
+              Image(image: AssetImage("assets/images/waterlog.png")),
             ),
             Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
@@ -122,7 +113,7 @@ class log_in_state extends State<log_in> {
               child: FlatButton(
                 onPressed: () {
                   auth.signInWithEmailAndPassword(email: _email, password: _password).then((res){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => mainPage()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(email: _email)));
                   }).catchError((error){
                     print("This is the Error: " + error.toString().split("]")[1]);
                     setState(() { _errorMsg = "Incorrect Email / Username combination "; });
@@ -141,7 +132,7 @@ class log_in_state extends State<log_in> {
               ),
             ),
             SizedBox(
-              height: 130,
+              height: 100,
             ),
             FlatButton(
               onPressed: () {

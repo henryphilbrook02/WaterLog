@@ -4,15 +4,34 @@ import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
 
+import 'package:water_log_app/friend_stats.dart';
+
 class friends extends StatefulWidget {
   @override
   _friends createState() => _friends();
 }
 
 class _friends extends State<friends> {
+  List<friendEntity> friendList = [
+    friendEntity("Saqib", "Front End", false, false),
+    friendEntity("Mike", "IT", false, false),
+    friendEntity("Henry", "Back End", false, false),
+    friendEntity("Jack", "Integration", false, false),
+    friendEntity("Brian", "IS", false, false),
+  ];
+
+  List<friendEntity> friendRequestList = [
+    friendEntity("Prof. Arias", "Professor", false, false),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Friends"),
+        elevation: 1,
+        automaticallyImplyLeading: false,
+      ),
       backgroundColor: Colors.white,
       body: ListView(
         children: <Widget>[
@@ -26,56 +45,138 @@ class _friends extends State<friends> {
               ),
             ),
           ),
-          SizedBox(height: 30),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 60),
-            title: Text(
-              'Jack',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
+          SizedBox(
+            width: double.infinity,
+            height: 15,
           ),
-          SizedBox(height: 15),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 60),
-            title: Text(
-              'Henry',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
+          Row(
+            children: <Widget>[
+              const Expanded(child: Text("\t\t\tFriend Requests")),
+            ],
           ),
-          SizedBox(height: 15),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 60),
-            title: Text(
-              'Mike',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
+          SizedBox(
+            width: double.infinity,
+            height: 15,
           ),
-          SizedBox(height: 15),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 60),
-            title: Text(
-              'Brian',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: friendRequestList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Icon(Icons.account_circle, size: 60),
+                title: Text(friendRequestList[index].friendName,
+                    style:
+                        TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
+                subtitle: Text(friendRequestList[index].friendDesc),
+                trailing: FittedBox(
+                  child: Row(
+                    children: [
+                      IconButton(
+                          color: Colors.pinkAccent,
+                          highlightColor: Colors.red.shade100,
+                          splashRadius: 15,
+                          onPressed: () {
+                            setState(() {
+                              friendRequestList[index].isFriend = false;
+                            });
+                          },
+                          /*
+                        Not sure how to fix this, not sure what state I need to change here
+                        I know this has to decrement the quantity of water used.
+                      */
+                          icon: Icon(Icons.close_rounded)),
+                      IconButton(
+                          color: Colors.lightGreen,
+                          highlightColor: Colors.green.shade100,
+                          splashRadius: 15,
+                          onPressed: () {
+                            setState(() {
+                              friendRequestList[index].isFriend = false;
+                            });
+                          },
+                          //addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc),
+                          /*
+                        Not sure how to fix this, not sure what state I need to change here
+                        I know this has to decrement the quantity of water used.
+                      */
+                          icon: Icon(Icons.check_rounded)),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
-          SizedBox(height: 15),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 60),
-            title: Text(
-              'Saqib',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
+          SizedBox(
+            width: double.infinity,
+            height: 15,
           ),
-          SizedBox(height: 15),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 60),
-            title: Text(
-              'Prof. Arias',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-            ),
+          Row(
+            children: <Widget>[
+              const Expanded(child: Text("\t\t\tFriends")),
+            ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 15,
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: friendList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Icon(Icons.account_circle, size: 60),
+                title: Text(friendList[index].friendName,
+                    style:
+                        TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
+                subtitle: Text(friendList[index].friendDesc),
+                trailing: FittedBox(
+                  child: Row(
+                    children: [
+                      IconButton(
+                          color: Colors.lightGreen,
+                          highlightColor: Colors.green.shade100,
+                          splashRadius: 15,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => statsFriends()));
+                          },
+                          //addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc),
+                          /*
+                        Not sure how to fix this, not sure what state I need to change here
+                        I know this has to decrement the quantity of water used.
+                      */
+                          icon: Icon(
+                            Icons.account_box_outlined,
+                            size: 35,
+                          )),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
+
+  void addFriend(String friendName, String friendDesc) {
+    setState(() {
+      friendList.add(friendEntity(friendName, friendDesc, true, true));
+    });
+  }
+}
+
+class friendEntity {
+  String friendName;
+  String friendDesc;
+  bool isFriend;
+  bool friendStatus;
+
+  friendEntity(
+      this.friendName, this.friendDesc, this.isFriend, this.friendStatus);
+
+  verifyFriend() {}
 }

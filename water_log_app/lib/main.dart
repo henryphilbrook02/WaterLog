@@ -5,6 +5,7 @@ import 'package:water_log_app/entity_creation.dart';
 import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
+import 'package:water_log_app/home.dart';
 import 'package:water_log_app/friend_stats.dart';
 
 void main() async {
@@ -14,20 +15,36 @@ void main() async {
 }
 
 class mainPage extends StatefulWidget {
+
+  final email;
+
+  mainPage({
+    Key? key,
+    this.email,
+  }) : super(key: key);
+
   @override
   _mainPage createState() => _mainPage();
 }
 
 class _mainPage extends State<mainPage> {
+
+
   int selectedPage = 0;
 
-  final _pageOptions = [
-    statsFriends(),
-    stats(),
-    //EntityCreation(),
-    friends(),
-    AccountPage()
-  ];
+  var _pageOptions = [];
+
+  @override
+  void initState() {
+    _pageOptions = [
+      homePage(email: widget.email),
+      stats(),
+      EntityCreationItem(),
+      friends(),
+      AccountPage(),
+      statsFriends(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

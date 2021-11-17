@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
+
 
 var user_name = "";
 var name = "";
@@ -35,10 +37,9 @@ class _AccountPageState extends State<AccountPage> {
   var height = "";
   var bmi = "";
 
-
   void postRequest() async {
     final response =
-    await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
+        await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -48,12 +49,20 @@ class _AccountPageState extends State<AccountPage> {
       //   x = User.fromJson(jsonDecode(response.body)[i]);
       //   debugPrint(x.userName.toString());
       // }
-      var mainUser = User.fromJson(jsonDecode(response.body)[2]);
+      var mainUser = User.fromJson(jsonDecode(response.body)[4]);
 
-      setState((){ user_name = mainUser.userName.toString(); });
-      setState((){ weight = mainUser.weight.toString(); });
-      setState((){ height = mainUser.height.toString(); });
-      setState((){ bmi = mainUser.BMI.toString(); });
+      setState(() {
+        user_name = mainUser.userName.toString();
+      });
+      setState(() {
+        weight = mainUser.weight.toString();
+      });
+      setState(() {
+        height = mainUser.height.toString();
+      });
+      setState(() {
+        bmi = mainUser.BMI.toString();
+      });
 
       print("Username: " + user_name);
       //return User.fromJson(jsonDecode(response.body)[1]);
@@ -64,10 +73,8 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     postRequest();
 
     return Scaffold(
@@ -108,11 +115,11 @@ class _AccountPageState extends State<AccountPage> {
                               offset: Offset(0, 10))
                         ],
                         shape: BoxShape.circle,
-                        // image: DecorationImage(
-                        //     fit: BoxFit.cover,
-                        //     image: NetworkImage(
-                        //       "C:\Users\saqib\Documents\GitHub\FormalLanguagesFinal\WaterLog\water_log_app\assets\images\newuser.png",
-                        //     ))
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: new AssetImage(
+                              'assets/images/tempUser.png'
+                            ))
                       ),
                     ),
                     Positioned(
@@ -125,7 +132,7 @@ class _AccountPageState extends State<AccountPage> {
                             shape: BoxShape.circle,
                             border: Border.all(
                               width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
+                              //color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                             color: Colors.blue,
                           ),

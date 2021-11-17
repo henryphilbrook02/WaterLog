@@ -1,83 +1,293 @@
-// import 'package:flutter/material.dart';
-// import 'package:water_log_app/custom_theme.dart';
+import 'dart:convert';
+import 'dart:io';
 
-// class EntityCreation extends StatelessWidget {
-//     @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       theme: theme_class.light_theme,
-//       home: EntityCreation(),
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:water_log_app/custom_theme.dart';
+import 'package:http/http.dart' as http;
 
-// class EntityCreationItem extends StatefulWidget {
-//   @override
-//   _EntityCreationPageState createState() => _EntityCreationPageState();
-// }
+class EntityCreation extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: theme_class.light_theme,
+      home: EntityCreation(),
+    );
+  }
+}
 
-// class _EntityCreationPageState extends State<EntityCreationItem> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Add Your Water Intake"),
-//         elevation: 1,
-//       ),
-//       body: ListView(
-//         children: [
-//           buildEntity("Shower", 5)
-//         ],
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         child: Icon(Icons.add),
-//         onPressed: () => addEntity(),
-//       ),
-//     );
-//   }
-// }
+class EntityCreationItem extends StatefulWidget {
+  @override
+  _EntityCreationPageState createState() => _EntityCreationPageState();
+}
 
-// Widget buildEntity (String entityName, int waterUnits) {
-//   int waterUnits = 0;
-//   return ListTile(
-//     leading: Icon(Icons.water),
-//     title: Text(entityName),
-//     subtitle: Text("Enter the amount of gallons used for this task."),
-//     trailing: FittedBox(
-//       child: Row(
-//         children: [
-//           IconButton(
-//             onPressed: () => incrementWater(waterUnits),
-//             /*
-//               Not sure how to fix this, not sure what state I need to change here
-//               I know this has to decrement the quantity of water used.
-//             */
-//             icon: Icon(Icons.remove)
-//             ),
-//           Text(waterUnits.toString()),
-//           IconButton(
-//             onPressed: () => incrementWater(waterUnits),
-//             //onPressed: () { setState( () {waterUnits!=0 ? waterUnits--: waterUnits;} ); },
-//             /*
-//               Not sure how to fix this, not sure what state I need to change here
-//               I know this has to decrement the quantity of water used.
-//             */
-//             icon: Icon(Icons.add)
-//             ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
+class _EntityCreationPageState extends State<EntityCreationItem> {
+  Future<entityData> postRequest() async {
+    final response =
+        await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
+    if (response.statusCode == 200) {
+      for (var i = 0; i < 10; i++) {
+        var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
+        var activityName = mainUser.NAME.toString();
+        var activityUnit = mainUser.UNIT.toString();
+        var activityAmount = mainUser.AMOUNT;
 
-// Widget addEntity() {
-//   return Card(
+        addEntity(activityName, activityUnit, activityAmount);
+      }
 
-//   );
-// }
+      return entityData.fromJson(jsonDecode(response.body)[0]);
+    } else {
+      throw Exception('Failed to load user');
+    }
+  }
 
-// Widget incrementWater(int waterUnits) {
-//   return
-//   int waterUnits++;
-// }
+  List<Entity> entityList = [];
+
+  late TextEditingController _Activity;
+  late TextEditingController _Desc;
+  late TextEditingController _Amount;
+  initState() {
+    _Activity = new TextEditingController();
+    _Desc = new TextEditingController();
+    _Amount = new TextEditingController();
+    Future.delayed(Duration.zero, () async {
+      await postRequest();
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Your Water Intake"),
+        elevation: 1,
+        automaticallyImplyLeading: false,
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: entityList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Icon(Icons.water),
+                  title: Text(entityList[index].entityName),
+                  subtitle: Text(entityList[index].desc),
+                  trailing: FittedBox(
+                    child: Row(
+                      children: [
+                        IconButton(
+                            color: Colors.black,
+                            highlightColor: Colors.red.shade100,
+                            splashRadius: 15,
+                            onPressed: () {
+                              setState(() {
+                                entityList[index].waterUnits != 0
+                                    ? entityList[index].waterUnits--
+                                    : entityList[index].waterUnits;
+                              });
+                            },
+                            icon: Icon(Icons.remove)),
+                        Text(entityList[index].waterUnits.toString()),
+                        IconButton(
+                            color: Colors.black,
+                            highlightColor: Colors.green.shade100,
+                            splashRadius: 15,
+                            onPressed: () {
+                              setState(() {
+                                entityList[index].waterUnits != -1
+                                    ? entityList[index].waterUnits++
+                                    : entityList[index].waterUnits;
+                              });
+                            },
+                            icon: Icon(Icons.add)),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ],
+      ),
+      floatingActionButton:
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        Container(
+          height: 50,
+          width: 300,
+          decoration: BoxDecoration(
+              color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              postEntry();
+              postActivity();
+
+              print("submit");
+            },
+            label: const Text("Submit", style: TextStyle(fontSize: 25)),
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _showAlertDialog();
+          },
+        )
+      ]),
+    );
+  }
+
+  void _showAlertDialog() {
+    String activity;
+    String desc;
+    String amt;
+
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+        activity = _Activity.text;
+        desc = _Desc.text;
+        amt = _Amount.text;
+        addEntity(activity, desc, int.parse(amt));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Please Enter Name and Description"),
+      content: IntrinsicHeight(
+        child: Column(
+          children: <Widget>[
+            new Flexible(
+              child: new TextField(
+                controller: _Activity,
+                decoration: new InputDecoration(
+                    hintText: "Acticity Name",
+                    contentPadding: EdgeInsets.all(10)),
+              ),
+            ),
+            new Flexible(
+              child: new TextField(
+                controller: _Desc,
+                decoration: new InputDecoration(
+                    hintText: "Activity Description",
+                    contentPadding: EdgeInsets.all(10)),
+              ),
+            ),
+            new Flexible(
+              child: new TextField(
+                controller: _Amount,
+                decoration: new InputDecoration(
+                    hintText: "Amount Consumed  Per Use",
+                    contentPadding: EdgeInsets.all(10)),
+              ),
+            )
+          ],
+        ),
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void addEntity(String actName, String desc, int amount) {
+    setState(() {
+      entityList.add(Entity(actName, desc, amount));
+    });
+  }
+
+  void postEntry() async {
+    var totalWater = 0;
+    // Loop through the entry lsit that Saqib made and get all the amounts, add them tofether for a total amount, then return that.\
+    for (int i = 0; i < entityList.length; i++) {
+      totalWater = totalWater + entityList[i].waterUnits;
+    }
+    print("Total Units: " + totalWater.toString());
+
+    var uri = Uri.parse('http://10.11.25.60:443/api/entries');
+
+    Map<String, dynamic> map = {
+      "activity_id": "NULL",
+      "preset_id": 1,
+      "username": "Maaloufer",
+      "day": "2021-11-14",
+      "amount": totalWater
+    };
+    String rawJson = jsonEncode(map);
+
+    http.Response response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: rawJson,
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+  }
+
+  void postActivity() async {
+    print("Activity Posted");
+    var uri = Uri.parse('http://10.11.25.60:443/api/activities');
+
+    Map<String, dynamic> map = {
+      "username": "Maaloufer",
+      "name": _Activity.text, //name
+      "amount": _Amount.text, // amount
+      "units": _Desc.text, // Description
+      "creation": "2021-11-17",
+      "update": "2021-11-17"
+    };
+    String rawJson = jsonEncode(map);
+
+    http.Response response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: rawJson,
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+  }
+}
+
+class Entity {
+  String entityName;
+  String desc;
+  int waterUnits;
+
+  Entity(this.entityName, this.desc, this.waterUnits);
+}
+
+class entityData {
+  String NAME;
+  int AMOUNT;
+  String UNIT;
+
+  entityData({required this.NAME, required this.AMOUNT, required this.UNIT});
+
+  factory entityData.fromJson(Map<String, dynamic> json) {
+    return entityData(
+        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT']);
+  }
+}
+// So we have posted an entry to the database
+
+// now we must post an activity.
+
