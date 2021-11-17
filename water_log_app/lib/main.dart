@@ -15,21 +15,36 @@ void main() async {
 }
 
 class mainPage extends StatefulWidget {
+
+  final email;
+
+  mainPage({
+    Key? key,
+    this.email,
+  }) : super(key: key);
+
   @override
   _mainPage createState() => _mainPage();
 }
 
 class _mainPage extends State<mainPage> {
+
+
   int selectedPage = 0;
 
-  final _pageOptions = [
-    home(),
-    stats(),
-    EntityCreationItem(),
-    friends(),
-    AccountPage(),
-    statsFriends(),
-  ];
+  var _pageOptions = [];
+
+  @override
+  void initState() {
+    _pageOptions = [
+      homePage(email: widget.email),
+      stats(),
+      EntityCreationItem(),
+      friends(),
+      AccountPage(),
+      statsFriends(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

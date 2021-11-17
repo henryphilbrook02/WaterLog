@@ -122,7 +122,7 @@ class log_in_state extends State<log_in> {
               child: FlatButton(
                 onPressed: () {
                   auth.signInWithEmailAndPassword(email: _email, password: _password).then((res){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => mainPage()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(email: _email)));
                   }).catchError((error){
                     print("This is the Error: " + error.toString().split("]")[1]);
                     setState(() { _errorMsg = "Incorrect Email / Username combination "; });
