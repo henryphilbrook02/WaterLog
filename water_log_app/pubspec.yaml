@@ -66,6 +66,7 @@ flutter:
   assets:
     - assets/images/newuser.png
     - assets/images/tempUser.png
+    - assets/images/waterlog.png
     - assets/
 
   #   - images/a_dot_ham.jpeg

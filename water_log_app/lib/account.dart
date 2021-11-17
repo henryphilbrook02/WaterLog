@@ -49,7 +49,7 @@ class _AccountPageState extends State<AccountPage> {
       //   x = User.fromJson(jsonDecode(response.body)[i]);
       //   debugPrint(x.userName.toString());
       // }
-      var mainUser = User.fromJson(jsonDecode(response.body)[2]);
+      var mainUser = User.fromJson(jsonDecode(response.body)[4]);
 
       setState(() {
         user_name = mainUser.userName.toString();
