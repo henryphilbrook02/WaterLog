@@ -11,6 +11,11 @@ exports.readUser = (req, res) => {
     index.executeQuery(res, query);
 }
 
+exports.readUserEmail = (req, res) => {
+    var query = "select * from user where email = '" + req.params.id + "'";
+    index.executeQuery(res, query);
+}
+
 exports.createUser = (req, res) => {
     console.log(req.body)
     var query = "INSERT INTO user(`USERNAME`, `TOKEN`, `WEIGHT`, `HEIGHT`, `BMI`, `CUR_USAGE`, `UNIT`, `EMAIL`, `CREATION`, `LAST_UPDATE`) VALUES('" +

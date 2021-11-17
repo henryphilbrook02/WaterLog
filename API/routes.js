@@ -17,6 +17,9 @@ router.route("/users/:id")
     .put(userCtlr.updateUser)
     .delete(userCtlr.deleteUser)
 
+router.route("/user/:id")
+    .get(userCtlr.readUserEmail)
+
 router.route("/presets")
     .get(presetCtlr.readAllPreset)
     .post(presetCtlr.createPreset)
