@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 
 import 'account.dart';
 
+import 'package:water_log_app/models/userModel.dart' as userModel;
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,12 +34,14 @@ class log_in_state extends State<log_in> {
   String _email = "";
   String _password = "";
   String _errorMsg = "";
+  var client;
 
   final auth = FirebaseAuth.instance;
 
   @override
 
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -113,17 +117,14 @@ class log_in_state extends State<log_in> {
               child: FlatButton(
                 onPressed: () {
                   auth.signInWithEmailAndPassword(email: _email, password: _password).then((res){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(email: _email)));
+                    Future.delayed(Duration.zero, () async {
+                      var user = await postRequest(_email);
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(client: user)));
+                    });
                   }).catchError((error){
                     print("This is the Error: " + error.toString().split("]")[1]);
                     setState(() { _errorMsg = "Incorrect Email / Username combination "; });
                   });
-
-                  // TODO get data from the databse so we know the user i think the res we get can give us the email
-                  // postRequest();
-                  // var x = http.get(Uri.parse('http://10.0.2.2:8080/api/users'));
-                  // debugPrint(jsonDecode(x.toString()));
-
                 },
                 child: Text(
                   'Login',
@@ -151,90 +152,36 @@ class log_in_state extends State<log_in> {
       ),
     );
   }
-
-  Future<User> postRequest() async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:8080/api/users'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      for (var i = 0; i < 2; i++) {
-        var x = User.fromJson(jsonDecode(response.body)[i]);
-        debugPrint(x.userName.toString());
-      }
-
-      return User.fromJson(jsonDecode(response.body)[0]);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
-
-//   postRequest() async {
-//     debugPrint("Made it");
-//     // todo - fix baseUrl
-//     var url = 'http://10.0.2.2:8080/api/users';
-//     // var body = json.encode({
-//     //   'nick': nick,
-//     //   'password': password,
-//     // });
-
-//     // print('Body: $body');
-
-//     var response = await http.get(
-//       Uri.parse(url),
-//       headers: {
-//         'accept': 'application/json',
-//         'Content-Type': 'application/json-patch+json',
-//       },
-//     );
-
-//     // todo - handle non-200 status code, etc
-
-//     debugPrint(json.decode(response.body));
-//   }
 }
 
-class User {
-  String userName;
-  String token;
-  int weight;
-  String height;
-  int BMI;
-  int currentUsage;
-  //int unit;
-  String creationDate;
-  String updateDate;
+Future<userModel.User> postRequest(String email) async {
+  final response =
+  await http.get(Uri.parse('http://10.11.25.60:443/api/user/'+email));
 
-  User({
-    required this.userName,
-    required this.token,
-    required this.weight,
-    required this.height,
-    required this.BMI,
-    required this.currentUsage,
-    //required this.unit,
-    required this.creationDate,
-    required this.updateDate,
-  });
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      userName: json['USERNAME'],
-      token: json['TOKEN'],
-      weight: json['WEIGHT'],
-      height: json['HEIGHT'],
-      BMI: json['BMI'],
-      currentUsage: json['CUR_USAGE'],
-      //unit: json['UNIT'],
-      creationDate: json['CREATION'],
-      updateDate: json['LAST_UPDATE'],
+    var res = jsonDecode(response.body)[0];
+
+    userModel.User client = new userModel.User(
+        userName: res['USERNAME'],
+        token: res['TOKEN'],
+        weight: res['WEIGHT'],
+        height: res['HEIGHT'],
+        BMI: res['BMI'],
+        currentUsage: res['CUR_USAGE'],
+        unit: res['UNIT'],
+        email: res['EMAIL'],
+        creationDate: res['CREATION'],
+        updateDate: res['LAST_UPDATE']
     );
-  }
-  getUserName() {
-    return userName;
+
+    return client;
+
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
   }
 }

@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:water_log_app/custom_theme.dart';
 
+import 'package:water_log_app/models/userModel.dart' as userModel;
+
+
 class home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme_class.light_theme,
-      home: homePage(),
+      //home: homePage(),
     );
   }
 }
@@ -17,9 +20,12 @@ class homePage extends StatefulWidget {
 
   final email;
 
+  userModel.User client;
+
   homePage({
     Key? key,
     this.email,
+    required this.client,
   }) : super(key: key);
 
   @override
@@ -32,7 +38,7 @@ class _HomePageState extends State<homePage> {
 
   @override
   void initState() {
-    print(widget.email);
+    print(widget.client.getUserName());
     _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
