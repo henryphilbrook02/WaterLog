@@ -26,7 +26,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     final response =
         await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
     if (response.statusCode == 200) {
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 10; i++) {
         var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
         var activityName = mainUser.NAME.toString();
         var activityUnit = mainUser.UNIT.toString();
@@ -119,6 +119,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
           child: FloatingActionButton.extended(
             onPressed: () {
               postEntry();
+              postActivity();
+
               print("submit");
             },
             label: const Text("Submit", style: TextStyle(fontSize: 25)),
@@ -208,7 +210,12 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
   }
 
   void postEntry() async {
-    print("Entry posted?");
+    var totalWater = 0;
+    // Loop through the entry lsit that Saqib made and get all the amounts, add them tofether for a total amount, then return that.\
+    for (int i = 0; i < entityList.length; i++) {
+      totalWater = totalWater + entityList[i].waterUnits;
+    }
+    print("Total Units: " + totalWater.toString());
 
     var uri = Uri.parse('http://10.11.25.60:443/api/entries');
 
@@ -216,8 +223,34 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       "activity_id": "NULL",
       "preset_id": 1,
       "username": "Maaloufer",
-      "day": "2021-11-16",
-      "amount": 5
+      "day": "2021-11-14",
+      "amount": totalWater
+    };
+    String rawJson = jsonEncode(map);
+
+    http.Response response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: rawJson,
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+  }
+
+  void postActivity() async {
+    print("Activity Posted");
+    var uri = Uri.parse('http://10.11.25.60:443/api/activities');
+
+    Map<String, dynamic> map = {
+      "username": "Maaloufer",
+      "name": _Activity.text, //name
+      "amount": _Amount.text, // amount
+      "units": _Desc.text, // Description
+      "creation": "2021-11-17",
+      "update": "2021-11-17"
     };
     String rawJson = jsonEncode(map);
 
@@ -254,3 +287,7 @@ class entityData {
         NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT']);
   }
 }
+// So we have posted an entry to the database
+
+// now we must post an activity.
+
