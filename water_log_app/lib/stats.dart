@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+var average = 0.0;
+
 class stats extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -40,12 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
   var myDays = [];
 
   Future<wData> postRequest() async {
-    print("In METHOD");
-
-    double average = 0;
     final response = await http.get(
         Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
-
+    average = 0;
     if (response.statusCode == 200) {
       for (var i = 0; i < 7; i++) {
         var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
@@ -53,24 +52,18 @@ class _MyHomePageState extends State<MyHomePage> {
         day = mainUser.wDay.toString();
         DateTime dt = DateTime.parse(day);
         myDay = DateFormat('EEEE').format(dt);
-
+        average = average + sum;
+        print("Average: " + average.toString());
         mySums.add(sum);
         myDays.add(myDay);
 
-        print("Average: " + average.toString());
-        print("Sum: " + sum.toString());
-        print("I" + i.toString() + ": " + myDays[i].toString());
+        // print("Average: " + average.toString());
+        // print("Sum: " + sum.toString());
+        // print("I" + i.toString() + ": " + myDays[i].toString());
       }
 
       return wData.fromJson(jsonDecode(response.body)[0]);
-
-      print("The sums are this: " + mySums.length.toString());
-      for (var i = 0; i < mySums.length; i++) {
-        print(mySums[i]);
-      }
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       throw Exception('Failed to load user');
     }
   }
@@ -115,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTrackVisible: false,
                 opacity: 0.5,
                 color: const Color.fromRGBO(51, 153, 255, 255),
-                name: "Title",
+                name: "Average: " + (average / 7).round().toString(),
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
                 xValueMapper: (GDPData gdp, _) => gdp.continent,
@@ -137,12 +130,15 @@ class _MyHomePageState extends State<MyHomePage> {
   List<GDPData> getChartData() {
     final List<GDPData> chartData = [];
     for (int i = 0; i < mySums.length; i++) {
-      // if ((mySums[i] > fullAverage)) {
-      //   gColor = Colors.red;
-      // } else {
-      //   gColor = Colors.green;
-      // }
-      chartData.add(GDPData(myDays[i], mySums[i], Colors.red));
+      var fullAverage = average / mySums.length;
+      print("Full: " + fullAverage.toString());
+      var gColor;
+      if ((mySums[i] > fullAverage)) {
+        gColor = Colors.red;
+      } else {
+        gColor = Colors.green;
+      }
+      chartData.add(GDPData(myDays[i], mySums[i], gColor));
     }
     return chartData;
   }

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
+import 'package:http/http.dart' as http;
 
 class EntityCreation extends StatelessWidget {
   @override
@@ -18,11 +21,33 @@ class EntityCreationItem extends StatefulWidget {
 }
 
 class _EntityCreationPageState extends State<EntityCreationItem> {
-  List<Entity> entityList = [
-    Entity("Shower", "Morning Shower", 5),
-    Entity("Shower", "Evening Shower", 5),
-    Entity("Flush", "null", 4),
-  ];
+  Future<entityData> postRequest() async {
+    final response =
+        await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
+    if (response.statusCode == 200) {
+      for (var i = 0; i < 3; i++) {
+        var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
+        var activityName = mainUser.NAME.toString();
+        var activityUnit = mainUser.UNIT.toString();
+
+        addEntity(activityName, activityUnit);
+        //print(activityName);
+        // day = mainUser.wDay.toString();
+        // DateTime dt = DateTime.parse(day);
+        // myDay = DateFormat('EEEE').format(dt);
+        // average = average + sum;
+        // print("Average: " + average.toString());
+        // mySums.add(sum);
+        // myDays.add(myDay);
+      }
+
+      return entityData.fromJson(jsonDecode(response.body)[0]);
+    } else {
+      throw Exception('Failed to load user');
+    }
+  }
+
+  List<Entity> entityList = [];
 
   late TextEditingController _Activity;
   late TextEditingController _Desc;
@@ -31,6 +56,9 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     _Activity = new TextEditingController();
     _Desc = new TextEditingController();
     _Amount = new TextEditingController();
+    Future.delayed(Duration.zero, () async {
+      await postRequest();
+    });
     super.initState();
   }
 
@@ -87,34 +115,30 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
               }),
         ],
       ),
-      floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 50,
-              width: 300,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  print("submit");
-                },
-                label: const Text("Submit", style: TextStyle(fontSize: 25)),
-              ),
-            ),
-
-            SizedBox(
-              width: 10,
-            ),
-
-            FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                _showAlertDialog();
-              },
-            )
-          ]
-      ),
+      floatingActionButton:
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        Container(
+          height: 50,
+          width: 300,
+          decoration: BoxDecoration(
+              color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              print("submit");
+            },
+            label: const Text("Submit", style: TextStyle(fontSize: 25)),
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _showAlertDialog();
+          },
+        )
+      ]),
     );
   }
 
@@ -193,4 +217,17 @@ class Entity {
   int waterUnits;
 
   Entity(this.entityName, this.desc, this.waterUnits);
+}
+
+class entityData {
+  String NAME;
+  int AMOUNT;
+  String UNIT;
+
+  entityData({required this.NAME, required this.AMOUNT, required this.UNIT});
+
+  factory entityData.fromJson(Map<String, dynamic> json) {
+    return entityData(
+        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT']);
+  }
 }
