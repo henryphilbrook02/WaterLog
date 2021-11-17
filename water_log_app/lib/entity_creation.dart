@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
@@ -29,16 +30,9 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
         var activityName = mainUser.NAME.toString();
         var activityUnit = mainUser.UNIT.toString();
+        var activityAmount = mainUser.AMOUNT;
 
-        addEntity(activityName, activityUnit);
-        //print(activityName);
-        // day = mainUser.wDay.toString();
-        // DateTime dt = DateTime.parse(day);
-        // myDay = DateFormat('EEEE').format(dt);
-        // average = average + sum;
-        // print("Average: " + average.toString());
-        // mySums.add(sum);
-        // myDays.add(myDay);
+        addEntity(activityName, activityUnit, activityAmount);
       }
 
       return entityData.fromJson(jsonDecode(response.body)[0]);
@@ -124,6 +118,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
               color: Colors.blue, borderRadius: BorderRadius.circular(20)),
           child: FloatingActionButton.extended(
             onPressed: () {
+              postEntry();
               print("submit");
             },
             label: const Text("Submit", style: TextStyle(fontSize: 25)),
@@ -145,6 +140,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
   void _showAlertDialog() {
     String activity;
     String desc;
+    String amt;
 
     // set up the button
     Widget okButton = FlatButton(
@@ -153,7 +149,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         Navigator.pop(context);
         activity = _Activity.text;
         desc = _Desc.text;
-        addEntity(activity, desc);
+        amt = _Amount.text;
+        addEntity(activity, desc, int.parse(amt));
       },
     );
 
@@ -204,10 +201,36 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     );
   }
 
-  void addEntity(String actName, String desc) {
+  void addEntity(String actName, String desc, int amount) {
     setState(() {
-      entityList.add(Entity(actName, desc, 0));
+      entityList.add(Entity(actName, desc, amount));
     });
+  }
+
+  void postEntry() async {
+    print("Entry posted?");
+
+    var uri = Uri.parse('http://10.11.25.60:443/api/entries');
+
+    Map<String, dynamic> map = {
+      "activity_id": "NULL",
+      "preset_id": 1,
+      "username": "Maaloufer",
+      "day": "2021-11-16",
+      "amount": 5
+    };
+    String rawJson = jsonEncode(map);
+
+    http.Response response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: rawJson,
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
   }
 }
 
