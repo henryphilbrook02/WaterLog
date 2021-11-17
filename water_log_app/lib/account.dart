@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
+
 
 var user_name = "";
 var name = "";
@@ -113,11 +115,11 @@ class _AccountPageState extends State<AccountPage> {
                               offset: Offset(0, 10))
                         ],
                         shape: BoxShape.circle,
-                        // image: DecorationImage(
-                        //     fit: BoxFit.cover,
-                        //     image: NetworkImage(
-                        //       "C:\Users\saqib\Documents\GitHub\FormalLanguagesFinal\WaterLog\water_log_app\assets\images\newuser.png",
-                        //     ))
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: new AssetImage(
+                              'assets/images/tempUser.png'
+                            ))
                       ),
                     ),
                     Positioned(

@@ -14,9 +14,14 @@ class home extends StatelessWidget {
 }
 
 class homePage extends StatefulWidget {
-  const homePage({
+
+  final email;
+
+  homePage({
     Key? key,
+    this.email,
   }) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -27,6 +32,7 @@ class _HomePageState extends State<homePage> {
 
   @override
   void initState() {
+    print(widget.email);
     _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
