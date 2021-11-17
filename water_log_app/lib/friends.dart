@@ -78,12 +78,9 @@ class _friends extends State<friends> {
                           onPressed: () {
                             setState(() {
                               friendRequestList[index].isFriend = false;
+                              friendRequestList.removeAt(index);
                             });
                           },
-                          /*
-                        Not sure how to fix this, not sure what state I need to change here
-                        I know this has to decrement the quantity of water used.
-                      */
                           icon: Icon(Icons.close_rounded)),
                       IconButton(
                           color: Colors.lightGreen,
@@ -91,14 +88,11 @@ class _friends extends State<friends> {
                           splashRadius: 15,
                           onPressed: () {
                             setState(() {
-                              friendRequestList[index].isFriend = false;
+                              friendRequestList[index].isFriend = true;
+                              addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc, index);
                             });
                           },
                           //addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc),
-                          /*
-                        Not sure how to fix this, not sure what state I need to change here
-                        I know this has to decrement the quantity of water used.
-                      */
                           icon: Icon(Icons.check_rounded)),
                     ],
                   ),
@@ -143,10 +137,6 @@ class _friends extends State<friends> {
                                     builder: (context) => statsFriends()));
                           },
                           //addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc),
-                          /*
-                        Not sure how to fix this, not sure what state I need to change here
-                        I know this has to decrement the quantity of water used.
-                      */
                           icon: Icon(
                             Icons.account_box_outlined,
                             size: 35,
@@ -162,9 +152,10 @@ class _friends extends State<friends> {
     );
   }
 
-  void addFriend(String friendName, String friendDesc) {
-    setState(() {
-      friendList.add(friendEntity(friendName, friendDesc, true, true));
+  void addFriend(String friendName, String friendDesc, int index) {
+      setState(() {
+        friendList.add(friendEntity(friendName, friendDesc, true, true));
+        friendRequestList.removeAt(index);
     });
   }
 }
@@ -178,5 +169,4 @@ class friendEntity {
   friendEntity(
       this.friendName, this.friendDesc, this.isFriend, this.friendStatus);
 
-  verifyFriend() {}
 }
