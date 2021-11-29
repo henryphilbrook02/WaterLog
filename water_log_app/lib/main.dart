@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/account.dart';
@@ -7,7 +8,7 @@ import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
 import 'package:water_log_app/home.dart';
 import 'package:water_log_app/friend_stats.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
 void main() async {
@@ -39,14 +40,36 @@ class _mainPage extends State<mainPage> {
 
   @override
   void initState() {
+
+    double temp = 10.0;
+
     _pageOptions = [
-      homePage(client: widget.client),
+      homePage(client: widget.client, curGoal: temp),
       stats(),
       EntityCreationItem(),
       friends(),
       AccountPage(),
       statsFriends(),
     ];
+
+    Future.delayed(Duration.zero, () async {
+
+      double temp = (await getCurGoal(widget.client.userName)).toDouble();
+
+      //print(temp);
+      setState(() {
+        _pageOptions = [
+          homePage(client: widget.client, curGoal: temp),
+          stats(),
+          EntityCreationItem(),
+          friends(),
+          AccountPage(),
+          statsFriends(),
+        ];
+      });
+
+    });
+
   }
 
   @override
@@ -79,5 +102,24 @@ class _mainPage extends State<mainPage> {
             });
           },
         ));
+  }
+}
+
+
+Future<int> getCurGoal(String uname) async {
+  final response =
+  await http.get(Uri.parse('http://10.11.25.60:443/api/cur_goals/'+uname));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+
+    var res = jsonDecode(response.body)[0];
+    return res['GOAL'];
+
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to get goal');
   }
 }

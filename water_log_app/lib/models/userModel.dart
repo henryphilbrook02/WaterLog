@@ -25,21 +25,6 @@ class User {
     required this.updateDate,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      userName: json['USERNAME'],
-      token: json['TOKEN'],
-      weight: json['WEIGHT'],
-      height: json['HEIGHT'],
-      BMI: json['BMI'],
-      currentUsage: json['CUR_USAGE'],
-      unit: json['UNIT'],
-      email: json['EMAIL'],
-      creationDate: json['CREATION'],
-      updateDate: json['LAST_UPDATE'],
-    );
-  }
-
   getapiBody(){
     Map<String, dynamic> map = {
       "id": this.userName,
