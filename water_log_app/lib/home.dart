@@ -23,13 +23,12 @@ class homePage extends StatefulWidget {
   final email;
 
   userModel.User client;
-  var curGoal;
+  var curGoal = 0.0;
 
   homePage({
     Key? key,
     this.email,
     required this.client,
-    required this.curGoal,
   }) : super(key: key);
 
   @override
@@ -53,40 +52,67 @@ class _HomePageState extends State<homePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Welcome Back"),
+          title: Text("Welcome Back ${widget.client.userName}"),
           elevation: 1,
         ),
         body: SingleChildScrollView(
-          child:  Column(
-              children: <Widget>[
-                Container (
-                    height: 450,
-                    child: SfCircularChart(
-                      title: ChartTitle(text: 'Current Water Usage'),
-                      legend: Legend(
-                          isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-                      tooltipBehavior: _tooltipBehavior,
-                      series: <CircularSeries>[
-                        RadialBarSeries<GDPData, String>(
-                            dataSource: _chartData,
-                            xValueMapper: (GDPData data, _) => data.continent,
-                            yValueMapper: (GDPData data, _) => data.gdp,
-                            pointColorMapper: (GDPData data, _) => data.color,
-                            cornerStyle: CornerStyle.bothCurve,
-                            dataLabelSettings: DataLabelSettings(isVisible: true),
-                            enableTooltip: true,
-                            maximumValue: widget.curGoal)
-                      ]
-                    )
-                ),
-                Container(
-                  child: Text(
-                    "Current Goal: "+ widget.curGoal.toString(),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ]
-          )
+          child:
+            FutureBuilder<http.Response>(
+              future: http.get(Uri.parse('http://10.11.25.60:443/api/cur_goals/'+widget.client.userName)),
+              builder: (
+                  BuildContext context,
+                  AsyncSnapshot<http.Response> snapshot,
+                  ) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    throw Exception('Failed to get goal');
+                  }
+                  else if (snapshot.hasData) {
+                    widget.curGoal = jsonDecode(snapshot.data!.body)[0]['GOAL'].toDouble();
+                    return Column(
+                        children: <Widget>[
+                            Container (
+                              height: 450,
+                              child: SfCircularChart(
+                                  title: ChartTitle(text: 'Current Water Usage',textStyle: TextStyle(fontSize: 20)),
+                                  legend: Legend(
+                                      isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+                                  tooltipBehavior: _tooltipBehavior,
+                                  series: <CircularSeries>[
+                                    RadialBarSeries<GDPData, String>(
+                                        dataSource: _chartData,
+                                        xValueMapper: (GDPData data, _) => data.continent,
+                                        yValueMapper: (GDPData data, _) => data.gdp,
+                                        pointColorMapper: (GDPData data, _) => data.color,
+                                        cornerStyle: CornerStyle.bothCurve,
+                                        dataLabelSettings: DataLabelSettings(isVisible: true),
+                                        enableTooltip: true,
+                                        maximumValue: widget.curGoal)
+                                  ]
+                              )
+                          ),
+                          Container(
+                            child: Text(
+                              "You are at: ${widget.client.currentUsage} out of ${widget.curGoal}",
+                              textAlign: TextAlign.center,
+                                style: TextStyle(height: 3, fontSize: 20, color: Colors.blueAccent)
+                            ),
+                          )
+                        ]
+                    );
+                  }
+                  else {
+                    return const Text('Empty data');
+                  }
+                }
+                else {
+                  return Text('State: ${snapshot.connectionState}');
+                }
+              },
+            ),
         )
     );
   }
@@ -113,22 +139,4 @@ class GDPData {
   final String continent;
   final int gdp;
   final color;
-}
-
-Future<int> getCurGoal(String uname) async {
-  final response =
-  await http.get(Uri.parse('http://10.11.25.60:443/api/cur_goals/'+uname));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-
-    var res = jsonDecode(response.body)[0];
-    return res['GOAL'];
-
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to get goal');
-  }
 }
