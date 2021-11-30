@@ -42,7 +42,7 @@ class _HomePageState extends State<homePage> {
   @override
   void initState() {
     //print(widget.curGoal);
-    _chartData = getChartData();
+    // _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
 
     super.initState();
@@ -72,6 +72,7 @@ class _HomePageState extends State<homePage> {
                   }
                   else if (snapshot.hasData) {
                     widget.curGoal = jsonDecode(snapshot.data!.body)[0]['GOAL'].toDouble();
+                    _chartData = getChartData();
                     return Column(
                         children: <Widget>[
                             Container (
