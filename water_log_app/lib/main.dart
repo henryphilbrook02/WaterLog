@@ -39,14 +39,12 @@ class _mainPage extends State<mainPage> {
   @override
   void initState() {
 
-    double temp = 10.0;
-
     _pageOptions = [
       homePage(client: widget.client),
-      stats(),
-      EntityCreationItem(),
-      friends(),
-      AccountPage(),
+      stats(client: widget.client),
+      EntityCreationItem(client: widget.client),
+      friends(client: widget.client),
+      AccountPage(client: widget.client),
       statsFriends(),
     ];
 

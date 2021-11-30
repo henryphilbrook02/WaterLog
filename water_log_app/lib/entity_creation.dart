@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:water_log_app/models/userModel.dart' as userModel;
+
 
 class EntityCreation extends StatelessWidget {
   @override
@@ -17,6 +19,14 @@ class EntityCreation extends StatelessWidget {
 }
 
 class EntityCreationItem extends StatefulWidget {
+
+  userModel.User client;
+
+  EntityCreationItem({
+    Key? key,
+    required this.client
+  }) : super(key: key);
+
   @override
   _EntityCreationPageState createState() => _EntityCreationPageState();
 }

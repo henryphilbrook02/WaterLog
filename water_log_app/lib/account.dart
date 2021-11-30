@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
+import 'package:water_log_app/models/userModel.dart' as userModel;
 
 
 var user_name = "";
@@ -17,13 +18,20 @@ class Account extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme_class.light_theme,
-      home: AccountPage(),
+      home: Account(),
     );
   }
 }
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+
+  userModel.User client;
+
+  AccountPage({
+    Key? key,
+    required this.client
+  }) : super(key: key);
+
   @override
   _AccountPageState createState() => _AccountPageState();
 }

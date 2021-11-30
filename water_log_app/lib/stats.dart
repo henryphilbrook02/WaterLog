@@ -5,27 +5,40 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:water_log_app/models/userModel.dart' as userModel;
+import 'package:water_log_app/custom_theme.dart';
+
 
 var average = 0.0;
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.
+
+  userModel.User client;
+
+  stats({
+    Key? key,
+    required this.client,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      theme: theme_class.light_theme,
+      home: MyHomePage(client: client),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  final String title;
+  userModel.User client;
+
+  MyHomePage({
+    Key? key,
+    required this.client,
+  }) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
