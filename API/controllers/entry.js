@@ -59,13 +59,13 @@ function querybuilder(userName, startDate, endDate) {
         "from preset_activity AS p, entry AS e " +
         "where  (p.ACTIVITY_ID = e.PRESET_ID) " +
         "and (e.USERNAME = '" + userName + "') " +
-        "and (e.day > '" + startDate + "')and (e.day <= '" + endDate + "') " +
+        "and (e.day >= '" + startDate + "')and (e.day <= '" + endDate + "') " +
         "UNION " +
         "SELECT SUM(e.amount * a.amount) as amount " +
         "from activity AS a, entry AS e " +
         "where (a.USERNAME = e.USERNAME) and (a.ACTIVITY_ID = e.ACTIVITY_ID) " +
         "and (e.USERNAME = '" + userName + "') " +
-        "and (e.day > '" + startDate + "') and (e.day <= '" + endDate + "')" +
+        "and (e.day >= '" + startDate + "') and (e.day <= '" + endDate + "')" +
         ") x"
     return val;
 }

@@ -23,8 +23,8 @@ exports.createUser = (req, res) => {
         req.body.tolken + "', " +
         req.body.weight + ", '" +
         req.body.height + "', " +
-        req.body.BMI + ", " +
-        req.body.curUsage + ", '" +
+        req.body.BMI + ", '" +
+        req.body.gender + "', '" +
         req.body.unit + "', '" +
         req.body.email + "', '" +
         req.body.creation + "', '" +
@@ -38,8 +38,8 @@ exports.updateUser = (req, res) => {
         "', WEIGHT = " + req.body.weight +
         ", HEIGHT = '" + req.body.height +
         "', BMI = " + req.body.BMI +
-        ", CUR_USAGE = " + req.body.curUsage +
-        ", UNIT = '" + req.body.unit +
+        ", GENDER = '" + req.body.gender +
+        "', UNIT = '" + req.body.unit +
         "', EMAIL = '" + req.body.email +
         "', CREATION = '" + req.body.creation +
         "', LAST_UPDATE = '" + req.body.update + "' " +

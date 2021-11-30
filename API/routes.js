@@ -38,6 +38,9 @@ router.route("/goals/:id")
     .delete(goalCtlr.deleteGoal)
     .put(goalCtlr.updateGoal)
 
+router.route("/cur_goals/:user")
+    .get(goalCtlr.curUserGoal)
+
 router.route("/user_goals/:user")
     .get(goalCtlr.userGoal)
 
