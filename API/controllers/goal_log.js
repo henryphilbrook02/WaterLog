@@ -15,6 +15,11 @@ exports.userGoal = (req, res) => {
     index.executeQuery(res, query);
 }
 
+exports.curUserGoal = (req, res) => {
+    var query = "select * from goal_log where USERNAME = '" + req.params.user +"' and CURRENT = "+ 1;
+    index.executeQuery(res, query);
+}
+
 exports.createGoal = (req, res) => {
     var query = "INSERT INTO goal_log(`USERNAME`, `GOAL`, `CURRENT`, `CREATION`) VALUES('" +
         req.body.username + "', " +
