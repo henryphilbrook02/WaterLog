@@ -86,7 +86,6 @@ class log_in_state extends State<log_in> {
                   setState(() {
                     _password = value.trim();
                   });
-                  print(_password);
                 },
               ),
             ),

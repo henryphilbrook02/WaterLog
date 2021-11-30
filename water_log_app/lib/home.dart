@@ -58,24 +58,22 @@ class _HomePageState extends State<homePage> {
         body: SingleChildScrollView(
           child:
             FutureBuilder(
-              future: Future.wait([
-                http.get(Uri.parse('http://10.11.25.60:443/api/cur_goals/'+widget.client.userName)),
-                getChartData()
-              ]),
+              future: getChartData(),
               builder: (
                   BuildContext context,
-                  AsyncSnapshot< List<dynamic> > snapshot,
+                  AsyncSnapshot< List<GDPData> > snapshot,
                   ) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 }
                 else if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
+                    print(snapshot.error);
                     throw Exception('Failed to get goal');
                   }
                   else if (snapshot.hasData) {
-                    widget.curGoal = jsonDecode(snapshot.data![0]!.body)[0]['GOAL'].toDouble();
-                    _chartData = snapshot.data![1];
+                    //widget.curGoal = jsonDecode(snapshot.data![0]!.body)[0]['GOAL'].toDouble();
+                    _chartData = snapshot.data!;
                     return Column(
                         children: <Widget>[
                             Container (
@@ -122,6 +120,7 @@ class _HomePageState extends State<homePage> {
   }
 
   Future< List<GDPData> > getChartData() async {
+    widget.curGoal = await getGoal(widget.client.userName);
     double cur = await getDay(widget.client.userName);
     var color = Color.fromRGBO(30, 105, 205, 1);
     if(cur > widget.curGoal){
@@ -149,6 +148,19 @@ Future<double> getDay(String username) async {
   }
   else {
     throw Exception('Failed to load user');
+  }
+}
+
+Future<double> getGoal(String username) async {
+  final response = await http.get(Uri.parse('http://10.11.25.60:443/api/cur_goals/'+username));
+  if (response.statusCode == 200) {
+    if (jsonDecode(response.body)[0]['GOAL'] != null){
+      return jsonDecode(response.body)[0]['GOAL'].toDouble();
+    }
+    return 0.0;
+  }
+  else {
+    throw Exception('Failed to load goal');
   }
 }
 
