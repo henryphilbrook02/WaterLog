@@ -86,6 +86,7 @@ class log_in_state extends State<log_in> {
                   setState(() {
                     _password = value.trim();
                   });
+                  print(_password);
                 },
               ),
             ),
@@ -170,7 +171,7 @@ Future<userModel.User> postRequest(String email) async {
         weight: res['WEIGHT'],
         height: res['HEIGHT'],
         BMI: res['BMI'],
-        currentUsage: res['CUR_USAGE'],
+        gender: res['GENDER'],
         unit: res['UNIT'],
         email: res['EMAIL'],
         creationDate: res['CREATION'],

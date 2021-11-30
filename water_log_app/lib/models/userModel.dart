@@ -6,7 +6,7 @@ class User {
   int weight;
   String height;
   int BMI;
-  int currentUsage;
+  String gender;
   String unit;
   String email;
   String creationDate;
@@ -18,7 +18,7 @@ class User {
     required this.weight,
     required this.height,
     required this.BMI,
-    required this.currentUsage,
+    required this.gender,
     required this.unit,
     required this.email,
     required this.creationDate,
@@ -32,7 +32,7 @@ class User {
       "weight": this.weight,
       "height": this.height,
       "BMI": this.BMI,
-      "curUsage": this.currentUsage,
+      "gender": this.gender,
       "unit": this.unit,
       "email": this.email,
       "creation": this.creationDate,
