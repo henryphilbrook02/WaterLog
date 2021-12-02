@@ -8,8 +8,9 @@ import 'dart:convert';
 import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/custom_theme.dart';
 
-
 var average = 0.0;
+final now = new DateTime.now();
+String formatter = DateFormat('yMd').format(now); // 28/03/2020
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.
@@ -32,7 +33,6 @@ class stats extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   userModel.User client;
 
   MyHomePage({
@@ -60,15 +60,21 @@ class _MyHomePageState extends State<MyHomePage> {
     average = 0;
     if (response.statusCode == 200) {
       for (var i = 0; i < 7; i++) {
-        var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
-        sum = mainUser.wSum.toDouble();
-        day = mainUser.wDay.toString();
-        DateTime dt = DateTime.parse(day);
-        myDay = DateFormat('EEEE').format(dt);
-        average = average + sum;
-        print("Average: " + average.toString());
-        mySums.add(sum);
-        myDays.add(myDay);
+        try {
+          var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
+          sum = mainUser.wSum.toDouble();
+          day = mainUser.wDay.toString();
+          DateTime dt = DateTime.parse(day);
+          myDay = DateFormat('EEEE').format(dt);
+          average = average + sum;
+          print("Average: " + average.toString());
+          mySums.add(sum);
+          myDays.add(myDay);
+        } on Exception catch (exception) {
+          print("Error");
+        } catch (error) {
+          print("Error");
+        }
 
         // print("Average: " + average.toString());
         // print("Sum: " + sum.toString());
@@ -121,7 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTrackVisible: false,
                 opacity: 0.5,
                 color: const Color.fromRGBO(51, 153, 255, 255),
-                name: "Average: " + (average / 7).round().toString(),
+                name:
+                    "Average: " + (average / mySums.length).round().toString(),
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
                 xValueMapper: (GDPData gdp, _) => gdp.continent,
@@ -136,22 +143,30 @@ class _MyHomePageState extends State<MyHomePage> {
           primaryYAxis: NumericAxis(
               edgeLabelPlacement: EdgeLabelPlacement.shift,
               //numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)
-              title: AxisTitle(text: 'Gallons Per Day - (09/27/2021)'))),
+              title: AxisTitle(text: 'Gallons Per Day - ' + formatter))),
     );
   }
 
   List<GDPData> getChartData() {
     final List<GDPData> chartData = [];
-    for (int i = 0; i < mySums.length; i++) {
-      var fullAverage = average / mySums.length;
-      print("Full: " + fullAverage.toString());
-      var gColor;
-      if ((mySums[i] > fullAverage)) {
-        gColor = Colors.red;
-      } else {
-        gColor = Colors.green;
+
+    try {
+      for (int i = 0; i < mySums.length; i++) {
+        var fullAverage = average / mySums.length;
+        print("Full: " + fullAverage.toString());
+        var gColor;
+        if ((mySums[i] > fullAverage)) {
+          gColor = Colors.red;
+        } else {
+          gColor = Colors.green;
+        }
+        chartData.add(GDPData(myDays[i], mySums[i], gColor));
       }
-      chartData.add(GDPData(myDays[i], mySums[i], gColor));
+    } on Exception catch (exception) {
+      print("Error"); // only executed if error is of type Exception
+    } catch (error) {
+      print("Error"); // only executed if error is of type Exception
+      // executed for errors of all types other than Exception
     }
     return chartData;
   }

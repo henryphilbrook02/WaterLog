@@ -16,29 +16,22 @@ void main() async {
 }
 
 class mainPage extends StatefulWidget {
-
   final email;
   userModel.User client;
 
-  mainPage({
-    Key? key,
-    this.email,
-    required this.client
-  }) : super(key: key);
+  mainPage({Key? key, this.email, required this.client}) : super(key: key);
 
   @override
   _mainPage createState() => _mainPage();
 }
 
 class _mainPage extends State<mainPage> {
-
   int selectedPage = 0;
 
   var _pageOptions = [];
 
   @override
   void initState() {
-
     _pageOptions = [
       homePage(client: widget.client),
       stats(client: widget.client),
@@ -47,7 +40,6 @@ class _mainPage extends State<mainPage> {
       AccountPage(client: widget.client),
       statsFriends(),
     ];
-
   }
 
   @override
