@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
+final now = new DateTime.now();
+String formatter = DateFormat('yyyy-MM-dd').format(now); // 28/03/2020
+var currentDate = formatter.replaceAll("/", "-");
 
 class EntityCreation extends StatelessWidget {
   @override
@@ -19,13 +22,9 @@ class EntityCreation extends StatelessWidget {
 }
 
 class EntityCreationItem extends StatefulWidget {
-
   userModel.User client;
 
-  EntityCreationItem({
-    Key? key,
-    required this.client
-  }) : super(key: key);
+  EntityCreationItem({Key? key, required this.client}) : super(key: key);
 
   @override
   _EntityCreationPageState createState() => _EntityCreationPageState();
@@ -36,13 +35,20 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     final response =
         await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
     if (response.statusCode == 200) {
-      for (var i = 0; i < 10; i++) {
-        var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
-        var activityName = mainUser.NAME.toString();
-        var activityUnit = mainUser.UNIT.toString();
-        var activityAmount = mainUser.AMOUNT;
+      try {
+        for (var i = 0; i < 10; i++) {
+          var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
+          var activityName = mainUser.NAME.toString();
+          var activityUnit = mainUser.UNIT.toString();
+          var activityAmount = mainUser.AMOUNT;
 
-        addEntity(activityName, activityUnit, activityAmount);
+          addEntity(activityName, activityUnit, activityAmount);
+        }
+      } on Exception catch (exception) {
+        print("Error");
+      } catch (error) {
+        print("Error");
+        // executed for errors of all types other than Exception
       }
 
       return entityData.fromJson(jsonDecode(response.body)[0]);
@@ -129,8 +135,6 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
           child: FloatingActionButton.extended(
             onPressed: () {
               postEntry();
-              postActivity();
-
               print("submit");
             },
             label: const Text("Submit", style: TextStyle(fontSize: 25)),
@@ -163,6 +167,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         desc = _Desc.text;
         amt = _Amount.text;
         addEntity(activity, desc, int.parse(amt));
+        postActivity();
       },
     );
 
@@ -233,7 +238,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       "activity_id": "NULL",
       "preset_id": 1,
       "username": "Maaloufer",
-      "day": "2021-11-14",
+      "day": currentDate,
       "amount": totalWater
     };
     String rawJson = jsonEncode(map);
@@ -259,8 +264,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       "name": _Activity.text, //name
       "amount": _Amount.text, // amount
       "units": _Desc.text, // Description
-      "creation": "2021-11-17",
-      "update": "2021-11-17"
+      "creation": currentDate,
+      "update": currentDate
     };
     String rawJson = jsonEncode(map);
 

@@ -9,6 +9,7 @@ import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/custom_theme.dart';
 
 var average = 0.0;
+var totalNums = 2;
 final now = new DateTime.now();
 String formatter = DateFormat('yMd').format(now); // 28/03/2020
 
@@ -53,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var myDay;
   var mySums = [];
   var myDays = [];
+  var testAverage = 0;
 
   Future<wData> postRequest() async {
     final response = await http.get(
@@ -70,15 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
           print("Average: " + average.toString());
           mySums.add(sum);
           myDays.add(myDay);
+          testAverage++;
         } on Exception catch (exception) {
           print("Error");
         } catch (error) {
           print("Error");
         }
-
-        // print("Average: " + average.toString());
-        // print("Sum: " + sum.toString());
-        // print("I" + i.toString() + ": " + myDays[i].toString());
       }
 
       return wData.fromJson(jsonDecode(response.body)[0]);
@@ -127,8 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTrackVisible: false,
                 opacity: 0.5,
                 color: const Color.fromRGBO(51, 153, 255, 255),
-                name:
-                    "Average: " + (average / mySums.length).round().toString(),
+                name: "Average: " + (average / mySums.length).toString(),
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
                 xValueMapper: (GDPData gdp, _) => gdp.continent,
