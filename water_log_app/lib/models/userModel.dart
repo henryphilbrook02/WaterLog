@@ -25,6 +25,8 @@ class User {
     required this.updateDate,
   });
 
+  //User(this.userName, this.token, this.weight, this.height, this.BMI, this.gender, this.unit, this.email, this.creationDate, this.updateDate);
+
   getapiBody(){
     Map<String, dynamic> map = {
       "id": this.userName,

@@ -1,7 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:water_log_app/src/screens/home.dart';
+import 'package:water_log_app/models/userModel.dart' as Client;
 import 'main.dart';
 
 class MyApp extends StatelessWidget {
@@ -22,38 +27,62 @@ class NewUserPage extends StatefulWidget {
 
 class _NewUserPageState extends State<NewUserPage> {
   bool validPassword = false;
+  final auth = FirebaseAuth.instance;
 
-  TextEditingController name = new TextEditingController();
-  TextEditingController email = new TextEditingController();
-  TextEditingController password = new TextEditingController();
-  TextEditingController dob = new TextEditingController();
-  TextEditingController height = new TextEditingController();
-  TextEditingController weight = new TextEditingController();
+  String _errorMsg = "";
 
-  void post() async {
-    print("Made it to method");
-    final response = await http
-        .post(Uri.parse("http://192.168.0.174/MealTimeServer/config.php"), body: {
-      "name": name.text,
-      "email": email.text,
-      "password": password.text,
-      "dob": dob.text,
-      "height": height.text,
-      "weight": weight.text,
-    });
-    print("completed Method");
+  String _name = "";
+  String _email = "";
+  String _password = "";
+  String _gender = "Gender";
+  String _height = "";
+  String _unit = "Unit";
+  int _weight = 0;
+  int _BMI = 0;
+
+  newUser() async{
+    Client.User newUser = Client.User(
+        userName: _name,
+        token: "re",
+        weight: _weight,
+        height: _height,
+        BMI: _BMI,
+        gender: _gender,
+        unit: _unit,
+        email: _email,
+        creationDate: "2021-11-11",
+        updateDate: "2021-11-11");
+    var uri = Uri.parse('http://10.11.25.60:443/api/users');
+    String rawJson = jsonEncode(newUser.getapiBody());
+    http.Response response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: rawJson,
+    );
+    if (jsonDecode(response.body)["code"] == null){
+      print("Made it past the null check: " + response.body);
+      return newUser;
+    }
+    else{
+      print("bad data: " + response.body);
+      return null;
+    }
   }
 
-  void validateTextField(String userInput) {
+  validateTextField(String userInput) {
     if (userInput.length >= 8 &&
         (userInput.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]')))) {
       setState(() {
         validPassword = false;
       });
+      return true;
     } else {
       setState(() {
         validPassword = true;
       });
+      return false;
     }
   }
 
@@ -85,10 +114,9 @@ class _NewUserPageState extends State<NewUserPage> {
             children: <Widget>[
               Image.asset('assets/images/newuser.png'),
               TextField(
-                controller: name,
                 decoration: InputDecoration(
                   labelText: 'Username',
-                  hintText: 'Your Username:',
+                  hintText: 'Your Username',
                   hintStyle: TextStyle(color: Colors.blue),
                   contentPadding: EdgeInsets.all(10),
                   constraints: BoxConstraints.tightFor(width: 350),
@@ -96,13 +124,18 @@ class _NewUserPageState extends State<NewUserPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    _name = value.trim();
+                  });
+                }
               ),
               SizedBox(height: 8.0),
               TextField(
-                controller: email,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  hintText: 'example@mail.com:',
+                  hintText: 'example@mail.com',
                   hintStyle: TextStyle(color: Colors.blue),
                   contentPadding: EdgeInsets.all(10),
                   constraints: BoxConstraints.tightFor(width: 350),
@@ -110,10 +143,14 @@ class _NewUserPageState extends State<NewUserPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    _email = value.trim();
+                  });
+                }
               ),
               SizedBox(height: 8.0),
               TextField(
-                controller: password,
                 obscureText: true,
                 decoration: InputDecoration(
                   errorText:
@@ -127,27 +164,50 @@ class _NewUserPageState extends State<NewUserPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    _password = value.trim();
+                  });
+                }
+              ),
+              SizedBox(height: 8.0),
+              DropdownButton<String>(
+                value: _gender,
+                icon: Icon(Icons.keyboard_arrow_down),
+                items: <String>['Gender', 'M', 'F', 'Other'].map((String value) {
+                  return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value)
+                  );
+                }).toList(),
+                onChanged: (value){
+                  setState(() {
+                    _gender = value!;
+                  });
+                },
+              ),
+
+              SizedBox(height: 8.0),
+              DropdownButton<String>(
+                value: _unit,
+                icon: Icon(Icons.keyboard_arrow_down),
+                items: <String>['Unit', 'Metric', 'Imperial'].map((String value) {
+                  return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value)
+                  );
+                }).toList(),
+                onChanged: (value){
+                  setState(() {
+                    _unit = value!;
+                  });
+                },
               ),
               SizedBox(height: 8.0),
               TextField(
-                controller: dob,
-                decoration: InputDecoration(
-                  labelText: 'Date Of Birth: ',
-                  hintText: 'dd/mm/yyyy:',
-                  hintStyle: TextStyle(color: Colors.blue),
-                  contentPadding: EdgeInsets.all(10),
-                  constraints: BoxConstraints.tightFor(width: 350),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              SizedBox(height: 8.0),
-              TextField(
-                controller: height,
                 decoration: InputDecoration(
                   labelText: 'Height',
-                  hintText: "Ex: 5'8:",
+                  hintText: "Ex: 5'8",
                   hintStyle: TextStyle(color: Colors.blue),
                   contentPadding: EdgeInsets.all(10),
                   constraints: BoxConstraints.tightFor(width: 350),
@@ -155,13 +215,18 @@ class _NewUserPageState extends State<NewUserPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    _height = value.trim();
+                  });
+                }
               ),
               SizedBox(height: 8.0),
               TextField(
-                controller: weight,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Weight',
-                  hintText: 'Ex: 160: ',
+                  hintText: 'Ex: 160 ',
                   hintStyle: TextStyle(color: Colors.blue),
                   contentPadding: EdgeInsets.all(10),
                   constraints: BoxConstraints.tightFor(width: 350),
@@ -169,6 +234,36 @@ class _NewUserPageState extends State<NewUserPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                onChanged: (value) {
+                  setState(() {
+                    _weight = int.parse(value);
+                  });
+                }
+              ),
+              SizedBox(height: 8.0),
+              TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'BMI',
+                    hintText: 'Ex: 28 ',
+                    hintStyle: TextStyle(color: Colors.blue),
+                    contentPadding: EdgeInsets.all(10),
+                    constraints: BoxConstraints.tightFor(width: 350),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _BMI = int.parse(value);
+                    });
+                  }
               ),
               SizedBox(height: 8.0),
               MaterialButton(
@@ -177,9 +272,19 @@ class _NewUserPageState extends State<NewUserPage> {
                 child: Text("Register"),
                 color: Colors.blue,
                 elevation: 5,
-                onPressed: () {
-                  validateTextField(password.text);
-                  post();
+                onPressed: () async {
+                  if(validateTextField(_password)){
+                    var user = await newUser();
+                    if (user != null){
+                      auth.createUserWithEmailAndPassword(email: _email, password: _password).then((res){
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(client: user)));
+                      }).catchError((error){
+                        print("This is the Error: " + error.toString().split("]")[1]);
+                        setState(() { _errorMsg = "Incorrect Email / Username combination "; });
+                      });
+                    }
+                    else{ print("userError");}
+                  }
                 },
               ),
             ],
@@ -189,3 +294,5 @@ class _NewUserPageState extends State<NewUserPage> {
     );
   }
 }
+
+
