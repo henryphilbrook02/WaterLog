@@ -3,10 +3,18 @@ import 'package:water_log_app/main.dart';
 import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/friends.dart';
-
+import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/friend_stats.dart';
 
 class friends extends StatefulWidget {
+
+  userModel.User client;
+
+  friends({
+    Key? key,
+    required this.client
+  }) : super(key: key);
+
   @override
   _friends createState() => _friends();
 }
