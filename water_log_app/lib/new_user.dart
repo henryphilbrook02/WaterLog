@@ -44,7 +44,7 @@ class _NewUserPageState extends State<NewUserPage> {
   newUser() async{
     Client.User newUser = Client.User(
         userName: _name,
-        token: "awdqwdqw",
+        token: "",
         weight: _weight,
         height: _height,
         BMI: _BMI,
@@ -247,7 +247,7 @@ class _NewUserPageState extends State<NewUserPage> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _height = value.trim();
+                    _height = value.trim().replaceAll("\'", " ").replaceAll("\"", " ");
                   });
                 }
               ),
