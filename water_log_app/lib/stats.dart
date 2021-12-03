@@ -11,7 +11,7 @@ import 'package:water_log_app/custom_theme.dart';
 var average = 0.0;
 var totalNums = 2;
 final now = new DateTime.now();
-String formatter = DateFormat('yMd').format(now); // 28/03/2020
+String formatter = DateFormat('yMd').format(now); // 28/03/2020 TODO this will not work we need to parse it
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.
@@ -56,9 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
   var myDays = [];
   var testAverage = 0;
 
+
+  //  Need to use the passed username here
   Future<wData> postRequest() async {
     final response = await http.get(
-        Uri.parse('http://10.11.25.60:443/api/seven_day_readout/Maaloufer'));
+        Uri.parse('http://10.11.25.60:443/api/seven_day_readout/'+widget.client.userName));
     average = 0;
     if (response.statusCode == 200) {
       for (var i = 0; i < 7; i++) {
@@ -110,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(formatter);
     // _chartData = getChartData();
     // _tooltipBehavior = TooltipBehavior(enable: true);
     return Scaffold(
