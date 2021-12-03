@@ -39,11 +39,12 @@ class _NewUserPageState extends State<NewUserPage> {
   String _unit = "Unit";
   int _weight = 0;
   int _BMI = 0;
+  int _goal = 0;
 
   newUser() async{
     Client.User newUser = Client.User(
         userName: _name,
-        token: "re",
+        token: "rete",
         weight: _weight,
         height: _height,
         BMI: _BMI,
@@ -69,6 +70,35 @@ class _NewUserPageState extends State<NewUserPage> {
       print("bad data: " + response.body);
       return null;
     }
+  }
+
+  newGoal(Client.User newUser) async{
+
+    Map<String, dynamic> map = {
+      "username": newUser.userName,
+      "goal": _goal,
+      "current": 1,
+      "creation": "2021-11-11",
+    };
+
+    var uri = Uri.parse('http://10.11.25.60:443/api/goals');
+    String rawJson = jsonEncode(map);
+
+    http.Response response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: rawJson,
+    );
+    print("Made it past the null check: " + response.body);
+    if (jsonDecode(response.body)["code"] == null){
+      return true;
+    }
+    else{
+      return false;
+    }
+
   }
 
   validateTextField(String userInput) {
@@ -266,6 +296,28 @@ class _NewUserPageState extends State<NewUserPage> {
                   }
               ),
               SizedBox(height: 8.0),
+              TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Goal',
+                    hintText: 'Ex: 105 ',
+                    hintStyle: TextStyle(color: Colors.blue),
+                    contentPadding: EdgeInsets.all(10),
+                    constraints: BoxConstraints.tightFor(width: 350),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _goal = int.parse(value);
+                    });
+                  }
+              ),
+              SizedBox(height: 8.0),
               MaterialButton(
                 minWidth: 200.0,
                 height: 40.0,
@@ -274,16 +326,26 @@ class _NewUserPageState extends State<NewUserPage> {
                 elevation: 5,
                 onPressed: () async {
                   if(validateTextField(_password)){
-                    var user = await newUser();
+                    Client.User user = await newUser();
+                    print(user != null);
                     if (user != null){
-                      auth.createUserWithEmailAndPassword(email: _email, password: _password).then((res){
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(client: user)));
-                      }).catchError((error){
-                        print("This is the Error: " + error.toString().split("]")[1]);
-                        setState(() { _errorMsg = "Incorrect Email / Username combination "; });
-                      });
+                      if(await newGoal(user)){
+                        auth.createUserWithEmailAndPassword(email: _email, password: _password).then((res){
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(client: user)));
+                        }).catchError((error){
+                          print("This is the Error: " + error.toString().split("]")[1]);
+                          setState(() { _errorMsg = "Firebase error"; });
+                        });
+                      }
+                      else{
+                        setState(() { _errorMsg = "Goal Error"; });
+                        print("Goal Error");
+                      }
                     }
-                    else{ print("userError");}
+                    else{
+                      setState(() { _errorMsg = "userError"; });
+                      print("userError");
+                    }
                   }
                 },
               ),
