@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
@@ -14,10 +13,7 @@ final now = new DateTime.now();
 String formatter = DateFormat('yMd').format(now); // 28/03/2020
 
 class stats extends StatelessWidget {
-  // This widget is the root of your application.
-
   userModel.User client;
-
   stats({
     Key? key,
     required this.client,
@@ -56,11 +52,11 @@ class _MyHomePageState extends State<MyHomePage> {
   var myDays = [];
   var testAverage = 0;
 
-
   //  Need to use the passed username here
   Future<wData> postRequest() async {
-    final response = await http.get(
-        Uri.parse('http://10.11.25.60:443/api/seven_day_readout/'+widget.client.userName));
+    final response = await http.get(Uri.parse(
+        'http://10.11.25.60:443/api/seven_day_readout/' +
+            widget.client.userName));
     average = 0;
     if (response.statusCode == 200) {
       for (var i = 0; i < 7; i++) {
@@ -154,12 +150,16 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       for (int i = 0; i < mySums.length; i++) {
         var fullAverage = average / mySums.length;
+        var lowerAverage = fullAverage - 10;
+        var highAverage = fullAverage + 10;
         print("Full: " + fullAverage.toString());
         var gColor;
-        if ((mySums[i] > fullAverage)) {
+        if ((mySums[i] > highAverage)) {
           gColor = Colors.red;
-        } else {
+        } else if (mySums[i] < lowerAverage) {
           gColor = Colors.green;
+        } else {
+          gColor = Colors.blue;
         }
         chartData.add(GDPData(myDays[i], mySums[i], gColor));
       }
