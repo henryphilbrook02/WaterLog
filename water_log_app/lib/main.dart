@@ -38,7 +38,6 @@ class _mainPage extends State<mainPage> {
       EntityCreationItem(client: widget.client),
       friends(client: widget.client),
       AccountPage(client: widget.client),
-      statsFriends(),
     ];
   }
 

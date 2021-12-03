@@ -31,6 +31,7 @@ class EntityCreationItem extends StatefulWidget {
 }
 
 class _EntityCreationPageState extends State<EntityCreationItem> {
+
   Future<entityData> postRequest() async {
     final response =
         await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
@@ -42,8 +43,9 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
           var activityName = mainUser.NAME.toString();
           var activityUnit = mainUser.UNIT.toString();
           var activityAmount = mainUser.AMOUNT;
+          var activityID = mainUser.ACTIVITY_ID;
 
-          addEntity(activityName, activityUnit, activityAmount);
+          addEntity(activityName, activityUnit, activityAmount, activityID);
         }
       } on Exception catch (exception) {
         print("Error");
@@ -54,7 +56,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         // executed for errors of all types other than Exception
       }
 
-      return entityData.fromJson(jsonDecode(response.body)[0]);
+      return entityData.fromJson(jsonDecode(response.body)[0]); // TODO I dont think we need this
     } else {
       throw Exception('Failed to load user');
     }
@@ -175,7 +177,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         activity = _Activity.text;
         desc = _Desc.text;
         amt = _Amount.text;
-        addEntity(activity, desc, int.parse(amt));
+        addEntity(activity, desc, int.parse(amt), 1); // adding 1 for ID because it will be generated
         postActivity();
       },
     );
@@ -227,9 +229,9 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     );
   }
 
-  void addEntity(String actName, String desc, int amount) {
+  void addEntity(String actName, String desc, int amount, int id) {
     setState(() {
-      entityList.add(Entity(actName, amount.toString()+" "+desc, 0));
+      entityList.add(Entity(actName, amount.toString()+" "+desc, 0, id));
     });
   }
 
@@ -304,24 +306,51 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
   }
 }
 
-class Entity {
+
+class PreSetEntity {
+  int id;
   String entityName;
   String desc;
   int waterUnits;
 
-  Entity(this.entityName, this.desc, this.waterUnits);
+  PreSetEntity(this.entityName, this.desc, this.waterUnits, this.id);
 }
 
-class entityData {
+class PreSetEntityData {
+  int ACTIVITY_ID;
   String NAME;
   int AMOUNT;
   String UNIT;
 
-  entityData({required this.NAME, required this.AMOUNT, required this.UNIT});
+  PreSetEntityData({required this.NAME, required this.AMOUNT, required this.UNIT, required this.ACTIVITY_ID});
+
+  factory PreSetEntityData.fromJson(Map<String, dynamic> json) {
+    return PreSetEntityData(
+        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT'], ACTIVITY_ID: json['ACTIVITY_ID']);
+  }
+}
+
+
+class Entity {
+  int id;
+  String entityName;
+  String desc;
+  int waterUnits;
+
+  Entity(this.entityName, this.desc, this.waterUnits, this.id);
+}
+
+class entityData {
+  int ACTIVITY_ID;
+  String NAME;
+  int AMOUNT;
+  String UNIT;
+
+  entityData({required this.NAME, required this.AMOUNT, required this.UNIT, required this.ACTIVITY_ID});
 
   factory entityData.fromJson(Map<String, dynamic> json) {
     return entityData(
-        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT']);
+        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT'], ACTIVITY_ID: json['ACTIVITY_ID']);
   }
 }
 // So we have posted an entry to the database

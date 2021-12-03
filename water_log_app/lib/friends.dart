@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:water_log_app/main.dart';
-import 'package:water_log_app/stats.dart';
-import 'package:water_log_app/log_in.dart';
-import 'package:water_log_app/friends.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/friend_stats.dart';
 
@@ -142,7 +138,7 @@ class _friends extends State<friends> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => statsFriends()));
+                                    builder: (context) => statsFriends( username: friendList[index].friendName )));
                           },
                           //addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc),
                           icon: Icon(

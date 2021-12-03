@@ -44,7 +44,7 @@ class _NewUserPageState extends State<NewUserPage> {
   newUser() async{
     Client.User newUser = Client.User(
         userName: _name,
-        token: "rete",
+        token: "awdqwdqw",
         weight: _weight,
         height: _height,
         BMI: _BMI,

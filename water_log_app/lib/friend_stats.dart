@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:water_log_app/models/userModel.dart' as userModel;
 
 class statsFriends extends StatelessWidget {
   // This widget is the root of your application.
+
+  String username;
+
+  statsFriends({
+    Key? key,
+    required this.username,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -11,15 +20,20 @@ class statsFriends extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePageFriends(title: 'Flutter Demo Home Page'),
+      home: MyHomePageFriends(username: username),
     );
   }
 }
 
 class MyHomePageFriends extends StatefulWidget {
-  MyHomePageFriends({Key? key, required this.title}) : super(key: key);
 
-  final String title;
+  String username;
+
+  MyHomePageFriends({
+    Key? key,
+    required this.username,
+  }) : super(key: key);
+
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -38,6 +52,7 @@ class _MyHomePageState extends State<MyHomePageFriends> {
   }
 
   Widget build(BuildContext context) {
+    print(widget.username);
     return Scaffold(
       appBar: AppBar(
         title: Text("Friend Data"),
@@ -223,3 +238,4 @@ class GDPData {
   final double gdp;
   final Color segmentColor;
 }
+

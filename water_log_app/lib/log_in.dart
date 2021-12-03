@@ -1,17 +1,10 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
-import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/new_user.dart';
-import 'package:water_log_app/stats.dart';
 import 'package:water_log_app/main.dart';
-
 import 'package:http/http.dart' as http;
-
-import 'account.dart';
-
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
 class MyApp extends StatelessWidget {
