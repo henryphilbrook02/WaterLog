@@ -11,7 +11,7 @@ import 'package:water_log_app/custom_theme.dart';
 var average = 0.0;
 var totalNums = 2;
 final now = new DateTime.now();
-String formatter = DateFormat('yMd').format(now); // 28/03/2020 TODO this will not work we need to parse it
+String formatter = DateFormat('yMd').format(now); // 28/03/2020
 
 class stats extends StatelessWidget {
   // This widget is the root of your application.

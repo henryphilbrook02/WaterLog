@@ -36,7 +36,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
     if (response.statusCode == 200) {
       try {
-        for (var i = 0; i < 10; i++) {
+        var len = jsonDecode(response.body).length;
+        for (var i = 0; i < len; i++) {
           var mainUser = entityData.fromJson(jsonDecode(response.body)[i]);
           var activityName = mainUser.NAME.toString();
           var activityUnit = mainUser.UNIT.toString();
@@ -46,8 +47,10 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         }
       } on Exception catch (exception) {
         print("Error");
+        print(exception);
       } catch (error) {
         print("Error");
+        print(error);
         // executed for errors of all types other than Exception
       }
 
@@ -62,6 +65,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
   late TextEditingController _Activity;
   late TextEditingController _Desc;
   late TextEditingController _Amount;
+
   initState() {
     _Activity = new TextEditingController();
     _Desc = new TextEditingController();
@@ -80,51 +84,56 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         elevation: 1,
         automaticallyImplyLeading: false,
       ),
-      body: ListView(
-        children: <Widget>[
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: entityList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Icon(Icons.water),
-                  title: Text(entityList[index].entityName),
-                  subtitle: Text(entityList[index].desc),
-                  trailing: FittedBox(
-                    child: Row(
-                      children: [
-                        IconButton(
-                            color: Colors.black,
-                            highlightColor: Colors.red.shade100,
-                            splashRadius: 15,
-                            onPressed: () {
-                              setState(() {
-                                entityList[index].waterUnits != 0
-                                    ? entityList[index].waterUnits--
-                                    : entityList[index].waterUnits;
-                              });
-                            },
-                            icon: Icon(Icons.remove)),
-                        Text(entityList[index].waterUnits.toString()),
-                        IconButton(
-                            color: Colors.black,
-                            highlightColor: Colors.green.shade100,
-                            splashRadius: 15,
-                            onPressed: () {
-                              setState(() {
-                                entityList[index].waterUnits != -1
-                                    ? entityList[index].waterUnits++
-                                    : entityList[index].waterUnits;
-                              });
-                            },
-                            icon: Icon(Icons.add)),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-        ],
+
+      body: Center(
+          child: Center(
+            child: Scrollbar(
+              child: ListView.builder(
+                  padding: const EdgeInsets.only(bottom: kFloatingActionButtonMargin + 48),
+                  shrinkWrap: true,
+                  itemCount: entityList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: Icon(Icons.water),
+                      title: Text(entityList[index].entityName),
+                      subtitle: Text(entityList[index].desc),
+                      trailing: FittedBox(
+                        child: Row(
+                          children: [
+                            IconButton(
+                                color: Colors.black,
+                                highlightColor: Colors.red.shade100,
+                                splashRadius: 15,
+                                onPressed: () {
+                                  setState(() {
+                                    entityList[index].waterUnits != 0
+                                        ? entityList[index].waterUnits--
+                                        : entityList[index].waterUnits;
+                                  });
+                                },
+                                icon: Icon(Icons.remove)),
+                            Text(entityList[index].waterUnits.toString()),
+                            IconButton(
+                                color: Colors.black,
+                                highlightColor: Colors.green.shade100,
+                                splashRadius: 15,
+                                onPressed: () {
+                                  setState(() {
+                                    entityList[index].waterUnits != -1
+                                        ? entityList[index].waterUnits++
+                                        : entityList[index].waterUnits;
+                                  });
+                                },
+                                icon: Icon(Icons.add)),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          )
       ),
+
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         Container(
@@ -220,13 +229,23 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
   void addEntity(String actName, String desc, int amount) {
     setState(() {
-      entityList.add(Entity(actName, desc, amount));
+      entityList.add(Entity(actName, amount.toString()+" "+desc, 0));
+    });
+  }
+
+  void resetList(){ //used in post entry to reset all the amounts back to zero
+    for (int i=0; i<entityList.length; i++){
+      entityList[i].waterUnits = 0;
+    }
+    setState(() {
+      entityList = entityList;
     });
   }
 
   void postEntry() async {
     var totalWater = 0;
     // Loop through the entry lsit that Saqib made and get all the amounts, add them tofether for a total amount, then return that.\
+    // TODO we need to change this logic and add multiple different entrys, 1 per each activity
     for (int i = 0; i < entityList.length; i++) {
       totalWater = totalWater + entityList[i].waterUnits;
     }
@@ -236,8 +255,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
     Map<String, dynamic> map = {
       "activity_id": "NULL",
-      "preset_id": 1,
-      "username": "Maaloufer",
+      "preset_id": 1, // TODO change this to be the id of the thing added
+      "username": widget.client.userName,
       "day": currentDate,
       "amount": totalWater
     };
@@ -253,6 +272,9 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
+
+    resetList();
+
   }
 
   void postActivity() async {
@@ -260,7 +282,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     var uri = Uri.parse('http://10.11.25.60:443/api/activities');
 
     Map<String, dynamic> map = {
-      "username": "Maaloufer",
+      "username": widget.client.userName,
       "name": _Activity.text, //name
       "amount": _Amount.text, // amount
       "units": _Desc.text, // Description
