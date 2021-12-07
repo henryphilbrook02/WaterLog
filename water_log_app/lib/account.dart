@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
+import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
 var user_name = "";
@@ -10,7 +11,7 @@ var name = "";
 var weight = "";
 var height = "";
 var bmi = "";
-String _errorMsg = " ";
+String _errorMsg = "";
 
 class Account extends StatelessWidget {
   @override
@@ -96,6 +97,9 @@ class _AccountPageState extends State<AccountPage> {
       );
       print("Made it past the null check: " + response.body);
       if (jsonDecode(response.body)["code"] == null) {
+        setState(() {
+          _errorMsg = "Success, changes will take effect after next log in";
+        });
         return true;
       } else {
         return false;
@@ -105,11 +109,26 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    //_errorMsg = "";
     //postRequest();
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => log_in(),
+              ),
+              (route) => false,
+            );
+          },
+          child: Icon(
+            Icons.logout, // add custom icons also
+          ),
+        ),
         elevation: 1,
       ),
       body: Container(
