@@ -33,8 +33,37 @@ class EntityCreationItem extends StatefulWidget {
 class _EntityCreationPageState extends State<EntityCreationItem> {
 
   Future<entityData> postRequest() async {
-    final response =
-        await http.get(Uri.parse('http://10.11.25.60:443/api/activities'));
+
+    var response =
+    await http.get(Uri.parse('http://10.11.25.60:443/api/presets'));
+    if (response.statusCode == 200) {
+      try {
+        var len = jsonDecode(response.body).length;
+        for (var i = 0; i < len; i++) {
+          var mainUser = PreSetEntityData.fromJson(jsonDecode(response.body)[i]);
+          var activityName = mainUser.NAME.toString();
+          var activityUnit = mainUser.UNIT.toString();
+          var activityAmount = mainUser.AMOUNT;
+          var activityID = mainUser.ACTIVITY_ID;
+
+          addPresetEntity(activityName, activityUnit, activityAmount, activityID);
+        }
+      } on Exception catch (exception) {
+        print("Error");
+        print(exception);
+      } catch (error) {
+        print("Error");
+        print(error);
+        // executed for errors of all types other than Exception
+      }
+
+    } else {
+      throw Exception('Failed to load Presets');
+    }
+
+
+    response =
+        await http.get(Uri.parse('http://10.11.25.60:443/api/user_activities/'+widget.client.userName));
     if (response.statusCode == 200) {
       try {
         var len = jsonDecode(response.body).length;
@@ -62,7 +91,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     }
   }
 
-  List<Entity> entityList = [];
+  List<entry> entityList = [];
 
   late TextEditingController _Activity;
   late TextEditingController _Desc;
@@ -144,9 +173,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
           decoration: BoxDecoration(
               color: Colors.blue, borderRadius: BorderRadius.circular(20)),
           child: FloatingActionButton.extended(
-            onPressed: () {
-              postEntry();
-              print("submit");
+            onPressed: () async {
+              await postEntry();
             },
             label: const Text("Submit", style: TextStyle(fontSize: 25)),
           ),
@@ -188,26 +216,26 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       content: IntrinsicHeight(
         child: Column(
           children: <Widget>[
-            new Flexible(
-              child: new TextField(
+            Flexible(
+              child: TextField(
                 controller: _Activity,
-                decoration: new InputDecoration(
+                decoration: const InputDecoration(
                     hintText: "Acticity Name",
                     contentPadding: EdgeInsets.all(10)),
               ),
             ),
-            new Flexible(
-              child: new TextField(
+            Flexible(
+              child: TextField(
                 controller: _Desc,
-                decoration: new InputDecoration(
+                decoration: const InputDecoration(
                     hintText: "Activity Description",
                     contentPadding: EdgeInsets.all(10)),
               ),
             ),
-            new Flexible(
-              child: new TextField(
+            Flexible(
+              child: TextField(
                 controller: _Amount,
-                decoration: new InputDecoration(
+                decoration: const InputDecoration(
                     hintText: "Amount Consumed  Per Use",
                     contentPadding: EdgeInsets.all(10)),
               ),
@@ -235,6 +263,12 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     });
   }
 
+  void addPresetEntity(String actName, String desc, int amount, int id) {
+    setState(() {
+      entityList.add(PreSetEntity(actName, amount.toString()+" "+desc, 0, id));
+    });
+  }
+
   void resetList(){ //used in post entry to reset all the amounts back to zero
     for (int i=0; i<entityList.length; i++){
       entityList[i].waterUnits = 0;
@@ -244,43 +278,33 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
     });
   }
 
-  void postEntry() async {
+  Future<String> postEntry() async {
     var totalWater = 0;
     // Loop through the entry lsit that Saqib made and get all the amounts, add them tofether for a total amount, then return that.\
     // TODO we need to change this logic and add multiple different entrys, 1 per each activity
-    for (int i = 0; i < entityList.length; i++) {
-      totalWater = totalWater + entityList[i].waterUnits;
-    }
-    print("Total Units: " + totalWater.toString());
 
     var uri = Uri.parse('http://10.11.25.60:443/api/entries');
 
-    Map<String, dynamic> map = {
-      "activity_id": "NULL",
-      "preset_id": 1, // TODO change this to be the id of the thing added
-      "username": widget.client.userName,
-      "day": currentDate,
-      "amount": totalWater
-    };
-    String rawJson = jsonEncode(map);
+    for (int i = 0; i < entityList.length; i++) {
+      //totalWater = totalWater + entityList[i].waterUnits;
+      if (entityList[i].waterUnits > 0){
+        String rawJson = jsonEncode(entityList[i].apiBody(widget.client.userName));
+        http.Response response = await http.post(
+          uri,
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+          },
+          body: rawJson,
+        );
+      }
 
-    http.Response response = await http.post(
-      uri,
-      headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-      },
-      body: rawJson,
-    );
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    }
 
     resetList();
-
+    return "done";
   }
 
   void postActivity() async {
-    print("Activity Posted");
     var uri = Uri.parse('http://10.11.25.60:443/api/activities');
 
     Map<String, dynamic> map = {
@@ -301,19 +325,49 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       body: rawJson,
     );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
   }
 }
 
-
-class PreSetEntity {
+abstract class entry {
   int id;
   String entityName;
   String desc;
   int waterUnits;
 
-  PreSetEntity(this.entityName, this.desc, this.waterUnits, this.id);
+  entry(this.entityName, this.desc, this.waterUnits, this.id);
+
+  apiBody(String uName){
+    Map<String, dynamic> map = {
+
+    };
+
+    return map;
+  }
+
+}
+
+
+class PreSetEntity extends entry{
+  int id;
+  String entityName;
+  String desc;
+  int waterUnits;
+
+  PreSetEntity(this.entityName, this.desc, this.waterUnits, this.id) : super(entityName, desc, waterUnits, id); //TODO this needs to be changed I think
+
+  @override
+  apiBody(String uName){
+    Map<String, dynamic> map = {
+      "activity_id": null,
+      "preset_id": this.id,
+      "username": uName,
+      "day": currentDate,
+      "amount": this.waterUnits
+    };
+
+    return map;
+  }
+
 }
 
 class PreSetEntityData {
@@ -328,16 +382,31 @@ class PreSetEntityData {
     return PreSetEntityData(
         NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT'], ACTIVITY_ID: json['ACTIVITY_ID']);
   }
+
 }
 
 
-class Entity {
+class Entity extends entry{
   int id;
   String entityName;
   String desc;
   int waterUnits;
 
-  Entity(this.entityName, this.desc, this.waterUnits, this.id);
+  Entity(this.entityName, this.desc, this.waterUnits, this.id) : super(entityName, desc, waterUnits, id);
+
+  @override
+  apiBody(String uName){
+    Map<String, dynamic> map = {
+      "activity_id": this.id,
+      "preset_id": null,
+      "username": uName,
+      "day": currentDate,
+      "amount": this.waterUnits
+    };
+
+    return map;
+  }
+
 }
 
 class entityData {
@@ -352,6 +421,7 @@ class entityData {
     return entityData(
         NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT'], ACTIVITY_ID: json['ACTIVITY_ID']);
   }
+
 }
 // So we have posted an entry to the database
 
