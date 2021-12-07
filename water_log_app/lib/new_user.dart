@@ -9,7 +9,7 @@ import 'package:water_log_app/src/screens/home.dart';
 import 'package:water_log_app/models/userModel.dart' as Client;
 import 'main.dart';
 
-// TODO add an error message when there is an error in the input WILL add that later afte other pages are complete.
+// TODO add an error message when there is an error in the input WILL add that later after other pages are complete.
 
 class MyApp extends StatelessWidget {
   @override
