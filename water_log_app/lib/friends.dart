@@ -68,6 +68,15 @@ class _friends extends State<friends> {
               friendList.add(friendEntity("name9"));
               friendList.add(friendEntity("name10"));
               friendRequestList = snapshot.data![1];
+
+              bool isVisible;
+              if (friendRequestList.length == 0){
+                isVisible = false;
+              }
+              else{
+                isVisible = true;
+              }
+
               print(friendRequestList.length);
               final screenHeight = MediaQuery.of(context).size.height;
               return
@@ -82,18 +91,21 @@ class _friends extends State<friends> {
                             width: double.infinity,
                             height: 5,
                           ),
-                      Row(
+                      Visibility(
+                        visible: isVisible,
+                        child: Row(
                         children: const <Widget>[
                           Expanded(child: Text("\t\t\tFriend Requests")),
                         ],
-                      ),
+                      )),
                       const SizedBox(
                         width: double.infinity,
                         height: 15,
                       ),
-                      // TODO make this be gone when length is 0
-                          ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                      Visibility(
+                        visible: isVisible,
+                          child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: friendRequestList.length,
                       itemBuilder: (context, index) {
@@ -134,7 +146,7 @@ class _friends extends State<friends> {
                           ),
                         );
                         },
-                        ),
+                        )),
                   const SizedBox(
                     width: double.infinity,
                     height: 15,
