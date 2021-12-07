@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
-
 var user_name = "";
 var name = "";
 var weight = "";
 var height = "";
 var bmi = "";
+String _errorMsg = " ";
 
 class Account extends StatelessWidget {
   @override
@@ -24,13 +24,9 @@ class Account extends StatelessWidget {
 }
 
 class AccountPage extends StatefulWidget {
-
   userModel.User client;
 
-  AccountPage({
-    Key? key,
-    required this.client
-  }) : super(key: key);
+  AccountPage({Key? key, required this.client}) : super(key: key);
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -44,46 +40,72 @@ class _AccountPageState extends State<AccountPage> {
   var weight = "";
   var height = "";
   var bmi = "";
+  final userNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final weightController = TextEditingController();
+  final heightController = TextEditingController();
+  final bmiController = TextEditingController();
+  final genderController = TextEditingController();
 
-  void postRequest() async {
-    final response =
-        await http.get(Uri.parse('http://10.11.25.60:443/api/users'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      // for (var i = 0; i < 2; i++) {
-      //   x = User.fromJson(jsonDecode(response.body)[i]);
-      //   debugPrint(x.userName.toString());
-      // }
-      var mainUser = User.fromJson(jsonDecode(response.body)[4]);
-
+  postRequest() async {
+    if (weightController.text == "" ||
+        heightController.text == "" ||
+        bmiController.text == "" ||
+        genderController.text == "") {
       setState(() {
-        user_name = mainUser.userName.toString();
+        _errorMsg = "Please Fill out all Fields";
       });
-      setState(() {
-        weight = mainUser.weight.toString();
-      });
-      setState(() {
-        height = mainUser.height.toString();
-      });
-      setState(() {
-        bmi = mainUser.BMI.toString();
-      });
-
-      print("Username: " + user_name);
-      //return User.fromJson(jsonDecode(response.body)[1]);
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load user');
+      Map<String, dynamic> map = {
+        "token": " ",
+        "weight": weightController.text,
+        "height": heightController.text,
+        "BMI": bmiController.text,
+        "gender": genderController.text,
+        "unit": "Metric",
+        "email": widget.client.email,
+        "creation": "2021-11-11",
+        "update": "2021-11-11"
+      };
+
+      print("WEIGHT " +
+          weightController.text +
+          " HEIGHT " +
+          heightController.text +
+          " BMI " +
+          bmiController.text +
+          " GENDER " +
+          genderController.text +
+          " EMAIL " +
+          emailController.text +
+          " REATION " +
+          widget.client.creationDate +
+          " LAST_UPDATE " +
+          widget.client.updateDate);
+
+      var uri = Uri.parse(
+          'http://10.11.25.60:443/api/users/' + widget.client.userName);
+      String rawJson = jsonEncode(map);
+
+      http.Response response = await http.put(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: rawJson,
+      );
+      print("Made it past the null check: " + response.body);
+      if (jsonDecode(response.body)["code"] == null) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    postRequest();
+    //postRequest();
 
     return Scaffold(
       appBar: AppBar(
@@ -112,23 +134,21 @@ class _AccountPageState extends State<AccountPage> {
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 4,
-                            color: Theme.of(context).scaffoldBackgroundColor),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1),
-                              offset: Offset(0, 10))
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: new AssetImage(
-                              'assets/images/tempUser.png'
-                            ))
-                      ),
+                          border: Border.all(
+                              width: 4,
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                                color: Colors.black.withOpacity(0.1),
+                                offset: Offset(0, 10))
+                          ],
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: new AssetImage(
+                                  'assets/images/tempUser.png'))),
                     ),
                     Positioned(
                         bottom: 0,
@@ -155,14 +175,93 @@ class _AccountPageState extends State<AccountPage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Username", user_name, false),
-              buildTextField("Name", "John Maalouf", false),
-              buildTextField("Email", "john.maalouf1@marist.edu", false),
-              buildTextField("Date of Birth", "09/19/2000", false),
-              buildTextField("Weight", weight, false),
-              buildTextField("Height", height, false),
-              buildTextField("BMI", bmi, false),
-              buildTextField("Gender", "Male", false),
+              TextField(
+                enabled: false,
+                readOnly: true,
+                controller: userNameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Update Username? ',
+                  labelText: 'Username: ' + widget.client.userName,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                enabled: false,
+                readOnly: true,
+                controller: emailController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Update Email? ',
+                  labelText: 'Email: ' + widget.client.email,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: weightController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Update Weight? ',
+                  labelText: 'Weight: ' + widget.client.weight.toString(),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: heightController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Update Height? ',
+                  labelText: 'Height: ' + widget.client.height,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: bmiController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Update BMI? ',
+                  labelText: 'BMI: ' + widget.client.BMI.toString(),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: genderController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Update Gender? ',
+                  labelText: 'Gender: ' + widget.client.gender.toString(),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              FlatButton(
+                onPressed: () {
+                  postRequest();
+                },
+                child: Text(
+                  'Update Account Info',
+                  style: TextStyle(color: Colors.blue, fontSize: 15),
+                ),
+              ),
+              Text(
+                _errorMsg,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.red,
+                    backgroundColor: Colors.redAccent.withOpacity(.25)),
+              ),
               SizedBox(
                 height: 35,
               )
@@ -173,14 +272,12 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
-    postRequest();
+  Widget buildTextField(String labelText, String placeholder,
+      bool isPasswordTextField, TextEditingController myController) {
+    //postRequest();
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
-        enabled: false,
-        readOnly: true,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
@@ -205,6 +302,7 @@ class _AccountPageState extends State<AccountPage> {
               fontWeight: FontWeight.bold,
               color: Colors.black,
             )),
+        controller: myController,
       ),
     );
   }
@@ -241,7 +339,6 @@ class User {
       height: json['HEIGHT'],
       BMI: json['BMI'],
       currentUsage: json['CUR_USAGE'],
-      //unit: json['UNIT'],
       creationDate: json['CREATION'],
       updateDate: json['LAST_UPDATE'],
     );
