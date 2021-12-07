@@ -147,11 +147,6 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                               offset: Offset(0, 10))
                         ],
                         shape: BoxShape.circle,
-                        // image: DecorationImage(
-                        //     fit: BoxFit.cover,
-                        //     image: NetworkImage(
-                        //       "C:\Users\saqib\Documents\GitHub\FormalLanguagesFinal\WaterLog\water_log_app\assets\images\newuser.png",
-                        //     ))
                       ),
                     ),
                     Positioned(
@@ -183,19 +178,7 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                 readOnly: true,
                 enabled: false,
                 decoration:
-                    const InputDecoration(labelText: 'Username: Philbrooker'),
-              ),
-              TextFormField(
-                readOnly: true,
-                enabled: false,
-                decoration: const InputDecoration(
-                    labelText: 'Full Name: Henry Philbrook'),
-              ),
-              TextFormField(
-                readOnly: true,
-                enabled: false,
-                decoration:
-                    const InputDecoration(labelText: 'Age: 21 Years Old'),
+                    InputDecoration(labelText: 'Username: ' + widget.username),
               ),
               Container(
                 height: 400,
