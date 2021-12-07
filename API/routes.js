@@ -53,6 +53,13 @@ router.route("/fs/:id")
     .delete(fsCtlr.deleteFriendship)
     .put(fsCtlr.updateFriendship)
 
+router.route("/ufs/:id")
+    .get(fsCtlr.readFriends)
+
+router.route("/pfs/:id")
+    .get(fsCtlr.readPendingFriends)
+    .put(fsCtlr.updateAccept)
+
 router.route("/entries")
     .get(entryCtrl.readAllEntries)
     .post(entryCtrl.createEntry)
