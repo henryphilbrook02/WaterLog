@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
-
 var user_name = "";
 var name = "";
 var weight = "";
@@ -24,13 +23,9 @@ class Account extends StatelessWidget {
 }
 
 class AccountPage extends StatefulWidget {
-
   userModel.User client;
 
-  AccountPage({
-    Key? key,
-    required this.client
-  }) : super(key: key);
+  AccountPage({Key? key, required this.client}) : super(key: key);
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -112,23 +107,21 @@ class _AccountPageState extends State<AccountPage> {
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 4,
-                            color: Theme.of(context).scaffoldBackgroundColor),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1),
-                              offset: Offset(0, 10))
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: new AssetImage(
-                              'assets/images/tempUser.png'
-                            ))
-                      ),
+                          border: Border.all(
+                              width: 4,
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                                color: Colors.black.withOpacity(0.1),
+                                offset: Offset(0, 10))
+                          ],
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: new AssetImage(
+                                  'assets/images/tempUser.png'))),
                     ),
                     Positioned(
                         bottom: 0,
@@ -155,14 +148,12 @@ class _AccountPageState extends State<AccountPage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Username", user_name, false),
-              buildTextField("Name", "John Maalouf", false),
-              buildTextField("Email", "john.maalouf1@marist.edu", false),
-              buildTextField("Date of Birth", "09/19/2000", false),
-              buildTextField("Weight", weight, false),
-              buildTextField("Height", height, false),
-              buildTextField("BMI", bmi, false),
-              buildTextField("Gender", "Male", false),
+              buildTextField("Username", widget.client.userName, false),
+              buildTextField("Email", widget.client.email, false),
+              buildTextField("Height", widget.client.height, false),
+              buildTextField("Weight", widget.client.weight.toString(), false),
+              buildTextField("BMI", widget.client.BMI.toString(), false),
+              buildTextField("Gender", widget.client.gender, false),
               SizedBox(
                 height: 35,
               )
