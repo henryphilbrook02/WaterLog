@@ -51,8 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
   var mySums = [];
   var myDays = [];
   var testAverage = 0;
-
-  //  Need to use the passed username here
   Future<wData> postRequest() async {
     final response = await http.get(Uri.parse(
         'http://10.11.25.60:443/api/seven_day_readout/' +
@@ -128,8 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 name: "Average: " + (average / mySums.length).toString(),
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
-                xValueMapper: (GDPData gdp, _) => gdp.continent,
-                yValueMapper: (GDPData gdp, _) => gdp.gdp,
+                xValueMapper: (GDPData gdp, _) => gdp.usageDay,
+                yValueMapper: (GDPData gdp, _) => gdp.usageWater,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 dataLabelSettings: DataLabelSettings(isVisible: true),
                 width: 0.8, // Width of the bars
@@ -164,9 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
         chartData.add(GDPData(myDays[i], mySums[i], gColor));
       }
     } on Exception catch (exception) {
-      print("Error"); // only executed if error is of type Exception
+      print("Exception Handled"); // only executed if error is of type Exception
     } catch (error) {
-      print("Error"); // only executed if error is of type Exception
+      print("Error Caught"); // only executed if error is of type Exception
       // executed for errors of all types other than Exception
     }
     return chartData;
@@ -174,9 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class GDPData {
-  GDPData(this.continent, this.gdp, this.segmentColor);
-  final String continent;
-  final double gdp;
+  GDPData(this.usageDay, this.usageWater, this.segmentColor);
+  final String usageDay;
+  final double usageWater;
   final Color segmentColor;
 }
 
