@@ -39,10 +39,7 @@ class _HomePageState extends State<homePage> {
 
   @override
   void initState() {
-    //print(widget.curGoal);
-    // _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
-
     super.initState();
   }
 
@@ -67,7 +64,6 @@ class _HomePageState extends State<homePage> {
                   print(snapshot.error);
                   throw Exception('Failed to get goal');
                 } else if (snapshot.hasData) {
-                  //widget.curGoal = jsonDecode(snapshot.data![0]!.body)[0]['GOAL'].toDouble();
                   _chartData = snapshot.data!;
                   return Column(children: <Widget>[
                     Container(
