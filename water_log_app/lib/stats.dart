@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
           DateTime dt = DateTime.parse(day);
           myDay = DateFormat('EEEE').format(dt);
           average = average + sum;
-          print("Average: " + average.toString());
+          print("Average: " + average.roundToDouble().toString());
           mySums.add(sum);
           myDays.add(myDay);
           testAverage++;
@@ -123,7 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTrackVisible: false,
                 opacity: 0.5,
                 color: const Color.fromRGBO(51, 153, 255, 255),
-                name: "Average: " + (average / mySums.length).toString(),
+                name: "Average: " +
+                    (average / mySums.length).roundToDouble().toString(),
                 dataSource: _chartData,
                 pointColorMapper: (GDPData sales, _) => sales.segmentColor,
                 xValueMapper: (GDPData gdp, _) => gdp.usageDay,

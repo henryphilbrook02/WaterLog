@@ -61,7 +61,8 @@ class _AccountPageState extends State<AccountPage> {
       Map<String, dynamic> map = {
         "token": " ",
         "weight": weightController.text,
-        "height": heightController.text.replaceAll("\'", " ").replaceAll("\"", " "),
+        "height":
+            heightController.text.replaceAll("\'", " ").replaceAll("\"", " "),
         "BMI": bmiController.text,
         "gender": genderController.text,
         "unit": "Metric",
@@ -168,9 +169,7 @@ class _AccountPageState extends State<AccountPage> {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: new AssetImage(
-                                  'assets/images/tempUser.png')
-                                )
-                              ),
+                                  'assets/images/tempUser.png'))),
                     ),
                     // Positioned(
                     //     bottom: 0,
@@ -240,6 +239,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
               TextField(
                 controller: heightController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Update Height? ',
@@ -288,9 +288,9 @@ class _AccountPageState extends State<AccountPage> {
                 _errorMsg,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.red,
-                    //backgroundColor: Colors.redAccent.withOpacity(.25)
+                  fontSize: 15.0,
+                  color: Colors.red,
+                  //backgroundColor: Colors.redAccent.withOpacity(.25)
                 ),
               ),
               SizedBox(
