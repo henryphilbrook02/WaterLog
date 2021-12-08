@@ -181,9 +181,7 @@ class GDPData {
 class wData {
   int wSum;
   String wDay;
-
   wData({required this.wSum, required this.wDay});
-
   factory wData.fromJson(Map<String, dynamic> json) {
     return wData(wSum: json['sum(amount)'], wDay: json['day']);
   }

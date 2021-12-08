@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
@@ -60,7 +61,7 @@ class _AccountPageState extends State<AccountPage> {
       Map<String, dynamic> map = {
         "token": " ",
         "weight": weightController.text,
-        "height": heightController.text,
+        "height": heightController.text.replaceAll("\'", " ").replaceAll("\"", " "),
         "BMI": bmiController.text,
         "gender": genderController.text,
         "unit": "Metric",
@@ -171,25 +172,25 @@ class _AccountPageState extends State<AccountPage> {
                                 )
                               ),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              //color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: Colors.blue,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        )),
+                    // Positioned(
+                    //     bottom: 0,
+                    //     right: 0,
+                    //     child: Container(
+                    //       height: 40,
+                    //       width: 40,
+                    //       decoration: BoxDecoration(
+                    //         shape: BoxShape.circle,
+                    //         border: Border.all(
+                    //           width: 4,
+                    //           //color: Theme.of(context).scaffoldBackgroundColor,
+                    //         ),
+                    //         color: Colors.blue,
+                    //       ),
+                    //       child: Icon(
+                    //         Icons.edit,
+                    //         color: Colors.white,
+                    //       ),
+                    //     )),
                   ],
                 ),
               ),
@@ -230,6 +231,9 @@ class _AccountPageState extends State<AccountPage> {
                   hintText: 'Update Weight? ',
                   labelText: 'Weight: ' + widget.client.weight.toString(),
                 ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               SizedBox(
                 height: 15,
@@ -253,6 +257,9 @@ class _AccountPageState extends State<AccountPage> {
                   hintText: 'Update BMI? ',
                   labelText: 'BMI: ' + widget.client.BMI.toString(),
                 ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               SizedBox(
                 height: 15,
@@ -283,7 +290,8 @@ class _AccountPageState extends State<AccountPage> {
                 style: TextStyle(
                     fontSize: 15.0,
                     color: Colors.red,
-                    backgroundColor: Colors.redAccent.withOpacity(.25)),
+                    //backgroundColor: Colors.redAccent.withOpacity(.25)
+                ),
               ),
               SizedBox(
                 height: 35,

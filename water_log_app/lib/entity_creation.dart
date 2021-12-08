@@ -31,22 +31,22 @@ class EntityCreationItem extends StatefulWidget {
 }
 
 class _EntityCreationPageState extends State<EntityCreationItem> {
-
   Future<entityData> postRequest() async {
-
     var response =
-    await http.get(Uri.parse('http://10.11.25.60:443/api/presets'));
+        await http.get(Uri.parse('http://10.11.25.60:443/api/presets'));
     if (response.statusCode == 200) {
       try {
         var len = jsonDecode(response.body).length;
         for (var i = 0; i < len; i++) {
-          var mainUser = PreSetEntityData.fromJson(jsonDecode(response.body)[i]);
+          var mainUser =
+              PreSetEntityData.fromJson(jsonDecode(response.body)[i]);
           var activityName = mainUser.NAME.toString();
           var activityUnit = mainUser.UNIT.toString();
           var activityAmount = mainUser.AMOUNT;
           var activityID = mainUser.ACTIVITY_ID;
 
-          addPresetEntity(activityName, activityUnit, activityAmount, activityID);
+          addPresetEntity(
+              activityName, activityUnit, activityAmount, activityID);
         }
       } on Exception catch (exception) {
         print("Error");
@@ -56,14 +56,13 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         print(error);
         // executed for errors of all types other than Exception
       }
-
     } else {
       throw Exception('Failed to load Presets');
     }
 
-
-    response =
-        await http.get(Uri.parse('http://10.11.25.60:443/api/user_activities/'+widget.client.userName));
+    response = await http.get(Uri.parse(
+        'http://10.11.25.60:443/api/user_activities/' +
+            widget.client.userName));
     if (response.statusCode == 200) {
       try {
         var len = jsonDecode(response.body).length;
@@ -85,7 +84,8 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         // executed for errors of all types other than Exception
       }
 
-      return entityData.fromJson(jsonDecode(response.body)[0]); // TODO I dont think we need this
+      return entityData.fromJson(
+          jsonDecode(response.body)[0]); // TODO I dont think we need this
     } else {
       throw Exception('Failed to load user');
     }
@@ -115,56 +115,54 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         elevation: 1,
         automaticallyImplyLeading: false,
       ),
-
       body: Center(
           child: Center(
-            child: Scrollbar(
-              child: ListView.builder(
-                  padding: const EdgeInsets.only(bottom: kFloatingActionButtonMargin + 48),
-                  shrinkWrap: true,
-                  itemCount: entityList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: Icon(Icons.water),
-                      title: Text(entityList[index].entityName),
-                      subtitle: Text(entityList[index].desc),
-                      trailing: FittedBox(
-                        child: Row(
-                          children: [
-                            IconButton(
-                                color: Colors.black,
-                                highlightColor: Colors.red.shade100,
-                                splashRadius: 15,
-                                onPressed: () {
-                                  setState(() {
-                                    entityList[index].waterUnits != 0
-                                        ? entityList[index].waterUnits--
-                                        : entityList[index].waterUnits;
-                                  });
-                                },
-                                icon: Icon(Icons.remove)),
-                            Text(entityList[index].waterUnits.toString()),
-                            IconButton(
-                                color: Colors.black,
-                                highlightColor: Colors.green.shade100,
-                                splashRadius: 15,
-                                onPressed: () {
-                                  setState(() {
-                                    entityList[index].waterUnits != -1
-                                        ? entityList[index].waterUnits++
-                                        : entityList[index].waterUnits;
-                                  });
-                                },
-                                icon: Icon(Icons.add)),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-          )
-      ),
-
+        child: Scrollbar(
+          child: ListView.builder(
+              padding: const EdgeInsets.only(
+                  bottom: kFloatingActionButtonMargin + 48),
+              shrinkWrap: true,
+              itemCount: entityList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Icon(Icons.water),
+                  title: Text(entityList[index].entityName),
+                  subtitle: Text(entityList[index].desc),
+                  trailing: FittedBox(
+                    child: Row(
+                      children: [
+                        IconButton(
+                            color: Colors.black,
+                            highlightColor: Colors.red.shade100,
+                            splashRadius: 15,
+                            onPressed: () {
+                              setState(() {
+                                entityList[index].waterUnits != 0
+                                    ? entityList[index].waterUnits--
+                                    : entityList[index].waterUnits;
+                              });
+                            },
+                            icon: Icon(Icons.remove)),
+                        Text(entityList[index].waterUnits.toString()),
+                        IconButton(
+                            color: Colors.black,
+                            highlightColor: Colors.green.shade100,
+                            splashRadius: 15,
+                            onPressed: () {
+                              setState(() {
+                                entityList[index].waterUnits != -1
+                                    ? entityList[index].waterUnits++
+                                    : entityList[index].waterUnits;
+                              });
+                            },
+                            icon: Icon(Icons.add)),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ),
+      )),
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         Container(
@@ -205,14 +203,15 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
         activity = _Activity.text;
         desc = _Desc.text;
         amt = _Amount.text;
-        addEntity(activity, desc, int.parse(amt), 1); // adding 1 for ID because it will be generated
+        addEntity(activity, desc, int.parse(amt),
+            1); // adding 1 for ID because it will be generated
         postActivity();
       },
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Please Enter Name and Description"),
+      title: Text("Activity Entry"),
       content: IntrinsicHeight(
         child: Column(
           children: <Widget>[
@@ -220,7 +219,7 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
               child: TextField(
                 controller: _Activity,
                 decoration: const InputDecoration(
-                    hintText: "Acticity Name",
+                    hintText: "Activity Name",
                     contentPadding: EdgeInsets.all(10)),
               ),
             ),
@@ -228,15 +227,16 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
               child: TextField(
                 controller: _Desc,
                 decoration: const InputDecoration(
-                    hintText: "Activity Description",
+                    hintText: "Unit Of Measurement (G/GPM)",
                     contentPadding: EdgeInsets.all(10)),
               ),
             ),
             Flexible(
               child: TextField(
                 controller: _Amount,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                    hintText: "Amount Consumed  Per Use",
+                    hintText: "Amount Consumed Each Use",
                     contentPadding: EdgeInsets.all(10)),
               ),
             )
@@ -259,18 +259,20 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
   void addEntity(String actName, String desc, int amount, int id) {
     setState(() {
-      entityList.add(Entity(actName, amount.toString()+" "+desc, 0, id));
+      entityList.add(Entity(actName, amount.toString() + " " + desc, 0, id));
     });
   }
 
   void addPresetEntity(String actName, String desc, int amount, int id) {
     setState(() {
-      entityList.add(PreSetEntity(actName, amount.toString()+" "+desc, 0, id));
+      entityList
+          .add(PreSetEntity(actName, amount.toString() + " " + desc, 0, id));
     });
   }
 
-  void resetList(){ //used in post entry to reset all the amounts back to zero
-    for (int i=0; i<entityList.length; i++){
+  void resetList() {
+    //used in post entry to reset all the amounts back to zero
+    for (int i = 0; i < entityList.length; i++) {
       entityList[i].waterUnits = 0;
     }
     setState(() {
@@ -287,8 +289,9 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
 
     for (int i = 0; i < entityList.length; i++) {
       //totalWater = totalWater + entityList[i].waterUnits;
-      if (entityList[i].waterUnits > 0){
-        String rawJson = jsonEncode(entityList[i].apiBody(widget.client.userName));
+      if (entityList[i].waterUnits > 0) {
+        String rawJson =
+            jsonEncode(entityList[i].apiBody(widget.client.userName));
         http.Response response = await http.post(
           uri,
           headers: {
@@ -297,7 +300,6 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
           body: rawJson,
         );
       }
-
     }
 
     resetList();
@@ -324,7 +326,6 @@ class _EntityCreationPageState extends State<EntityCreationItem> {
       },
       body: rawJson,
     );
-
   }
 }
 
@@ -336,27 +337,25 @@ abstract class entry {
 
   entry(this.entityName, this.desc, this.waterUnits, this.id);
 
-  apiBody(String uName){
-    Map<String, dynamic> map = {
-
-    };
+  apiBody(String uName) {
+    Map<String, dynamic> map = {};
 
     return map;
   }
-
 }
 
-
-class PreSetEntity extends entry{
+class PreSetEntity extends entry {
   int id;
   String entityName;
   String desc;
   int waterUnits;
 
-  PreSetEntity(this.entityName, this.desc, this.waterUnits, this.id) : super(entityName, desc, waterUnits, id); //TODO this needs to be changed I think
+  PreSetEntity(this.entityName, this.desc, this.waterUnits, this.id)
+      : super(entityName, desc, waterUnits,
+            id); //TODO this needs to be changed I think
 
   @override
-  apiBody(String uName){
+  apiBody(String uName) {
     Map<String, dynamic> map = {
       "activity_id": null,
       "preset_id": this.id,
@@ -367,7 +366,6 @@ class PreSetEntity extends entry{
 
     return map;
   }
-
 }
 
 class PreSetEntityData {
@@ -376,26 +374,32 @@ class PreSetEntityData {
   int AMOUNT;
   String UNIT;
 
-  PreSetEntityData({required this.NAME, required this.AMOUNT, required this.UNIT, required this.ACTIVITY_ID});
+  PreSetEntityData(
+      {required this.NAME,
+      required this.AMOUNT,
+      required this.UNIT,
+      required this.ACTIVITY_ID});
 
   factory PreSetEntityData.fromJson(Map<String, dynamic> json) {
     return PreSetEntityData(
-        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT'], ACTIVITY_ID: json['ACTIVITY_ID']);
+        NAME: json['NAME'],
+        AMOUNT: json['AMOUNT'],
+        UNIT: json['UNIT'],
+        ACTIVITY_ID: json['ACTIVITY_ID']);
   }
-
 }
 
-
-class Entity extends entry{
+class Entity extends entry {
   int id;
   String entityName;
   String desc;
   int waterUnits;
 
-  Entity(this.entityName, this.desc, this.waterUnits, this.id) : super(entityName, desc, waterUnits, id);
+  Entity(this.entityName, this.desc, this.waterUnits, this.id)
+      : super(entityName, desc, waterUnits, id);
 
   @override
-  apiBody(String uName){
+  apiBody(String uName) {
     Map<String, dynamic> map = {
       "activity_id": this.id,
       "preset_id": null,
@@ -406,7 +410,6 @@ class Entity extends entry{
 
     return map;
   }
-
 }
 
 class entityData {
@@ -415,13 +418,19 @@ class entityData {
   int AMOUNT;
   String UNIT;
 
-  entityData({required this.NAME, required this.AMOUNT, required this.UNIT, required this.ACTIVITY_ID});
+  entityData(
+      {required this.NAME,
+      required this.AMOUNT,
+      required this.UNIT,
+      required this.ACTIVITY_ID});
 
   factory entityData.fromJson(Map<String, dynamic> json) {
     return entityData(
-        NAME: json['NAME'], AMOUNT: json['AMOUNT'], UNIT: json['UNIT'], ACTIVITY_ID: json['ACTIVITY_ID']);
+        NAME: json['NAME'],
+        AMOUNT: json['AMOUNT'],
+        UNIT: json['UNIT'],
+        ACTIVITY_ID: json['ACTIVITY_ID']);
   }
-
 }
 // So we have posted an entry to the database
 

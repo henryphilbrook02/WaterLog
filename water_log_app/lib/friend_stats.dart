@@ -148,11 +148,10 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                               offset: Offset(0, 10))
                         ],
                         shape: BoxShape.circle,
-                        image: DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
                               image: new AssetImage(
-                                  'assets/images/newuser.png')
-                              ),
+                                  'assets/images/tempUser.png'))
                       ),
                     ),
                   ],
