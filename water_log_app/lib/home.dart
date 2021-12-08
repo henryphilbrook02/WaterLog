@@ -84,8 +84,9 @@ class _HomePageState extends State<homePage> {
                               RadialBarSeries<GDPData, String>(
                                   dataSource: _chartData,
                                   xValueMapper: (GDPData data, _) =>
-                                      data.continent,
-                                  yValueMapper: (GDPData data, _) => data.gdp,
+                                      data.usageDay,
+                                  yValueMapper: (GDPData data, _) =>
+                                      data.usageWater,
                                   pointColorMapper: (GDPData data, _) =>
                                       data.color,
                                   cornerStyle: CornerStyle.bothCurve,
@@ -96,7 +97,7 @@ class _HomePageState extends State<homePage> {
                             ])),
                     Container(
                       child: Text(
-                          "${_chartData[0].gdp} / ${widget.curGoal} for your Daily Goal\n${_chartData[1].gdp} / ${(widget.curGoal).roundToDouble()} for your Weekly Average",
+                          "${_chartData[0].usageWater} / ${widget.curGoal} for your Daily Goal\n${_chartData[1].usageWater} / ${(widget.curGoal).roundToDouble()} for your Weekly Average",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               height: 3,
@@ -181,8 +182,8 @@ Future<double> getGoal(String username) async {
 }
 
 class GDPData {
-  GDPData(this.continent, this.gdp, this.color);
-  final String continent;
-  final double gdp;
+  GDPData(this.usageDay, this.usageWater, this.color);
+  final String usageDay;
+  final double usageWater;
   final color;
 }
