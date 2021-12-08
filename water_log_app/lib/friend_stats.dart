@@ -25,6 +25,7 @@ class statsFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -147,27 +148,13 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                               offset: Offset(0, 10))
                         ],
                         shape: BoxShape.circle,
+                        image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: new AssetImage(
+                                  'assets/images/newuser.png')
+                              ),
                       ),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: Colors.blue,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        )),
                   ],
                 ),
               ),

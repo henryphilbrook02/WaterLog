@@ -167,7 +167,9 @@ class _AccountPageState extends State<AccountPage> {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: new AssetImage(
-                                  'assets/images/tempUser.png'))),
+                                  'assets/images/tempUser.png')
+                                )
+                              ),
                     ),
                     Positioned(
                         bottom: 0,
