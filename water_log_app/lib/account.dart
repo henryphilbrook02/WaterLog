@@ -221,6 +221,7 @@ class _AccountPageState extends State<AccountPage> {
                 height: 15,
               ),
               TextField(
+                keyboardType: TextInputType.number,
                 controller: weightController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -243,6 +244,7 @@ class _AccountPageState extends State<AccountPage> {
                 height: 15,
               ),
               TextField(
+                keyboardType: TextInputType.number,
                 controller: bmiController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
