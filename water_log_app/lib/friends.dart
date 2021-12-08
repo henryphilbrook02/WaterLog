@@ -190,7 +190,11 @@ class _friends extends State<friends> {
                     itemCount: friendList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        leading: Icon(Icons.account_circle, size: 60),
+                        leading: CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/images/tempUser.png',
+                          ),
+                        ),
                         title: Text(friendList[index].username,
                             style:
                             TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
@@ -337,7 +341,7 @@ Future<List<friendEntity>> getRequests(String uName) async {
 Future<String> sendRequest(String client, String newFriend ) async {
   var uri = Uri.parse('http://10.11.25.60:443/api/fs/');
 
-  if (newFriend == client){
+  if ("${newFriend[0].toUpperCase()}${newFriend.substring(1)}" == "${client[0].toUpperCase()}${client.substring(1)}"){
     return "Cannot Add Yourself";
   }
 
@@ -359,11 +363,9 @@ Future<String> sendRequest(String client, String newFriend ) async {
   );
 
   if (jsonDecode(response.body)["code"] == null){
-    print("Made it past the null check: " + response.body);
     return "Friend Request Sent!";
   }
   else{
-    print("bad data: " + response.body);
     return "Cannot Add That User";
   }
 
