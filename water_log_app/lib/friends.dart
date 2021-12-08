@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/friend_stats.dart';
@@ -24,6 +24,8 @@ class _friends extends State<friends> {
   List<friendEntity> friendList = [];
 
   List<friendEntity> friendRequestList = [];
+
+  String _name = "";
 
   final appbar = AppBar(
   title: Text("Friends"),
@@ -57,16 +59,7 @@ class _friends extends State<friends> {
             else if (snapshot.hasData) {
 
               friendList = snapshot.data![0];
-              friendList.add(friendEntity("name1"));
-              friendList.add(friendEntity("name2"));
-              friendList.add(friendEntity("name3"));
-              friendList.add(friendEntity("name4"));
-              friendList.add(friendEntity("name5"));
-              friendList.add(friendEntity("name6"));
-              friendList.add(friendEntity("name7"));
-              friendList.add(friendEntity("name8"));
-              friendList.add(friendEntity("name9"));
-              friendList.add(friendEntity("name10"));
+
               friendRequestList = snapshot.data![1];
 
               bool isVisible;
@@ -79,6 +72,7 @@ class _friends extends State<friends> {
 
               print(friendRequestList.length);
               final screenHeight = MediaQuery.of(context).size.height;
+              var _controller = TextEditingController();
               return
                 SingleChildScrollView(
                   child: SizedBox(
@@ -90,6 +84,35 @@ class _friends extends State<friends> {
                           const SizedBox(
                             width: double.infinity,
                             height: 5,
+                          ),
+                          TextField(
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                labelText: 'Username',
+                                hintText: 'Friend Username',
+                                hintStyle: TextStyle(color: Colors.blue),
+                                contentPadding: EdgeInsets.all(10),
+                                constraints: BoxConstraints.tightFor(width: 350),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                _name = value.trim();
+                              }
+                          ),
+                          FlatButton(
+                            color: Colors.blue,
+                            splashColor: Colors.white,
+                            onPressed: () async {
+                              _controller.clear();
+                              _showAlertDialog(await sendRequest(widget.client.userName, _name));
+                            },
+                            child: Text("Add Friend",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                       Visibility(
                         visible: isVisible,
@@ -122,9 +145,9 @@ class _friends extends State<friends> {
                                     color: Colors.pinkAccent,
                                     highlightColor: Colors.red.shade100,
                                     splashRadius: 15,
-                                    onPressed: () {
-                                      setState(() {
-                                        // TODO remove the friend invite
+                                    onPressed: () async{
+                                      await deleteReq(friendRequestList[index].fID);
+                                      setState(()  {
                                         friendRequestList.removeAt(index);
                                       });
                                     },
@@ -133,10 +156,10 @@ class _friends extends State<friends> {
                                     color: Colors.lightGreen,
                                     highlightColor: Colors.green.shade100,
                                     splashRadius: 15,
-                                    onPressed: () {
-                                      // TODO made this send an api call to edit the invite
+                                    onPressed: () async{
+                                      await acceptFriendship(friendRequestList[index].fID);
                                       setState(() {
-                                        addFriend(friendRequestList[index].username, index);
+                                        addFriend(friendRequestList[index].username, index, friendRequestList[index].fID);
                                       });
                                     },
                                     //addFriend(friendRequestList[index].friendName, friendRequestList[index].friendDesc),
@@ -209,9 +232,37 @@ class _friends extends State<friends> {
       );
   }
 
-  void addFriend(String friendName, int index) {
+  void _showAlertDialog(String newDesc) {
+
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(newDesc),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
+  void addFriend(String friendName, int index, int fID) {
       setState(() {
-        friendList.add(friendEntity(friendName));
+        friendList.add(friendEntity(friendName, fID));
         friendRequestList.removeAt(index);
     });
   }
@@ -219,9 +270,9 @@ class _friends extends State<friends> {
 
 class friendEntity {
   String username;
+  int fID;
 
-  friendEntity(
-      this.username);
+  friendEntity(this.username, this.fID);
 }
 
 Future<List<friendEntity>> getFriends(String uName) async {
@@ -238,10 +289,10 @@ Future<List<friendEntity>> getFriends(String uName) async {
       var reqed = jsonDecode(response.body)[i]['REQUESTED'];
       var reqee = jsonDecode(response.body)[i]['REQUESTEE'];
       if (reqed == uName){
-        friendList.add(friendEntity(reqee));
+        friendList.add(friendEntity(reqee, jsonDecode(response.body)[i]['FS_ID']));
       }
       else{
-        friendList.add(friendEntity(reqed));
+        friendList.add(friendEntity(reqed, jsonDecode(response.body)[i]['FS_ID']));
       }
 
     }
@@ -267,7 +318,8 @@ Future<List<friendEntity>> getRequests(String uName) async {
 
     for (int i = 0; i<jsonDecode(response.body).length; i++){
 
-      pendingFriendList.add(friendEntity(jsonDecode(response.body)[i]['REQUESTEE']));
+      pendingFriendList.add(friendEntity(jsonDecode(response.body)[i]['REQUESTEE'],
+          jsonDecode(response.body)[i]['FS_ID']));
 
     }
 
@@ -279,4 +331,69 @@ Future<List<friendEntity>> getRequests(String uName) async {
     // then throw an exception.
     throw Exception('Failed to load album');
   }
+}
+
+
+Future<String> sendRequest(String client, String newFriend ) async {
+  var uri = Uri.parse('http://10.11.25.60:443/api/fs/');
+
+  if (newFriend == client){
+    return "Cannot Add Yourself";
+  }
+
+  Map<String, dynamic> map = {
+    "requested": newFriend,
+    "requestee": client,
+    "accepted": 0,
+    "creation": "2021-11-01",
+    "update": "2021-11-01"
+  };
+  String rawJson = jsonEncode(map);
+
+  http.Response response = await http.post(
+    uri,
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+    body: rawJson,
+  );
+
+  if (jsonDecode(response.body)["code"] == null){
+    print("Made it past the null check: " + response.body);
+    return "Friend Request Sent!";
+  }
+  else{
+    print("bad data: " + response.body);
+    return "Cannot Add That User";
+  }
+
+}
+
+
+Future acceptFriendship(int fID) async {
+  var uri = Uri.parse('http://10.11.25.60:443/api/pfs/${fID}');
+
+  Map<String, dynamic> map = {
+    "accepted": 1, // amount
+  };
+  String rawJson = jsonEncode(map);
+
+  http.Response response = await http.put(
+    uri,
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    },
+    body: rawJson,
+  );
+
+  return response;
+
+}
+
+Future deleteReq(int fID) async {
+  var uri = Uri.parse('http://10.11.25.60:443/api/fs/$fID');
+
+  http.Response response = await http.delete(uri);
+
+  return response;
 }
