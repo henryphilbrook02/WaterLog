@@ -9,7 +9,6 @@ import 'package:water_log_app/src/screens/home.dart';
 import 'package:water_log_app/models/userModel.dart' as Client;
 import 'main.dart';
 
-// TODO add an error message when there is an error in the input WILL add that later after other pages are complete.
 
 class MyApp extends StatelessWidget {
   @override
@@ -44,6 +43,7 @@ class _NewUserPageState extends State<NewUserPage> {
   int _goal = 0;
 
   newUser() async{
+    // creates user instance based on input of the user
     Client.User newUser = Client.User(
         userName: _name,
         token: "",
@@ -74,6 +74,7 @@ class _NewUserPageState extends State<NewUserPage> {
     }
   }
 
+  // Creates the goal for the user after input
   newGoal(Client.User newUser) async{
 
     Map<String, dynamic> map = {
@@ -103,6 +104,7 @@ class _NewUserPageState extends State<NewUserPage> {
 
   }
 
+  // Makes sure that the password is semi-complex
   validateTextField(String userInput) {
     if (userInput.length >= 8 &&
         (userInput.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]')))) {
@@ -119,6 +121,7 @@ class _NewUserPageState extends State<NewUserPage> {
   }
 
   @override
+  // Builds all the imput boxes that the user needs to fill out
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -320,6 +323,7 @@ class _NewUserPageState extends State<NewUserPage> {
                   }
               ),
               SizedBox(height: 8.0),
+              //This is the submit button that will check if the password, username, and email are valid along with the other fields
               MaterialButton(
                 minWidth: 200.0,
                 height: 40.0,
