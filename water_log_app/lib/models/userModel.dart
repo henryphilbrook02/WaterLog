@@ -1,5 +1,5 @@
 
-
+// This is a representation of the user table in the SQL database
 class User {
   String userName;
   String token;
@@ -24,8 +24,6 @@ class User {
     required this.creationDate,
     required this.updateDate,
   });
-
-  //User(this.userName, this.token, this.weight, this.height, this.BMI, this.gender, this.unit, this.email, this.creationDate, this.updateDate);
 
   getapiBody(){
     Map<String, dynamic> map = {
