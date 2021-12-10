@@ -7,6 +7,7 @@ import 'package:water_log_app/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:water_log_app/models/userModel.dart' as userModel;
 
+// Initializing setup of page
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class log_in extends StatefulWidget {
 }
 
 class log_in_state extends State<log_in> {
+  // Variables to keep track of input
   String _email = "";
   String _password = "";
   String _errorMsg = "";
@@ -47,6 +49,7 @@ class log_in_state extends State<log_in> {
             Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: EdgeInsets.symmetric(horizontal: 15),
+              // Input field for Email
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
@@ -63,7 +66,7 @@ class log_in_state extends State<log_in> {
             Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
+              // Input field for Password
               child: TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -77,15 +80,6 @@ class log_in_state extends State<log_in> {
                 },
               ),
             ),
-            // FlatButton(
-            //   onPressed: () {
-            //     //TODO FORGOT PASSWORD SCREEN GOES HERE
-            //   },
-            //   child: Text(
-            //     'Forgot Password',
-            //     style: TextStyle(color: Colors.blue, fontSize: 15),
-            //   ),
-            // ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
               child: new Text(
@@ -97,6 +91,7 @@ class log_in_state extends State<log_in> {
               ),
               alignment: Alignment(0.0, 0.0),
             ),
+            // Login Button
             Container(
               height: 50,
               width: 250,
@@ -149,6 +144,7 @@ class log_in_state extends State<log_in> {
   }
 }
 
+// Gets User and creates an instance of User to be passed to the other pages
 Future<userModel.User> postRequest(String email) async {
   final response =
       await http.get(Uri.parse('http://10.11.25.60:443/api/user/' + email));

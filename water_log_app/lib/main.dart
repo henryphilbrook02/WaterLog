@@ -17,6 +17,7 @@ void main() async {
 }
 
 class mainPage extends StatefulWidget {
+  // Takes in the user from log in or new account
   final email;
   userModel.User client;
   mainPage({Key? key, this.email, required this.client}) : super(key: key);
@@ -31,6 +32,7 @@ class _mainPage extends State<mainPage> {
   var _pageOptions = [];
 
   @override
+  // Creates an array of the pages that are on the NAV bar
   void initState() {
     _pageOptions = [
       homePage(client: widget.client),
@@ -42,6 +44,7 @@ class _mainPage extends State<mainPage> {
   }
 
   @override
+  // This is the bottom of each page that allows the user to navigate to each section of the code
   Widget build(BuildContext context) {
     // Widget that contains the global nav bar
     return Scaffold(
