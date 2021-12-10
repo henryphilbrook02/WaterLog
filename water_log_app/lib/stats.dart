@@ -8,9 +8,9 @@ import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/custom_theme.dart';
 
 var average = 0.0;
-var totalNums = 2;
 final now = new DateTime.now();
 String formatter = DateFormat('yMd').format(now); // 28/03/2020
+// Global Class Variables initalized
 
 class stats extends StatelessWidget {
   userModel.User client;
@@ -50,14 +50,17 @@ class _MyHomePageState extends State<MyHomePage> {
   var myDay;
   var mySums = [];
   var myDays = [];
+  // variables and lists declared to build chart from API data
   var testAverage = 0;
   Future<wData> postRequest() async {
+    // post method that gets the seven_day_readout from the API call
     final response = await http.get(Uri.parse(
         'http://10.11.25.60:443/api/seven_day_readout/' +
             widget.client.userName));
     average = 0;
     if (response.statusCode == 200) {
       for (var i = 0; i < 7; i++) {
+        // loops through for the most recent week
         try {
           var mainUser = wData.fromJson(jsonDecode(response.body)[i]);
           sum = mainUser.wSum.toDouble();
@@ -80,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       throw Exception('Failed to load user');
     }
+    // Error handling properly
   }
 
   @override
@@ -96,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         myDays = myDays;
       });
+      // Set states for the days and sums
 
       _tooltipBehavior = TooltipBehavior(enable: true);
       _chartData = getChartData();
@@ -106,9 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(formatter);
-    // _chartData = getChartData();
-    // _tooltipBehavior = TooltipBehavior(enable: true);
+    // Build the widget for the charts to be filled form the API data
     return Scaffold(
       appBar: AppBar(
         title: Text("Weekly Stats for User"),
@@ -145,12 +148,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<GDPData> getChartData() {
     final List<GDPData> chartData = [];
-
+    // Fills the char data list after parseing info from the API
     try {
       for (int i = 0; i < mySums.length; i++) {
         var fullAverage = average / mySums.length;
         var lowerAverage = fullAverage - 10;
         var highAverage = fullAverage + 10;
+        // Split the averages to color the bars
         print("Full: " + fullAverage.toString());
         var gColor;
         if ((mySums[i] > highAverage)) {
@@ -173,6 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class GDPData {
+  // Class for the data
   GDPData(this.usageDay, this.usageWater, this.segmentColor);
   final String usageDay;
   final double usageWater;
@@ -180,6 +185,7 @@ class GDPData {
 }
 
 class wData {
+  // parsing data class
   int wSum;
   String wDay;
   wData({required this.wSum, required this.wDay});

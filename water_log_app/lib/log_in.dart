@@ -32,9 +32,7 @@ class log_in_state extends State<log_in> {
   final auth = FirebaseAuth.instance;
 
   @override
-
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -44,8 +42,7 @@ class log_in_state extends State<log_in> {
         child: Column(
           children: <Widget>[
             Center(
-              child:
-              Image(image: AssetImage("assets/images/waterlog.png")),
+              child: Image(image: AssetImage("assets/images/waterlog.png")),
             ),
             Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
@@ -55,9 +52,8 @@ class log_in_state extends State<log_in> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'
-                ),
-                onChanged: (value){
+                    hintText: 'Enter valid email id as abc@gmail.com'),
+                onChanged: (value) {
                   setState(() {
                     _email = value.trim();
                   });
@@ -73,9 +69,8 @@ class log_in_state extends State<log_in> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
-                    hintText: 'Enter secure password'
-                ),
-                onChanged: (value){
+                    hintText: 'Enter secure password'),
+                onChanged: (value) {
                   setState(() {
                     _password = value.trim();
                   });
@@ -93,12 +88,12 @@ class log_in_state extends State<log_in> {
             // ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
-              child: new Text(_errorMsg,
+              child: new Text(
+                _errorMsg,
                 style: TextStyle(
                     fontSize: 15.0,
                     color: Colors.red,
-                    backgroundColor: Colors.redAccent.withOpacity(.25)
-                ),
+                    backgroundColor: Colors.redAccent.withOpacity(.25)),
               ),
               alignment: Alignment(0.0, 0.0),
             ),
@@ -109,14 +104,21 @@ class log_in_state extends State<log_in> {
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: FlatButton(
                 onPressed: () {
-                  auth.signInWithEmailAndPassword(email: _email, password: _password).then((res){
+                  auth
+                      .signInWithEmailAndPassword(
+                          email: _email, password: _password)
+                      .then((res) {
                     Future.delayed(Duration.zero, () async {
                       var user = await postRequest(_email);
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => new mainPage(client: user)));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => new mainPage(client: user)));
                     });
-                  }).catchError((error){
-                    print("This is the Error: " + error.toString().split("]")[1]);
-                    setState(() { _errorMsg = "Incorrect Email / Username combination "; });
+                  }).catchError((error) {
+                    print(
+                        "This is the Error: " + error.toString().split("]")[1]);
+                    setState(() {
+                      _errorMsg = "Incorrect Email / Username combination ";
+                    });
                   });
                 },
                 child: Text(
@@ -149,7 +151,7 @@ class log_in_state extends State<log_in> {
 
 Future<userModel.User> postRequest(String email) async {
   final response =
-  await http.get(Uri.parse('http://10.11.25.60:443/api/user/'+email));
+      await http.get(Uri.parse('http://10.11.25.60:443/api/user/' + email));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -167,11 +169,9 @@ Future<userModel.User> postRequest(String email) async {
         unit: res['UNIT'],
         email: res['EMAIL'],
         creationDate: res['CREATION'],
-        updateDate: res['LAST_UPDATE']
-    );
+        updateDate: res['LAST_UPDATE']);
 
     return client;
-
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.

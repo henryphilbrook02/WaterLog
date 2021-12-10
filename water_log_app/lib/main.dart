@@ -8,6 +8,7 @@ import 'package:water_log_app/friends.dart';
 import 'package:water_log_app/home.dart';
 import 'package:water_log_app/friend_stats.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
+// Imported Libraries
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,6 @@ void main() async {
 class mainPage extends StatefulWidget {
   final email;
   userModel.User client;
-
   mainPage({Key? key, this.email, required this.client}) : super(key: key);
 
   @override
@@ -38,11 +38,12 @@ class _mainPage extends State<mainPage> {
       EntityCreationItem(client: widget.client),
       friends(client: widget.client),
       AccountPage(client: widget.client),
-    ];
+    ]; // page options are for the navigation bar at the bottom, each page as their user passed into it
   }
 
   @override
   Widget build(BuildContext context) {
+    // Widget that contains the global nav bar
     return Scaffold(
         backgroundColor: Colors.white,
         body: _pageOptions[selectedPage],
