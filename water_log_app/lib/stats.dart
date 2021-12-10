@@ -1,3 +1,8 @@
+//
+// Waterlog Capping Group
+// Capping class Fall '21
+// stats.dart
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

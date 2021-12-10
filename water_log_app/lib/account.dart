@@ -1,3 +1,8 @@
+//
+// Waterlog Capping Group
+// Capping class Fall '21
+// Account.dart
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -50,18 +55,15 @@ class _AccountPageState extends State<AccountPage> {
   final bmiController = TextEditingController();
   final genderController = TextEditingController();
 
-  postRequest() async {
-    print(widget.client.creationDate.substring(0, 10));
-    //String formatter = DateFormat('yyyy-MM-dd').format(widget.client.creationDate); // 28/03/2020
-    //var currentDate = formatter.replaceAll("/", "-");
-
+  putRequest() async {
+    // API put request to update user account information
     if (weightController.text == "" ||
         heightController.text == "" ||
         bmiController.text == "" ||
         genderController.text == "") {
       setState(() {
         _errorMsg = "Please Fill out all Fields";
-      });
+      }); // checks if the fields are empty
     } else {
       Map<String, dynamic> map = {
         "token": " ",
@@ -76,21 +78,6 @@ class _AccountPageState extends State<AccountPage> {
         "update": widget.client.updateDate.substring(0, 10)
       };
 
-      print("WEIGHT " +
-          weightController.text +
-          " HEIGHT " +
-          heightController.text +
-          " BMI " +
-          bmiController.text +
-          " GENDER " +
-          genderController.text +
-          " EMAIL " +
-          emailController.text +
-          " REATION " +
-          widget.client.creationDate +
-          " LAST_UPDATE " +
-          widget.client.updateDate);
-
       var uri = Uri.parse(
           'http://10.11.25.60:443/api/users/' + widget.client.userName);
       String rawJson = jsonEncode(map);
@@ -102,7 +89,6 @@ class _AccountPageState extends State<AccountPage> {
         },
         body: rawJson,
       );
-      print("Made it past the null check: " + response.body);
       if (jsonDecode(response.body)["code"] == null) {
         setState(() {
           _errorMsg = "Success, changes will take effect after next log in";
@@ -116,9 +102,7 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    //_errorMsg = "";
-    //postRequest();
-
+    // Widget to build account
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
@@ -176,25 +160,6 @@ class _AccountPageState extends State<AccountPage> {
                               image: new AssetImage(
                                   'assets/images/tempUser.png'))),
                     ),
-                    // Positioned(
-                    //     bottom: 0,
-                    //     right: 0,
-                    //     child: Container(
-                    //       height: 40,
-                    //       width: 40,
-                    //       decoration: BoxDecoration(
-                    //         shape: BoxShape.circle,
-                    //         border: Border.all(
-                    //           width: 4,
-                    //           //color: Theme.of(context).scaffoldBackgroundColor,
-                    //         ),
-                    //         color: Colors.blue,
-                    //       ),
-                    //       child: Icon(
-                    //         Icons.edit,
-                    //         color: Colors.white,
-                    //       ),
-                    //     )),
                   ],
                 ),
               ),
@@ -282,7 +247,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
               FlatButton(
                 onPressed: () {
-                  postRequest();
+                  putRequest();
                 },
                 child: Text(
                   'Update Account Info',
@@ -295,7 +260,6 @@ class _AccountPageState extends State<AccountPage> {
                 style: TextStyle(
                   fontSize: 15.0,
                   color: Colors.red,
-                  //backgroundColor: Colors.redAccent.withOpacity(.25)
                 ),
               ),
               SizedBox(
@@ -307,44 +271,10 @@ class _AccountPageState extends State<AccountPage> {
       ),
     );
   }
-
-  Widget buildTextField(String labelText, String placeholder,
-      bool isPasswordTextField, TextEditingController myController) {
-    //postRequest();
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-        obscureText: isPasswordTextField ? showPassword : false,
-        decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
-                    ),
-                  )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
-        controller: myController,
-      ),
-    );
-  }
 }
 
 class User {
+  // User account class
   String userName;
   String token;
   int weight;
@@ -368,6 +298,7 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    // Parse information
     return User(
       userName: json['USERNAME'],
       token: json['TOKEN'],

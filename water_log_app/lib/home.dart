@@ -1,5 +1,9 @@
-import 'dart:convert';
+//
+// Waterlog Capping Group
+// Capping class Fall '21
+// Home.dart
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:water_log_app/custom_theme.dart';

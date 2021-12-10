@@ -1,3 +1,8 @@
+//
+// Waterlog Capping Group
+// Capping class Fall '21
+// Entity_creation.dart
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:intl/intl.dart';

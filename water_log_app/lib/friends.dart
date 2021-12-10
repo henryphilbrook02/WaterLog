@@ -1,3 +1,8 @@
+//
+// Waterlog Capping Group
+// Capping class Fall '21
+// Friends.dart
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
