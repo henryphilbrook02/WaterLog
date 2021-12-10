@@ -19,10 +19,9 @@ class home extends StatelessWidget {
 
 class homePage extends StatefulWidget {
   final email;
-
   userModel.User client;
   var curGoal = 0.0;
-
+  // Global Varibales
   homePage({
     Key? key,
     this.email,
@@ -36,6 +35,7 @@ class homePage extends StatefulWidget {
 class _HomePageState extends State<homePage> {
   late List<GDPData> _chartData;
   late TooltipBehavior _tooltipBehavior;
+  // Chart Data initalized
 
   @override
   void initState() {
@@ -45,6 +45,7 @@ class _HomePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
+    // This is the widget that contains the circulat chart
     return Scaffold(
         appBar: AppBar(
           title: Text("Welcome Back ${widget.client.userName}"),
@@ -65,6 +66,7 @@ class _HomePageState extends State<homePage> {
                   throw Exception('Failed to get goal');
                 } else if (snapshot.hasData) {
                   _chartData = snapshot.data!;
+                  // API call checks and excptions
                   return Column(children: <Widget>[
                     Container(
                         height: 450,
@@ -90,6 +92,7 @@ class _HomePageState extends State<homePage> {
                                       DataLabelSettings(isVisible: true),
                                   enableTooltip: true,
                                   maximumValue: widget.curGoal)
+                              // Filling Chart Data
                             ])),
                     Container(
                       child: Text(
@@ -117,6 +120,7 @@ class _HomePageState extends State<homePage> {
     widget.curGoal = await getGoal(widget.client.userName);
     double cur = await getDay(widget.client.userName);
     double week = await getWeek(widget.client.userName);
+    // Variables gathered from api call methods
 
     var color = Colors.blue;
     var lowerAverage = widget.curGoal - 10;
@@ -132,6 +136,7 @@ class _HomePageState extends State<homePage> {
     final List<GDPData> chartData = [
       GDPData('Usage', cur, color),
       GDPData('Week', week.roundToDouble(), Colors.blue)
+      // Add chart Data to the list
     ];
 
     return chartData;
@@ -139,6 +144,7 @@ class _HomePageState extends State<homePage> {
 }
 
 Future<double> getDay(String username) async {
+  // API call to our server to get and then parse the data in the json code
   final response = await http
       .get(Uri.parse('http://10.11.25.60:443/api/cur_day_data/' + username));
   if (response.statusCode == 200) {
@@ -152,6 +158,7 @@ Future<double> getDay(String username) async {
 }
 
 Future<double> getWeek(String username) async {
+  // Same As get Day essentially
   final response = await http
       .get(Uri.parse('http://10.11.25.60:443/api/seven_day_data/' + username));
   if (response.statusCode == 200) {
@@ -165,6 +172,7 @@ Future<double> getWeek(String username) async {
 }
 
 Future<double> getGoal(String username) async {
+  // Same thing as up top
   final response = await http
       .get(Uri.parse('http://10.11.25.60:443/api/cur_goals/' + username));
   if (response.statusCode == 200) {
@@ -178,6 +186,7 @@ Future<double> getGoal(String username) async {
 }
 
 class GDPData {
+  // Chart Data class
   GDPData(this.usageDay, this.usageWater, this.color);
   final String usageDay;
   final double usageWater;
