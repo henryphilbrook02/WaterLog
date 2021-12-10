@@ -1,4 +1,11 @@
+//
+//Waterlog Capping Group
+// Capping class Fall '21
+//
+
 var index = require("../index")
+
+// The explanation of what the route does is in the name of the function
 
 exports.readAllPreset = (req, res) => {
     var query = "select * from preset_activity";

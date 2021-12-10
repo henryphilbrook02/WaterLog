@@ -1,3 +1,8 @@
+//
+//Waterlog Capping Group
+// Capping class Fall '21
+//
+
 var express = require("express");
 var userCtlr = require("./controllers/user")
 var presetCtlr = require("./controllers/preset_activity")
@@ -6,8 +11,13 @@ var fsCtlr = require("./controllers/friendship")
 var entryCtrl = require("./controllers/entry")
 var activityCtrl = require("./controllers/activity")
 
+
+// Creates the routes that we will access using the URL http://10.11.25.60:443/api/...
 router = express.Router();
 
+//
+// USER 
+//
 router.route("/users")
     .get(userCtlr.readAllUsers)
     .post(userCtlr.createUser)
@@ -20,6 +30,10 @@ router.route("/users/:id")
 router.route("/user/:id")
     .get(userCtlr.readUserEmail)
 
+
+//
+// Preset Entity 
+//
 router.route("/presets")
     .get(presetCtlr.readAllPreset)
     .post(presetCtlr.createPreset)
@@ -29,6 +43,10 @@ router.route("/presets/:id")
     .delete(presetCtlr.deletePreset)
     .put(presetCtlr.updatePreset)
 
+
+//
+// Goals
+//
 router.route("/goals")
     .get(goalCtlr.readAllGoals)
     .post(goalCtlr.createGoal)
@@ -44,6 +62,10 @@ router.route("/cur_goals/:user")
 router.route("/user_goals/:user")
     .get(goalCtlr.userGoal)
 
+
+//
+// Friends
+//
 router.route("/fs")
     .get(fsCtlr.readAllFriendships)
     .post(fsCtlr.createFriendship)
@@ -60,6 +82,9 @@ router.route("/pfs/:id")
     .get(fsCtlr.readPendingFriends)
     .put(fsCtlr.updateAccept)
 
+//
+// Entries
+//
 router.route("/entries")
     .get(entryCtrl.readAllEntries)
     .post(entryCtrl.createEntry)
@@ -96,6 +121,9 @@ router.route("/seven_day_readout/:user")
 router.route("/week_readout/:user")
     .get(entryCtrl.weekReadout)
 
+//
+// Activities
+//
 router.route("/activities")
     .get(activityCtrl.readAllActivities)
     .post(activityCtrl.createActivity)

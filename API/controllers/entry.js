@@ -1,5 +1,9 @@
-var index = require("../index")
+//
+//Waterlog Capping Group
+//Capping class Fall '21
+//
 
+var index = require("../index")
 
 exports.readAllEntries = (req, res) => {
     var query = "select * from entry";
@@ -16,12 +20,14 @@ exports.userEntries = (req, res) => {
     index.executeQuery(res, query);
 }
 
+// This is the entries dueing a specific date
 exports.userDateEntries = (req, res) => {
     var query = "select * from entry where USERNAME = '" + req.params.user +
         "' AND DAY > '" + req.body.startDate + "' and DAY <= '" + req.body.endDate + "'";
     index.executeQuery(res, query);
 }
 
+// Gets the entried for the week you are in ex. if its tuesday the 10th it will return sunday 8th - saturday 14th 
 exports.sevenDayEntries = (req, res) => {
     var today = new Date();
     var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
@@ -34,6 +40,7 @@ exports.sevenDayEntries = (req, res) => {
     index.executeQuery(res, query);
 }
 
+// Gets the entried for the week you are in ex. if its tuesday the 10th it will return wednesday 4th - tuesday 10th 
 exports.weekEntries = (req, res) => { 
     var today = new Date(); 
     var first = today.getDate() - today.getDay(); 
@@ -50,8 +57,7 @@ exports.weekEntries = (req, res) => {
 }
 
 
-// These next three quesies use 
-
+// This is the builder for the queries that find totals
 function querybuilder(userName, startDate, endDate) {
     var val;
     val ="select sum(amount) from ("+
@@ -70,6 +76,7 @@ function querybuilder(userName, startDate, endDate) {
     return val;
 }
 
+// total of one day
 exports.dayTotal = (req, res) => {
     var today = new Date();
     var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
@@ -78,6 +85,7 @@ exports.dayTotal = (req, res) => {
     index.executeQuery(res, query);
 }
 
+// total of the week period explaied above
 exports.weekTotal = (req, res) => {
     var today = new Date(); 
     var first = today.getDate() - today.getDay(); 
@@ -92,6 +100,7 @@ exports.weekTotal = (req, res) => {
     index.executeQuery(res, query);
 }
 
+// total of the seven day period explaied above
 exports.sevenDayTotal = (req, res) => {
     var today = new Date();
     var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
@@ -128,6 +137,7 @@ function dayQueryBuilder(userName, startDate, endDate) {
     return val;
 }
 
+//day by day of a week
 exports.weekReadout = (req, res) => {
     var today = new Date(); 
     var first = today.getDate() - today.getDay(); 
@@ -142,6 +152,7 @@ exports.weekReadout = (req, res) => {
     index.executeQuery(res, query);
 }
 
+// day by day of the seven days
 exports.sevenDayReadout = (req, res) => {
     var today = new Date();
     var curDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()

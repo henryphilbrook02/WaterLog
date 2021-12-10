@@ -1,6 +1,12 @@
+//
+//Waterlog Capping Group
+// Capping class Fall '21
+//
+
 var index = require("../index")
 
-//NOTE: needs to add a check in Flutter to make sure that the FKs are different
+// The explanation of what the route does is in the name of the function
+
 exports.readAllFriendships = (req, res) => {
     var query = "select * from friendship";
     index.executeQuery(res, query);
