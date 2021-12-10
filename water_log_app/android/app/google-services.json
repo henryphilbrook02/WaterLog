@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "297257796990",
+    "firebase_url": "https://waterlog-f1103-default-rtdb.firebaseio.com",
+    "project_id": "waterlog-f1103",
+    "storage_bucket": "waterlog-f1103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297257796990:android:5d5d54f887918092871f2f",
+        "android_client_info": {
+          "package_name": "water.log.capping.water_log_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297257796990-m1uqb0csohg1rpmu4s5fg7fpioanve89.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "water.log.capping.water_log_app",
+            "certificate_hash": "14286559aef7fc64586de7dfb63cf30e391638d8"
+          }
+        },
+        {
+          "client_id": "297257796990-b62el53hhss0n3ja65oafq4citqi5kle.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV9y5hwB-E4m2SGoDUU3qVDInK9i1vi_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297257796990-b62el53hhss0n3ja65oafq4citqi5kle.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
