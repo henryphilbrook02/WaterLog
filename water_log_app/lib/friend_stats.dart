@@ -8,7 +8,6 @@ import 'package:water_log_app/models/userModel.dart' as userModel;
 import 'package:water_log_app/custom_theme.dart';
 
 var average = 0.0;
-var totalNums = 2;
 final now = new DateTime.now();
 String formatter = DateFormat('yMd').format(now); // 28/03/2020
 
@@ -37,7 +36,6 @@ class statsFriends extends StatelessWidget {
 
 class MyHomePageFriends extends StatefulWidget {
   String username;
-
   MyHomePageFriends({
     Key? key,
     required this.username,
@@ -58,8 +56,9 @@ class _MyHomePageState extends State<MyHomePageFriends> {
   var mySums = [];
   var myDays = [];
   var testAverage = 0;
+  // Global vairbales to be manipulated by supporting methods later
 
-  //  Need to use the passed username here
+  // Need to use the passed username here
   Future<wData> postRequest() async {
     final response = await http.get(Uri.parse(
         'http://10.11.25.60:443/api/seven_day_readout/' + widget.username));
@@ -137,22 +136,21 @@ class _MyHomePageState extends State<MyHomePageFriends> {
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 4,
-                            color: Theme.of(context).scaffoldBackgroundColor),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1),
-                              offset: Offset(0, 10))
-                        ],
-                        shape: BoxShape.circle,
+                          border: Border.all(
+                              width: 4,
+                              color: Theme.of(context).scaffoldBackgroundColor),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                                color: Colors.black.withOpacity(0.1),
+                                offset: Offset(0, 10))
+                          ],
+                          shape: BoxShape.circle,
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: new AssetImage(
-                                  'assets/images/tempUser.png'))
-                      ),
+                                  'assets/images/tempUser.png'))),
                     ),
                   ],
                 ),
@@ -218,9 +216,6 @@ class _MyHomePageState extends State<MyHomePageFriends> {
 
   @override
   Widget buildGraph(BuildContext context) {
-    print(formatter);
-    // _chartData = getChartData();
-    // _tooltipBehavior = TooltipBehavior(enable: true);
     return Scaffold(
       body: SfCartesianChart(
           title: ChartTitle(text: 'Weekly Water Usage'),

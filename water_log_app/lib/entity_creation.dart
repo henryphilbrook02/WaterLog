@@ -9,6 +9,7 @@ import 'package:water_log_app/models/userModel.dart' as userModel;
 final now = new DateTime.now();
 String formatter = DateFormat('yyyy-MM-dd').format(now); // 28/03/2020
 var currentDate = formatter.replaceAll("/", "-");
+// Date formatter for the enetity creation
 
 class EntityCreation extends StatelessWidget {
   @override

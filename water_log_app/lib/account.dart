@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:water_log_app/custom_theme.dart';
 import 'package:water_log_app/log_in.dart';
 import 'package:water_log_app/models/userModel.dart' as userModel;
+import 'package:intl/intl.dart';
 
 var user_name = "";
 var name = "";
@@ -50,6 +51,10 @@ class _AccountPageState extends State<AccountPage> {
   final genderController = TextEditingController();
 
   postRequest() async {
+    print(widget.client.creationDate.substring(0, 10));
+    //String formatter = DateFormat('yyyy-MM-dd').format(widget.client.creationDate); // 28/03/2020
+    //var currentDate = formatter.replaceAll("/", "-");
+
     if (weightController.text == "" ||
         heightController.text == "" ||
         bmiController.text == "" ||
@@ -67,8 +72,8 @@ class _AccountPageState extends State<AccountPage> {
         "gender": genderController.text,
         "unit": "Metric",
         "email": widget.client.email,
-        "creation": "2021-11-11",
-        "update": "2021-11-11"
+        "creation": widget.client.creationDate.substring(0, 10),
+        "update": widget.client.updateDate.substring(0, 10)
       };
 
       print("WEIGHT " +
