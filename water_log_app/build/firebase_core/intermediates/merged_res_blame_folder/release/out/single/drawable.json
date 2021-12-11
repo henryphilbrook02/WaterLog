@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_core\\intermediates\\merged_res\\release\\drawable\\notification_icon_background.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_core\\intermediates\\merged_res\\release\\drawable\\notification_bg_low.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_core\\intermediates\\merged_res\\release\\drawable\\notification_tile_bg.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\drawable\\notification_tile_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_core\\intermediates\\merged_res\\release\\drawable\\notification_bg.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\drawable\\notification_bg.xml"
+    }
+]

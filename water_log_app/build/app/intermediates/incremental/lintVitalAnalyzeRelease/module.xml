@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="C:\Users\jackm\Projects\WaterLog\water_log_app\android\app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    gradle="7.0.2"
+    buildFolder="C:\Users\jackm\Projects\WaterLog\water_log_app\build\app"
+    bootClassPath="C:\Users\jackm\AppData\Local\Android\Sdk\platforms\android-30\android.jar;C:\Users\jackm\AppData\Local\Android\Sdk\build-tools\30.0.2\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-30">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

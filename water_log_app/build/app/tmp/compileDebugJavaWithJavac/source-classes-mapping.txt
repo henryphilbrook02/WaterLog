@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+water/log/capping/water_log_app/BuildConfig.java
+ water.log.capping.water_log_app.BuildConfig

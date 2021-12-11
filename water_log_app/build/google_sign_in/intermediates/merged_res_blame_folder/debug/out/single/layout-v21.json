@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\google_sign_in\\intermediates\\merged_res\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\google_sign_in\\intermediates\\merged_res\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\google_sign_in\\intermediates\\merged_res\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\google_sign_in\\intermediates\\merged_res\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\452dc0cffada103a91fca481f34eb721\\transformed\\core-1.1.0\\res\\layout-v21\\notification_action_tombstone.xml"
+    }
+]
