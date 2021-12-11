@@ -1,0 +1,4 @@
+#Fri Dec 10 23:40:10 EST 2021
+base.0=C\:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

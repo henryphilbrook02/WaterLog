@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_auth\\intermediates\\merged_res\\release\\color\\common_google_signin_btn_text_light.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\dbd79bcc0ebfdf94399221b5468d6b17\\transformed\\jetified-play-services-base-17.1.0\\res\\color\\common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_auth\\intermediates\\merged_res\\release\\color\\common_google_signin_btn_tint.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\dbd79bcc0ebfdf94399221b5468d6b17\\transformed\\jetified-play-services-base-17.1.0\\res\\color\\common_google_signin_btn_tint.xml"
+    },
+    {
+        "merged": "C:\\Users\\jackm\\Projects\\WaterLog\\water_log_app\\build\\firebase_auth\\intermediates\\merged_res\\release\\color\\common_google_signin_btn_text_dark.xml",
+        "source": "C:\\Users\\jackm\\.gradle\\caches\\transforms-3\\dbd79bcc0ebfdf94399221b5468d6b17\\transformed\\jetified-play-services-base-17.1.0\\res\\color\\common_google_signin_btn_text_dark.xml"
+    }
+]
